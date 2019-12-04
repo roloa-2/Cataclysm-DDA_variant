@@ -66,6 +66,7 @@
 #include "skill_boost.h"
 #include "sounds.h"
 #include "speech.h"
+#include "scent_map.h"
 #include "start_location.h"
 #include "string_formatter.h"
 #include "text_snippets.h"
@@ -213,6 +214,7 @@ void DynamicDataLoader::initialize()
     add( "skill_boost", &skill_boost::load_boost );
     add( "enchantment", &enchantment::load_enchantment );
     add( "hit_range", &Creature::load_hit_range );
+    add( "scent_type", &scent_type::load_scent_type );
 
     // json/colors.json would be listed here, but it's loaded before the others (see init_colors())
     // Non Static Function Access
@@ -307,6 +309,8 @@ void DynamicDataLoader::initialize()
     add( "SPECIES", []( JsonObject & jo, const std::string & src ) {
         MonsterGenerator::generator().load_species( jo, src );
     } );
+
+    add( "LOOT_ZONE", &zone_type::load_zones );
     add( "monster_adjustment", &load_monster_adjustment );
     add( "recipe_category", &load_recipe_category );
     add( "recipe",  &recipe_dictionary::load_recipe );
@@ -592,6 +596,7 @@ void DynamicDataLoader::finalize_loaded_data( loading_ui &ui )
             { _( "Behaviors" ), &behavior::finalize },
             { _( "Harvest lists" ), &harvest_list::finalize_all },
             { _( "Anatomies" ), &anatomy::finalize_all },
+            { _( "Mutations" ), &mutation_branch::finalize },
 #if defined(TILES)
             { _( "Tileset" ), &load_tileset },
 #endif
@@ -679,6 +684,7 @@ void DynamicDataLoader::check_consistency( loading_ui &ui )
             { _( "Spells" ), &spell_type::check_consistency },
             { _( "Transformations" ), &event_transformation::check_consistency },
             { _( "Statistics" ), &event_statistic::check_consistency },
+            { _( "Scent types" ), &scent_type::check_scent_consistency },
             { _( "Scores" ), &score::check_consistency }
         }
     };
