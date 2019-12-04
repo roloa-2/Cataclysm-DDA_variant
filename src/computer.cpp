@@ -340,7 +340,7 @@ void computer::load_data( const std::string &data )
         int tmpsec;
 
         dump >> tmpname >> tmpaction >> tmpsec;
-        if( blacklisted_options.find( tmpname ) != blacklisted_options.end() ) {
+        if( blacklisted_options.find( tmpaction ) != blacklisted_options.end() ) {
             continue;
         }
         add_option( string_replace( tmpname, "_", " " ), static_cast<computer_action>( tmpaction ),
