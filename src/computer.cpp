@@ -54,16 +54,16 @@
 #include "colony.h"
 #include "point.h"
 
-const mtype_id mon_manhack( "mon_manhack" );
-const mtype_id mon_secubot( "mon_secubot" );
-const mtype_id mon_turret_rifle( "mon_turret_rifle" );
+static const mtype_id mon_manhack( "mon_manhack" );
+static const mtype_id mon_secubot( "mon_secubot" );
+static const mtype_id mon_turret_rifle( "mon_turret_rifle" );
 
-const skill_id skill_computer( "computer" );
+static const skill_id skill_computer( "computer" );
 
-const species_id ZOMBIE( "ZOMBIE" );
-const species_id HUMAN( "HUMAN" );
+static const species_id ZOMBIE( "ZOMBIE" );
+static const species_id HUMAN( "HUMAN" );
 
-const efftype_id effect_amigara( "amigara" );
+static const efftype_id effect_amigara( "amigara" );
 
 static int alerts = 0;
 
@@ -1592,6 +1592,20 @@ void computer::reset_terminal()
 void computer::print_newline()
 {
     wprintz( w_terminal, c_green, "\n" );
+}
+
+computer_option computer_option::from_json( const JsonObject &jo )
+{
+    std::string name = jo.get_string( "name" );
+    computer_action action = computer_action_from_string( jo.get_string( "action" ) );
+    int sec = jo.get_int( "security", 0 );
+    return computer_option( name, action, sec );
+}
+
+computer_failure computer_failure::from_json( const JsonObject &jo )
+{
+    computer_failure_type type = computer_failure_type_from_string( jo.get_string( "action" ) );
+    return computer_failure( type );
 }
 
 static computer_action computer_action_from_string( const std::string &str )
