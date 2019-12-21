@@ -183,3 +183,11 @@ Xcode/
 /.flatpak-builder/
 /repo/
 /build-dir/
+
+# Mod or Other
+/data/sound/*
+/data/mods/Battle_Maid/*
+/data/mods/Vibrator_mod/*
+/data/mods/Hentai_Zombie/*
+/data/mods/KawaiiMaidMod/*
+/gfx/MSX++DeadPeopleEdition/*
