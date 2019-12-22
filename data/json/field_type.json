@@ -1056,9 +1056,9 @@
     "type": "field_type",
     "legacy_enum_id": 46,
     "intensity_levels": [
-      { "name": "hot air 2", "sym": "&", "convection_temperature_mod": 6 },
-      { "color": "yellow", "convection_temperature_mod": 16 },
-      { "color": "red", "convection_temperature_mod": 20 }
+      { "name": "hot air 2", "sym": "&", "convection_temperature_mod": 20 },
+      { "color": "yellow", "convection_temperature_mod": 30 },
+      { "color": "red", "convection_temperature_mod": 40 }
     ],
     "decay_amount_factor": 5,
     "percent_spread": 100,
@@ -1073,8 +1073,8 @@
     "type": "field_type",
     "legacy_enum_id": 47,
     "intensity_levels": [
-      { "name": "hot air 3", "sym": "&", "convection_temperature_mod": 16 },
-      { "color": "yellow", "convection_temperature_mod": 40 },
+      { "name": "hot air 3", "sym": "&", "convection_temperature_mod": 50 },
+      { "color": "yellow", "convection_temperature_mod": 60 },
       { "color": "red", "convection_temperature_mod": 70 }
     ],
     "decay_amount_factor": 5,
