@@ -215,8 +215,7 @@ weather_type weather_generator::get_weather_conditions( const w_point &w ) const
 
     if( r == WEATHER_DRIZZLE && w.acidic ) {
         r = WEATHER_ACID_DRIZZLE;
-    }
-    if( r > WEATHER_DRIZZLE && w.acidic ) {
+    } else if( r > WEATHER_DRIZZLE && w.acidic ) {
         r = WEATHER_ACID_RAIN;
     }
     return r;
