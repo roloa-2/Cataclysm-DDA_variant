@@ -182,22 +182,22 @@ weather_type weather_generator::get_weather_conditions( const tripoint &location
 weather_type weather_generator::get_weather_conditions( const w_point &w ) const
 {
     weather_type r( WEATHER_CLEAR );
-    if( w.pressure > 1020 && w.humidity < 70 ) {
+    if( w.pressure > 1005 && w.humidity < 70 ) {
         r = WEATHER_SUNNY;
     }
-    if( w.pressure < 1010 && w.humidity > 40 ) {
+    if( w.pressure < 1002 && w.humidity > 40 ) {
         r = WEATHER_CLOUDY;
     }
-    if( r == WEATHER_CLOUDY && ( w.humidity > 97 || w.pressure < 1000 ) ) {
+    if( r == WEATHER_CLOUDY && ( w.humidity > 95 || w.pressure < 1000 ) ) {
         r = WEATHER_DRIZZLE;
     }
-    if( r >= WEATHER_CLOUDY && ( w.humidity > 98 || w.pressure < 994 ) ) {
+    if( r >= WEATHER_CLOUDY && ( w.humidity > 97 || w.pressure < 998 ) ) {
         r = WEATHER_RAINY;
     }
-    if( r == WEATHER_RAINY && w.pressure < 997 ) {
+    if( r == WEATHER_RAINY && w.pressure < 996 ) {
         r = WEATHER_THUNDER;
     }
-    if( r == WEATHER_THUNDER && w.pressure < 990 ) {
+    if( r == WEATHER_THUNDER && w.pressure < 994 ) {
         r = WEATHER_LIGHTNING;
     }
 
