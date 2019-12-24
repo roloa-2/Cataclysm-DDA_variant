@@ -100,6 +100,8 @@ const morale_type &morale_type_data::convert_legacy( int lmt )
             morale_type( "morale_accomplishment" ),
             morale_type( "morale_failure" ),
 
+            morale_type( "morale_sex_with_littlemaid" ),
+
             morale_type( "morale_null" )
         }
     };
@@ -190,6 +192,7 @@ const morale_type MORALE_FUNERAL( "morale_funeral" );
 const morale_type MORALE_TREE_COMMUNION( "morale_tree_communion" );
 const morale_type MORALE_ACCOMPLISHMENT( "morale_accomplishment" );
 const morale_type MORALE_FAILURE( "morale_failure" );
+const morale_type MORALE_SEX_WITH_LITTLEMAID( "morale_sex_with_littlemaid" );
 
 namespace
 {

@@ -187,7 +187,8 @@ activity_handlers::do_turn_functions = {
     { activity_id( "ACT_TREE_COMMUNION" ), tree_communion_do_turn },
     { activity_id( "ACT_STUDY_SPELL" ), study_spell_do_turn},
     { activity_id( "ACT_READ" ), read_do_turn},
-    { activity_id( "ACT_WAIT_STAMINA" ), wait_stamina_do_turn }
+    { activity_id( "ACT_WAIT_STAMINA" ), wait_stamina_do_turn },
+    { activity_id( "ACT_SEX_WITH_LITTLEMAID" ), sex_with_littlemaid_do_turn }
 };
 
 const std::map< activity_id, std::function<void( player_activity *, player * )> >
@@ -257,7 +258,8 @@ activity_handlers::finish_functions = {
     { activity_id( "ACT_MIND_SPLICER" ), mind_splicer_finish },
     { activity_id( "ACT_HACKING" ), hacking_finish },
     { activity_id( "ACT_SPELLCASTING" ), spellcasting_finish },
-    { activity_id( "ACT_STUDY_SPELL" ), study_spell_finish }
+    { activity_id( "ACT_STUDY_SPELL" ), study_spell_finish },
+    { activity_id( "ACT_SEX_WITH_LITTLEMAID" ), sex_with_littlemaid_finish }
 };
 
 bool activity_handlers::resume_for_multi_activities( player &p )
@@ -4545,3 +4547,25 @@ void activity_handlers::mind_splicer_finish( player_activity *act, player *p )
     data_card.contents.clear();
     data_card.put_in( item( "mind_scan_robofac" ) );
 }
+
+void activity_handlers::sex_with_littlemaid_do_turn( player_activity *act, player *p ){
+    (void)act;
+    if( calendar::once_every( 1_minutes ) ) {
+        // check maid is gone
+    }
+    if( calendar::once_every( 5_minutes ) ) {
+        // say some messages
+        p->mod_fatigue( 5 );
+        add_msg( m_info, "* feelin'good *");
+    }
+
+}
+
+void activity_handlers::sex_with_littlemaid_finish( player_activity *act, player *p ){
+    p->add_msg_if_player( m_good, _( "sex finish message" ) );
+    p->add_morale( MORALE_SEX_WITH_LITTLEMAID, 30, 60 );
+    act->set_to_null();
+}
+
+
+

@@ -375,6 +375,11 @@
     "text": "Failure"
   },
   {
+    "id": "morale_sex_with_littlemaid",
+    "type": "morale_type",
+    "text": "Have sex with littlemaid"
+  },
+  {
     "id": "morale_perm_debug",
     "type": "morale_type",
     "text": "Debug Morale"

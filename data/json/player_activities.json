@@ -786,5 +786,13 @@
     "suspendable": false,
     "based_on": "time",
     "no_resume": true
+  },
+  
+  {
+    "id": "ACT_SEX_WITH_LITTLEMAID",
+    "type": "activity_type",
+    "activity_level": "MODERATE_EXERCISE",
+    "verb": "have fun with littlemaid",
+    "based_on": "time"
   }
 ]
