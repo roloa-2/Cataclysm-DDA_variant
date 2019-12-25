@@ -50,6 +50,9 @@ const efftype_id effect_tied( "tied" );
 const efftype_id effect_riding( "riding" );
 const efftype_id effect_ridden( "ridden" );
 const efftype_id effect_saddled( "monster_saddled" );
+const efftype_id effect_littlemaid_talk( "littlemaid_stoptalk" );
+const efftype_id effect_littlemaid_stay( "littlemaid_stay" );
+
 const skill_id skill_survival( "survival" );
 
 bool monexamine::pet_menu( monster &z )
@@ -75,6 +78,10 @@ bool monexamine::pet_menu( monster &z )
         remove_bat,
         insert_bat,
         check_bat,
+        littlemaid_sex,
+        littlemaid_itemize,
+        littlemaid_talk,
+        littlemaid_stay,
     };
 
     uilist amenu;
@@ -183,6 +190,16 @@ bool monexamine::pet_menu( monster &z )
             amenu.addentry( insert_bat, false, 'x', _( "You need a %s to power this mech" ), type.nname( 1 ) );
         }
     }
+    if( z.has_flag( MF_LITTLE_MAID ) ) {
+        amenu.addentry( littlemaid_sex, true, 'x', _( "Do se[x]ual thing" ));
+        amenu.addentry( littlemaid_itemize, true, 'i', _( "Itemize littlemaid" ));
+        amenu.addentry( littlemaid_talk, true, 't', _( "talk with littlemaid" ));
+        if( z.has_effect( effect_littlemaid_stay ) ){
+            amenu.addentry( littlemaid_stay, true, 't', _( "follow me" ));
+        } else {
+            amenu.addentry( littlemaid_stay, true, 't', _( "stay here" ));
+        }
+    }
     amenu.query();
     int choice = amenu.ret;
 
@@ -245,6 +262,19 @@ bool monexamine::pet_menu( monster &z )
             insert_battery( z );
             break;
         case check_bat:
+            break;
+        case littlemaid_sex:
+            z.add_effect( effect_littlemaid_stay, 1_turns, num_bp, true );
+            g->u.assign_activity(
+                player_activity( activity_id( "ACT_SEX_WITH_LITTLEMAID" ),
+                to_moves<int>( 30_minutes ),
+                -1,
+                0,
+                "having fun with littlemaid <3" ));
+            break;
+        case littlemaid_stay:
+            maid_stay_or_follow( z );
+            break;
         default:
             break;
     }
@@ -689,6 +719,18 @@ void monexamine::tie_or_untie( monster &z )
         }
     }
 }
+
+void monexamine::maid_stay_or_follow( monster &z )
+{
+    if( z.has_effect( effect_littlemaid_stay ) ) {
+        add_msg( _("order littlemaid to follow.") );
+        z.remove_effect( effect_littlemaid_stay );
+    } else {
+        add_msg( _("order littlemaid to stay.") );
+        z.add_effect( effect_littlemaid_stay, 1_turns, num_bp, true );
+    }
+}
+
 
 void monexamine::milk_source( monster &source_mon )
 {

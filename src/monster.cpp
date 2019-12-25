@@ -159,6 +159,7 @@ const efftype_id effect_stunned( "stunned" );
 const efftype_id effect_supercharged( "supercharged" );
 const efftype_id effect_tied( "tied" );
 const efftype_id effect_webbed( "webbed" );
+const efftype_id effect_littlemaid_stay( "littlemaid_stay" );
 
 static const trait_id trait_ANIMALDISCORD( "ANIMALDISCORD" );
 static const trait_id trait_ANIMALDISCORD2( "ANIMALDISCORD2" );
@@ -1549,6 +1550,11 @@ bool monster::move_effects( bool )
     // This function is relatively expensive, we want that cached
     // IMPORTANT: If adding any new effects here, make SURE to
     // add them to hardcoded_movement_impairing in effect.cpp
+
+    if( has_effect( effect_littlemaid_stay ) ) {
+        return false;
+    }
+
     if( !effect_cache[MOVEMENT_IMPAIRED] ) {
         return true;
     }

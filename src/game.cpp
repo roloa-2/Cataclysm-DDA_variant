@@ -8860,49 +8860,6 @@ bool game::disable_robot( const tripoint &p )
     const auto mid = critter.type->id;
     const auto mon_item_id = critter.type->revert_to_itype;
 
-    // Littlemaids are special
-    if( mid == mon_little_maid_R18_milk_sanpo ) {
-        uilist smenu;
-        smenu.text = string_format( _( "What do to %s?" ),  critter.name());
-        smenu.reset();
-        smenu.addentry( 0, true, 'p', "swap [p]osition");
-        smenu.addentry( 1, true, 't', "[t]alk");
-        smenu.addentry( 2, true, 's', "Stop [s]peaking");
-        smenu.addentry( 3, true, 'f', "Stop [f]ollow");
-        smenu.addentry( 4, true, 'x', "Do se[x]ual thing");
-        smenu.addentry( 5, true, 'D', "[D]eactivate");
-        smenu.query();
-        switch(smenu.ret) {
-            case 0:
-            return false;
-            case 1:
-            add_msg( _( "koujichu1" ) );
-            return true;
-            case 2:
-            add_msg( _( "koujichu2" ) );
-            return true;
-            case 3:
-            add_msg( _( "koujichu3" ) );
-            return true;
-            case 4:
-            u.assign_activity(
-                player_activity( activity_id( "ACT_SEX_WITH_LITTLEMAID" ),
-                to_moves<int>( 30_minutes ),
-                -1,
-                0,
-                "having fun with littlemaid <3" ));
-            return true;
-            case 5:
-            // stop maid
-            // remove monster and drop item
-            u.moves -= 100;
-            m.add_item_or_charges( p, critter.to_item() );
-            remove_zombie( critter );
-            return true;
-        }
-        return true;
-    }
-
     if( !mon_item_id.empty() &&
         query_yn( _( "Deactivate the %s?" ), critter.name() ) ) {
 
