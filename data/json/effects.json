@@ -250,6 +250,12 @@
     "name": [ "littlemaid_stay" ],
     "desc": [ "AI tag used for tied up critters.  This is a bug if you have it." ]
   },
+  {
+    "type": "effect_type",
+    "id": "littlemaid_speak_off",
+    "name": [ "littlemaid_speak_off" ],
+    "desc": [ "AI tag used for tied up critters.  This is a bug if you have it." ]
+  },
   
   {
     "//": "ACTUAL PLAYER EFFECTS START HERE",

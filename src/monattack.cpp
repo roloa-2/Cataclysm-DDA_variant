@@ -153,6 +153,8 @@ const efftype_id effect_stunned( "stunned" );
 const efftype_id effect_targeted( "targeted" );
 const efftype_id effect_teleglow( "teleglow" );
 const efftype_id effect_under_op( "under_operation" );
+const efftype_id effect_littlemaid_speak_off( "littlemaid_speak_off" );
+
 
 static const trait_id trait_ACIDBLOOD( "ACIDBLOOD" );
 static const trait_id trait_MARLOSS_BLUE( "MARLOSS_BLUE" );
@@ -4354,6 +4356,19 @@ bool mattack::parrot_at_danger( monster *parrot )
         }
     }
 
+    return false;
+}
+
+bool mattack::littlemaid_action( monster *maid )
+{
+    if( maid->has_effect( effect_littlemaid_speak_off ) ) {
+        return true;
+    } else if( one_in( 20 ) ) {
+        const SpeechBubble &speech = get_speech( maid->type->id.str() );
+        sounds::sound( maid->pos(), speech.volume, sounds::sound_t::speech, speech.text.translated(),
+                       false, "speech", maid->type->id.str() );
+        return true;
+    }
     return false;
 }
 

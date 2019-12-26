@@ -82,6 +82,7 @@ bool lunge( monster *z );
 bool longswipe( monster *z );
 bool parrot( monster *z );
 bool parrot_at_danger( monster *parrot );
+bool littlemaid_action( monster *maid );
 bool darkman( monster *z );
 bool slimespring( monster *z );
 bool tindalos_teleport( monster *z );

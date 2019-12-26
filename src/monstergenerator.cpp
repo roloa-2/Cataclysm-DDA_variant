@@ -531,6 +531,7 @@ void MonsterGenerator::init_attack()
     add_hardcoded_attack( "LONGSWIPE", mattack::longswipe );
     add_hardcoded_attack( "PARROT", mattack::parrot );
     add_hardcoded_attack( "PARROT_AT_DANGER", mattack::parrot_at_danger );
+    add_hardcoded_attack( "LITTLEMAID_ACTION", mattack::littlemaid_action );
     add_hardcoded_attack( "DARKMAN", mattack::darkman );
     add_hardcoded_attack( "SLIMESPRING", mattack::slimespring );
     add_hardcoded_attack( "TINDALOS_TELEPORT", mattack::tindalos_teleport );

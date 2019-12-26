@@ -27,6 +27,11 @@ void tie_or_untie( monster &z );
 void mount_pet( monster &z );
 void attach_or_remove_saddle( monster &z );
 void maid_stay_or_follow( monster &z );
+void maid_itemize( monster &z );
+void maid_talk( monster &z );
+void maid_toggle_speak( monster &z );
+void maid_sex( monster &z );
+
 /*
 *Manages the milking and milking cool down of monsters.
 *Milked item uses starting_ammo, where ammo type is the milked item

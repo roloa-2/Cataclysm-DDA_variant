@@ -160,6 +160,7 @@ const efftype_id effect_supercharged( "supercharged" );
 const efftype_id effect_tied( "tied" );
 const efftype_id effect_webbed( "webbed" );
 const efftype_id effect_littlemaid_stay( "littlemaid_stay" );
+const efftype_id effect_littlemaid_speak_off( "littlemaid_speak_off" );
 
 static const trait_id trait_ANIMALDISCORD( "ANIMALDISCORD" );
 static const trait_id trait_ANIMALDISCORD2( "ANIMALDISCORD2" );

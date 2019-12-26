@@ -50,7 +50,7 @@ const efftype_id effect_tied( "tied" );
 const efftype_id effect_riding( "riding" );
 const efftype_id effect_ridden( "ridden" );
 const efftype_id effect_saddled( "monster_saddled" );
-const efftype_id effect_littlemaid_talk( "littlemaid_stoptalk" );
+const efftype_id effect_littlemaid_speak_off( "littlemaid_speak_off" );
 const efftype_id effect_littlemaid_stay( "littlemaid_stay" );
 
 const skill_id skill_survival( "survival" );
@@ -78,9 +78,10 @@ bool monexamine::pet_menu( monster &z )
         remove_bat,
         insert_bat,
         check_bat,
+        littlemaid_talk,
         littlemaid_sex,
         littlemaid_itemize,
-        littlemaid_talk,
+        littlemaid_toggle_speak,
         littlemaid_stay,
     };
 
@@ -191,13 +192,18 @@ bool monexamine::pet_menu( monster &z )
         }
     }
     if( z.has_flag( MF_LITTLE_MAID ) ) {
-        amenu.addentry( littlemaid_sex, true, 'x', _( "Do se[x]ual thing" ));
+        amenu.addentry( littlemaid_talk, true, 't', _( "Talk with littlemaid" ));
+        amenu.addentry( littlemaid_sex, true, 'x', _( "Sexual activity" ));
         amenu.addentry( littlemaid_itemize, true, 'i', _( "Itemize littlemaid" ));
-        amenu.addentry( littlemaid_talk, true, 't', _( "talk with littlemaid" ));
-        if( z.has_effect( effect_littlemaid_stay ) ){
-            amenu.addentry( littlemaid_stay, true, 't', _( "follow me" ));
+        if( z.has_effect( effect_littlemaid_speak_off ) ){
+            amenu.addentry( littlemaid_toggle_speak, true, 's', _( "Allow speak" ));
         } else {
-            amenu.addentry( littlemaid_stay, true, 't', _( "stay here" ));
+            amenu.addentry( littlemaid_toggle_speak, true, 's', _( "Stop speak" ));
+        }
+        if( z.has_effect( effect_littlemaid_stay ) ){
+            amenu.addentry( littlemaid_stay, true, 'f', _( "Follow me" ));
+        } else {
+            amenu.addentry( littlemaid_stay, true, 'f', _( "Stay here" ));
         }
     }
     amenu.query();
@@ -264,16 +270,19 @@ bool monexamine::pet_menu( monster &z )
         case check_bat:
             break;
         case littlemaid_sex:
-            z.add_effect( effect_littlemaid_stay, 1_turns, num_bp, true );
-            g->u.assign_activity(
-                player_activity( activity_id( "ACT_SEX_WITH_LITTLEMAID" ),
-                to_moves<int>( 30_minutes ),
-                -1,
-                0,
-                "having fun with littlemaid <3" ));
+            maid_sex( z );
             break;
         case littlemaid_stay:
             maid_stay_or_follow( z );
+            break;
+        case littlemaid_itemize:
+            maid_itemize( z );
+            break;
+        case littlemaid_talk:
+            maid_talk( z );
+            break;
+        case littlemaid_toggle_speak:
+            maid_toggle_speak( z );
             break;
         default:
             break;
@@ -731,6 +740,42 @@ void monexamine::maid_stay_or_follow( monster &z )
     }
 }
 
+void monexamine::maid_itemize( monster &z )
+{
+    if( query_yn( _( "Itemize the %s?" ), z.name() ) ) {
+        g->u.moves -= 100;
+        g->u.i_add( item( "little_maid_R18_milk_sanpo" ) );
+        g->remove_zombie( z );
+    }
+}
+
+void monexamine::maid_talk( monster &z )
+{
+    add_msg(_("%s 'master?' "), z.name());
+}
+
+void monexamine::maid_toggle_speak( monster &z )
+{
+    if( z.has_effect( effect_littlemaid_speak_off ) ) {
+        add_msg( _("allow littlemaid speak.") );
+        z.remove_effect( effect_littlemaid_speak_off );
+    } else {
+        add_msg( _("stop littlemaid speak.") );
+        z.add_effect( effect_littlemaid_speak_off, 1_turns, num_bp, true );
+    }
+}
+
+void monexamine::maid_sex( monster &z )
+{
+    z.add_effect( effect_littlemaid_stay, 1_turns, num_bp, true );
+    g->u.assign_activity(
+        player_activity( activity_id( "ACT_SEX_WITH_LITTLEMAID" ),
+        to_moves<int>( 30_minutes ),
+        -1,
+        0,
+        "having fun with littlemaid <3" ));
+
+}
 
 void monexamine::milk_source( monster &source_mon )
 {
