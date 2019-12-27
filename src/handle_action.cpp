@@ -999,6 +999,10 @@ static void sleep()
     u.try_to_sleep( try_sleep_dur );
 }
 
+static void excretion(){
+    add_msg(_("bu chi pa"));
+}
+
 static void loot()
 {
     enum ZoneFlags {
@@ -2049,6 +2053,10 @@ bool game::handle_action()
                 } else {
                     sleep();
                 }
+                break;
+
+            case ACTION_EXCRETION:
+                excretion();
                 break;
 
             case ACTION_CONTROL_VEHICLE:

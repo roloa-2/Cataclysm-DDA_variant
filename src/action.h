@@ -203,6 +203,8 @@ enum action_id : int {
     ACTION_DISASSEMBLE,
     /** Open sleep menu */
     ACTION_SLEEP,
+    /** Open excretion menu */
+    ACTION_EXCRETION,
     /** Open vehicle control menu */
     ACTION_CONTROL_VEHICLE,
     /** Turn auto travel mode on/off */

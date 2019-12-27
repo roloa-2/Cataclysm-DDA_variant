@@ -265,6 +265,8 @@ std::string action_ident( action_id act )
             return "disassemble";
         case ACTION_SLEEP:
             return "sleep";
+        case ACTION_EXCRETION:
+            return "excretion";
         case ACTION_CONTROL_VEHICLE:
             return "control_vehicle";
         case ACTION_TOGGLE_AUTO_TRAVEL_MODE:
@@ -889,6 +891,7 @@ action_id handle_action_menu()
         } else if( category == _( "Misc" ) ) {
             REGISTER_ACTION( ACTION_WAIT );
             REGISTER_ACTION( ACTION_SLEEP );
+            REGISTER_ACTION( ACTION_EXCRETION );
             REGISTER_ACTION( ACTION_BIONICS );
             REGISTER_ACTION( ACTION_MUTATIONS );
             REGISTER_ACTION( ACTION_CONTROL_VEHICLE );
