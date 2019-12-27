@@ -293,6 +293,8 @@ class Character : public Creature, public visitable<Character>
         virtual std::pair<std::string, nc_color> get_hunger_description() const;
         virtual std::pair<std::string, nc_color> get_fatigue_description() const;
         virtual int get_fatigue() const;
+        virtual int get_excrete_amount() const;
+        virtual int get_excrete_need() const;
         virtual int get_sleep_deprivation() const;
 
         /** Modifiers for need values exclusive to characters */
@@ -301,6 +303,8 @@ class Character : public Creature, public visitable<Character>
         virtual void mod_hunger( int nhunger );
         virtual void mod_thirst( int nthirst );
         virtual void mod_fatigue( int nfatigue );
+        virtual void mod_excrete_amount( int nexcrete );
+        virtual void mod_excrete_need( int nexcrete );
         virtual void mod_sleep_deprivation( int nsleep_deprivation );
 
         /** Setters for need values exclusive to characters */
@@ -308,6 +312,8 @@ class Character : public Creature, public visitable<Character>
         virtual void set_hunger( int nhunger );
         virtual void set_thirst( int nthirst );
         virtual void set_fatigue( int nfatigue );
+        virtual void set_excrete_amount( int nexcrete );
+        virtual void set_excrete_need( int nexcrete );
         virtual void set_sleep_deprivation( int nsleep_deprivation );
 
         void mod_stat( const std::string &stat, float modifier ) override;
@@ -1659,6 +1665,9 @@ class Character : public Creature, public visitable<Character>
         int fatigue;
         int sleep_deprivation;
         bool check_encumbrance = true;
+
+        int excrete_need;
+        int excrete_amount;
 
         int stim;
         int pkill;

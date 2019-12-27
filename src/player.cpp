@@ -2399,6 +2399,8 @@ void player::update_stomach( const time_point &from, const time_point &to )
         if( !is_npc() || !get_option<bool>( "NO_NPC_FOOD" ) ) {
             mod_stored_kcal( digested_to_body.kcal );
             vitamins_mod( digested_to_body.vitamins, false );
+            // increase unchi amount
+            mod_excrete_amount( units::to_milliliter<int>(digested_to_body.solids) / 4 + units::to_milliliter<int>(digested_to_body.water) / 8 );
         }
     }
     if( stomach.time_since_ate() > 10_minutes ) {
@@ -2690,6 +2692,8 @@ void player::check_needs_extremes()
         }
     }
 
+    // unchi morasu
+
 }
 
 needs_rates player::calc_needs_rates() const
@@ -2865,6 +2869,16 @@ void player::update_needs( int rate_multiplier )
             g->cancel_activity_query( _( "You're feeling tired." ) );
         }
     }
+
+    if( 500 < get_excrete_amount() ) {
+        int excrete_delta = (get_excrete_amount() / 72 ) * rate_multiplier;
+        mod_excrete_need( excrete_delta );
+
+    }
+
+    //
+
+    //
 
     if( current_stim < 0 ) {
         set_stim( std::min( current_stim + rate_multiplier, 0 ) );

@@ -1001,6 +1001,12 @@ static void sleep()
 
 static void excretion(){
     add_msg(_("bu chi pa"));
+
+    g->m.spawn_item( g->u.pos(), "feces_human", rng( 2, 6 ) );
+
+    g->u.set_excrete_need( 0 );
+    g->u.set_excrete_amount( 0 );
+
 }
 
 static void loot()

@@ -236,6 +236,8 @@ Character::Character() :
     hunger = 0;
     thirst = 0;
     fatigue = 0;
+    excrete_need = 0;
+    excrete_amount = 0;
     sleep_deprivation = 0;
     radiation = 0;
     tank_plut = 0;
@@ -3251,6 +3253,42 @@ void Character::set_thirst( int nthirst )
 void Character::mod_fatigue( int nfatigue )
 {
     set_fatigue( fatigue + nfatigue );
+}
+
+void Character::set_excrete_amount( int nexcrete )
+{
+    if( excrete_amount != nexcrete ) {
+    	excrete_amount = nexcrete;
+        on_stat_change( "excrete_amount", excrete_amount );
+    }}
+
+
+void Character::mod_excrete_amount( int nexcrete )
+{
+	set_excrete_amount( excrete_amount + nexcrete );
+}
+
+int Character::get_excrete_amount() const
+{
+    return excrete_amount;
+}
+
+void Character::set_excrete_need( int nexcrete )
+{
+    if( excrete_need != nexcrete ) {
+    	excrete_need = nexcrete;
+        on_stat_change( "excrete_need", excrete_amount );
+    }}
+
+
+void Character::mod_excrete_need( int nexcrete )
+{
+	set_excrete_need( excrete_need + nexcrete );
+}
+
+int Character::get_excrete_need() const
+{
+    return excrete_need;
 }
 
 void Character::mod_sleep_deprivation( int nsleep_deprivation )
