@@ -188,7 +188,8 @@ activity_handlers::do_turn_functions = {
     { activity_id( "ACT_STUDY_SPELL" ), study_spell_do_turn},
     { activity_id( "ACT_READ" ), read_do_turn},
     { activity_id( "ACT_WAIT_STAMINA" ), wait_stamina_do_turn },
-    { activity_id( "ACT_SEX_WITH_LITTLEMAID" ), sex_with_littlemaid_do_turn }
+    { activity_id( "ACT_SEX_WITH_LITTLEMAID" ), sex_with_littlemaid_do_turn },
+    { activity_id( "ACT_EXCRETE" ), excrete_do_turn }
 };
 
 const std::map< activity_id, std::function<void( player_activity *, player * )> >
@@ -259,7 +260,9 @@ activity_handlers::finish_functions = {
     { activity_id( "ACT_HACKING" ), hacking_finish },
     { activity_id( "ACT_SPELLCASTING" ), spellcasting_finish },
     { activity_id( "ACT_STUDY_SPELL" ), study_spell_finish },
-    { activity_id( "ACT_SEX_WITH_LITTLEMAID" ), sex_with_littlemaid_finish }
+    { activity_id( "ACT_SEX_WITH_LITTLEMAID" ), sex_with_littlemaid_finish },
+    { activity_id( "ACT_EXCRETE" ), excrete_finish }
+
 };
 
 bool activity_handlers::resume_for_multi_activities( player &p )
@@ -4567,5 +4570,31 @@ void activity_handlers::sex_with_littlemaid_finish( player_activity *act, player
     act->set_to_null();
 }
 
+void activity_handlers::excrete_do_turn( player_activity *act, player *p ){
+    (void)act;
+    (void)p;
+    if( calendar::once_every( 1_minutes ) ) {
+        // check maid is gone
+    }
+    if( calendar::once_every( 5_minutes ) ) {
+        // say some messages
+    }
+}
 
+void activity_handlers::excrete_finish( player_activity *act, player *p ){
+
+    if( EXCRETETABLE < p->get_excrete_need() ) {
+        p->add_msg_if_player( m_good, _( "you finish execrete." ) );
+
+        g->m.spawn_item( p->pos(), "feces_human", 1, p->get_excrete_amount() / 125, calendar::turn , 0);
+        p->set_excrete_need( 0 );
+        p->set_excrete_amount( 0 );
+
+        p->add_morale( MORALE_EXCRETE, 30, 60 );
+    } else {
+        p->add_msg_if_player( m_neutral, _( "you could not execrete." ) );
+    }
+    act->set_to_null();
+
+}
 

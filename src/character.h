@@ -118,6 +118,14 @@ enum sleep_deprivation_levels {
     SLEEP_DEPRIVATION_MASSIVE = 14 * 24 * 60
 };
 
+enum excrete_need_levels {
+    EXCRETETABLE = 1000,
+    NEED_EXECRETE = 1500,
+    PATIENTING = 2000,
+    INCONTINENTING = 2500,
+    INCONTINENTED = 3000,
+};
+
 struct layer_details {
 
     std::vector<int> pieces;

@@ -430,6 +430,8 @@ void Character::load( JsonObject &data )
     data.read( "radiation", radiation );
     data.read( "oxygen", oxygen );
     data.read( "pkill", pkill );
+    data.read( "excrete_amount", excrete_amount);
+    data.read( "excrete_need", excrete_need);
 
     data.read( "type_of_scent", type_of_scent );
 
@@ -614,6 +616,8 @@ void Character::load( JsonObject &data )
     on_stat_change( "fatigue", fatigue );
     on_stat_change( "sleep_deprivation", sleep_deprivation );
     on_stat_change( "pkill", pkill );
+    on_stat_change( "excrete_amount", excrete_amount );
+    on_stat_change( "excrete_need", excrete_need );
     on_stat_change( "perceived_pain", get_perceived_pain() );
     recalc_sight_limits();
     reset_encumbrance();
@@ -693,6 +697,9 @@ void Character::store( JsonOut &json ) const
     json.member( "vitamin_levels", vitamin_levels );
     json.member( "pkill", pkill );
     json.member( "omt_path", omt_path );
+    json.member( "excrete_amount", excrete_amount);
+    json.member( "excrete_need", excrete_need);
+
 
     // crafting etc
     json.member( "destination_activity", destination_activity );

@@ -117,5 +117,7 @@ extern const morale_type MORALE_TREE_COMMUNION;
 extern const morale_type MORALE_ACCOMPLISHMENT;
 extern const morale_type MORALE_FAILURE;
 extern const morale_type MORALE_SEX_WITH_LITTLEMAID;
+extern const morale_type MORALE_EXCRETE;
+extern const morale_type MORALE_INCONTINENT;
 
 #endif

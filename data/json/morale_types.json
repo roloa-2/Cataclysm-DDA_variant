@@ -380,6 +380,16 @@
     "text": "Have sex with littlemaid"
   },
   {
+    "id": "morale_excrete",
+    "type": "morale_type",
+    "text": "Took a crap"
+  },
+  {
+    "id": "morale_incontinent",
+    "type": "morale_type",
+    "text": "Incontinented"
+  },
+  {
     "id": "morale_perm_debug",
     "type": "morale_type",
     "text": "Debug Morale"

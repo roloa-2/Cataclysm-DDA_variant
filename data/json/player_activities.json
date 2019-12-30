@@ -789,6 +789,15 @@
   },
   
   {
+    "id": "ACT_EXCRETE",
+    "type": "activity_type",
+    "activity_level": "NO_EXERCISE",
+    "verb": "excreting",
+    "based_on": "time",
+    "no_resume": true
+  },
+  
+  {
     "id": "ACT_SEX_WITH_LITTLEMAID",
     "type": "activity_type",
     "activity_level": "MODERATE_EXERCISE",

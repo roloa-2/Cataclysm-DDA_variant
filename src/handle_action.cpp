@@ -1000,13 +1000,15 @@ static void sleep()
 }
 
 static void excretion(){
-    add_msg(_("bu chi pa"));
 
-    g->m.spawn_item( g->u.pos(), "feces_human", rng( 2, 6 ) );
+    if( query_yn( _( "Do excrete?" ) ) ) {
 
-    g->u.set_excrete_need( 0 );
-    g->u.set_excrete_amount( 0 );
-
+        g->u.assign_activity(player_activity( activity_id( "ACT_EXCRETE" ),
+        to_moves<int>( 10_minutes ),
+        -1,
+        0,
+        "Excrete" ));
+    }
 }
 
 static void loot()

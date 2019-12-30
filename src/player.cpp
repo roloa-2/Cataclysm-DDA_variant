@@ -2693,6 +2693,35 @@ void player::check_needs_extremes()
     }
 
     // unchi morasu
+    if( is_player() ) {
+        if( PATIENTING < get_excrete_need() ){
+            if( calendar::once_every( 30_minutes ) ) {
+                if( INCONTINENTED < get_excrete_need()) {
+                    add_msg_if_player( m_bad,
+                            _( "You could not in time." ) );
+                    g->m.spawn_item( pos(), "feces_human", 1, get_excrete_amount() / 125, calendar::turn , 0);
+                    set_excrete_need( 0 );
+                    set_excrete_amount( 0 );
+                    moves -= 1000;
+
+                    for( auto &i : worn ) {
+                        if( i.covers( bp_leg_l ) || i.covers( bp_leg_r ) ) {
+                            i.item_tags.insert( "FILTHY" );
+                            morale->on_worn_item_be_filthy(i);
+                        }
+                    }
+
+                    add_morale( MORALE_INCONTINENT, -30, -60 );
+                } else if( INCONTINENTING < get_excrete_need()) {
+                    add_msg_if_player( m_warning,
+                            _( "You need take a crap immidiately." ) );
+                } else {
+                    add_msg_if_player( m_neutral,
+                            _( "You need excrete." ) );
+                }
+            }
+        }
+    }
 
 }
 
@@ -2870,15 +2899,17 @@ void player::update_needs( int rate_multiplier )
         }
     }
 
-    if( 500 < get_excrete_amount() ) {
-        int excrete_delta = (get_excrete_amount() / 72 ) * rate_multiplier;
-        mod_excrete_need( excrete_delta );
-
+    if( is_player() ) {
+        if( 500 < get_excrete_amount() ) {
+            if( asleep ){
+                int excrete_delta = (get_excrete_amount() / 144 ) * rate_multiplier;
+                mod_excrete_need( excrete_delta );
+            } else {
+                int excrete_delta = (get_excrete_amount() / 72 ) * rate_multiplier;
+                mod_excrete_need( excrete_delta );
+            }
+        }
     }
-
-    //
-
-    //
 
     if( current_stim < 0 ) {
         set_stim( std::min( current_stim + rate_multiplier, 0 ) );
@@ -7463,6 +7494,41 @@ std::pair<std::string, nc_color> player::get_pain_description() const
     }
     return std::make_pair( pain_string, pain_color );
 }
+
+std::pair<std::string, nc_color> player::get_excrete_description() const
+{
+    nc_color excrete_color;
+    std::string excrete_string;
+
+    if( ( has_trait( trait_SELFAWARE ) || has_effect( effect_got_checked ) ) &&
+        get_excrete_need() > 0 ) {
+        excrete_string = string_format( "%d%%", get_excrete_need() / 10);
+    } else if( INCONTINENTING < get_excrete_need() ) {
+        excrete_string = _("Incontinenting");
+    } else if( PATIENTING < get_excrete_need() ) {
+        excrete_string = _("Patienting");
+    } else if( NEED_EXECRETE < get_excrete_need() ) {
+        excrete_string = _("Need excrete");
+    } else if( EXCRETETABLE < get_excrete_need() ) {
+        excrete_string = _("Excretable");
+    } else {
+        excrete_string = "";
+    }
+
+    if (INCONTINENTING < get_excrete_need()) {
+        excrete_color = c_red;
+    } else if (PATIENTING < get_excrete_need()) {
+        excrete_color = c_light_red;
+    } else if (NEED_EXECRETE < get_excrete_need()) {
+        excrete_color = c_yellow;
+    } else if (EXCRETETABLE < get_excrete_need()) {
+        excrete_color = c_dark_gray;
+    } else {
+        excrete_color = c_dark_gray;
+    }
+    return std::make_pair( excrete_string, excrete_color );
+}
+
 
 void player::enforce_minimum_healing()
 {
