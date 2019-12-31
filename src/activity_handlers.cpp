@@ -4573,24 +4573,31 @@ void activity_handlers::sex_with_littlemaid_finish( player_activity *act, player
 void activity_handlers::excrete_do_turn( player_activity *act, player *p ){
     (void)act;
     (void)p;
-    if( calendar::once_every( 1_minutes ) ) {
-        // check maid is gone
-    }
     if( calendar::once_every( 5_minutes ) ) {
-        // say some messages
+        // say some messages?
     }
 }
 
 void activity_handlers::excrete_finish( player_activity *act, player *p ){
 
     if( EXCRETETABLE < p->get_excrete_need() ) {
-        p->add_msg_if_player( m_good, _( "you finish execrete." ) );
 
-        g->m.spawn_item( p->pos(), "feces_human", 1, p->get_excrete_amount() / 125, calendar::turn , 0);
+        bool isOnTheToilet = g->m.has_flag_ter_or_furn("TOILET", p->pos()) || g->m.veh_at(p->pos()).part_with_feature("TOILET", true);
+
+        item unchi( "feces_human", calendar::turn );
+        unchi.charges = p->get_excrete_amount() / 125;
+        put_into_vehicle_or_drop(*p, item_drop_reason::tumbling, { unchi });
+
         p->set_excrete_need( 0 );
         p->set_excrete_amount( 0 );
 
-        p->add_morale( MORALE_EXCRETE, 30, 60 );
+        if( isOnTheToilet ){
+            p->add_msg_if_player( m_good, _( "you execrete to toilet." ) );
+            p->add_morale( MORALE_EXCRETE, 30, 60 );
+        } else {
+            p->add_msg_if_player( m_good, _( "you finish execrete." ) );
+            p->add_morale( MORALE_EXCRETE, 15, 30 );
+        }
     } else {
         p->add_msg_if_player( m_neutral, _( "you could not execrete." ) );
     }

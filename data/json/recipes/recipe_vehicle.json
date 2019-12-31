@@ -651,6 +651,20 @@
   },
   {
     "type": "recipe",
+    "result": "vehicle_toilet",
+    "category": "CC_OTHER",
+    "subcategory": "CSC_OTHER_PARTS",
+    "skill_used": "fabrication",
+    "difficulty": 3,
+    "time": "30 m",
+    "autolearn": true,
+    "using": [ [ "welding_standard", 4 ], [ "steel_tiny", 4 ] ],
+    "tools": [],
+    "qualities": [],
+    "components": [ [ [ "plastic_chunk", 12 ] ], [ [ "water_faucet", 1 ] ] ]
+  },
+  {
+    "type": "recipe",
     "result": "wood_plate",
     "category": "CC_OTHER",
     "subcategory": "CSC_OTHER_PARTS",
