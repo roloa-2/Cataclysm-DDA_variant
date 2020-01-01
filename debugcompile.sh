@@ -1,2 +1,2 @@
 make DYNAMIC_LINKING=1 SDL=1 TILES=1 SOUND=1 LOCALIZE=1 LANGUAGES=all LINTJSON=0 ASTYLE=0 RUNTESTS=0
-while :; do echo \a;sleep 1; done
+while :; do echo ;sleep 1; done
