@@ -244,6 +244,11 @@
     "name": [ "Pushed" ],
     "desc": [ "AI tag used for monsters pushing each other.  This is a bug if you have it." ]
   },
+  
+  
+  
+  
+  
   {
     "type": "effect_type",
     "id": "littlemaid_stay",
@@ -1877,6 +1882,57 @@
     "type": "effect_type",
     "id": "recently_coughed"
   },
+  {
+    "type": "effect_type",
+    "id": "happiness",
+    "name": [ "Happiness" ],
+    "desc": ["You are feeling happiness."],
+    "max_intensity": 100,
+    "max_duration": "100 m",
+    "int_dur_factor": "1 m",
+    "base_mods": {
+    },
+    "scaling_mods": {
+    }
+  },
+  {
+    "type": "effect_type",
+    "id": "comfortness",
+    "name": [ "Comfortness" ],
+    "desc": ["You are feeling comfortness."],
+    "max_intensity": 100,
+    "max_duration": "100 m",
+    "int_dur_factor": "1 m",
+
+    "base_mods": {
+    },
+    "scaling_mods": {
+    }
+  },
+  {
+    "type": "effect_type",
+    "id": "ecstasy",
+    "name": ["ecstasy"],
+    "desc": ["You are on ecstasy."],
+    "apply_message": "You rised on ecstasy.",
+    "base_mods": {
+    },
+    "scaling_mods": {
+    }
+  },
+  {
+    "type": "effect_type",
+    "id": "maid_fatigue",
+    "name": ["fatigue"],
+    "desc": ["You are on ecstasy."],
+    "apply_message": "You tired.",
+    "base_mods": {
+    },
+    "scaling_mods": {
+    }
+  },
+
+
   {
     "type": "effect_type",
     "id": "ignore_fall_damage",

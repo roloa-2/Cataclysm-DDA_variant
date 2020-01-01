@@ -193,7 +193,7 @@ bool monexamine::pet_menu( monster &z )
     }
     if( z.has_flag( MF_LITTLE_MAID ) ) {
         amenu.addentry( littlemaid_talk, true, 't', _( "Talk with littlemaid" ));
-        amenu.addentry( littlemaid_sex, true, 'x', _( "Sexual activity" ));
+        amenu.addentry( littlemaid_sex, true, 'l', _( "Lovely activity" ));
         amenu.addentry( littlemaid_itemize, true, 'i', _( "Itemize littlemaid" ));
         if( z.has_effect( effect_littlemaid_speak_off ) ){
             amenu.addentry( littlemaid_toggle_speak, true, 's', _( "Allow speak" ));
@@ -765,15 +765,49 @@ void monexamine::maid_toggle_speak( monster &z )
     }
 }
 
+
 void monexamine::maid_sex( monster &z )
 {
     z.add_effect( effect_littlemaid_stay, 1_turns, num_bp, true );
-    g->u.assign_activity(
-        player_activity( activity_id( "ACT_SEX_WITH_LITTLEMAID" ),
-        to_moves<int>( 30_minutes ),
-        -1,
-        0,
-        "having fun with littlemaid <3" ));
+
+    enum maid_choices {
+        littlemaid_kiss = 0,
+        littlemaid_petting,
+        littlemaid_service,
+        littlemaid_special
+    };
+
+    uilist amenu;
+    std::string pet_name = z.get_name();
+    amenu.text = string_format( _( "What to do with your %s?" ), pet_name );
+
+    amenu.addentry( littlemaid_kiss, true, 'k', _( "Kiss" ) );
+    amenu.addentry( littlemaid_petting, true, 'p', _( "Petting" ) );
+    amenu.addentry( littlemaid_service, true, 's', _( "Get service" ) );
+    amenu.addentry( littlemaid_special, true, 'x', _( "Special thing" ) );
+
+    amenu.query();
+    int choice = amenu.ret;
+
+    string_id<activity_type> act_id;
+    switch( choice ) {
+    case littlemaid_kiss:
+        act_id = activity_id( "ACT_LITTLEMAID_KISS" );
+        break;
+    case littlemaid_petting:
+        act_id = activity_id( "ACT_LITTLEMAID_PETTING" );
+        break;
+    case littlemaid_service:
+        act_id = activity_id( "ACT_LITTLEMAID_SERVICE" );
+        break;
+    case littlemaid_special:
+        act_id = activity_id( "ACT_LITTLEMAID_SPECIAL" );
+        break;
+    }
+    player_activity act = player_activity( act_id,
+                        to_moves<int>( 10_minutes ),-1,0,"having fun with littlemaid" );
+    act.monsters.emplace_back( g->shared_from( z ) );
+    g->u.assign_activity(act);
 
 }
 

@@ -796,7 +796,34 @@
     "based_on": "time",
     "no_resume": true
   },
-  
+  {
+    "id": "ACT_LITTLEMAID_KISS",
+    "type": "activity_type",
+    "activity_level": "LIGHT_EXERCISE",
+    "verb": "have fun with littlemaid",
+    "based_on": "time"
+  },
+  {
+    "id": "ACT_LITTLEMAID_PETTING",
+    "type": "activity_type",
+    "activity_level": "LIGHT_EXERCISE",
+    "verb": "have fun with littlemaid",
+    "based_on": "time"
+  },
+  {
+    "id": "ACT_LITTLEMAID_SERVICE",
+    "type": "activity_type",
+    "activity_level": "LIGHT_EXERCISE",
+    "verb": "have fun with littlemaid",
+    "based_on": "time"
+  },
+  {
+    "id": "ACT_LITTLEMAID_SPECIAL",
+    "type": "activity_type",
+    "activity_level": "ACTIVE_EXERCISE",
+    "verb": "have fun with littlemaid",
+    "based_on": "time"
+  },
   {
     "id": "ACT_SEX_WITH_LITTLEMAID",
     "type": "activity_type",

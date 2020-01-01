@@ -188,6 +188,10 @@ void study_spell_do_turn( player_activity *act, player *p );
 void read_do_turn( player_activity *act, player *p );
 void wait_stamina_do_turn( player_activity *act, player *p );
 void sex_with_littlemaid_do_turn( player_activity *act, player *p );
+void littlemaid_kiss_do_turn( player_activity *act, player *p );
+void littlemaid_petting_do_turn( player_activity *act, player *p );
+void littlemaid_service_do_turn( player_activity *act, player *p );
+void littlemaid_special_do_turn( player_activity *act, player *p );
 void excrete_do_turn( player_activity *act, player *p );
 
 // defined in activity_handlers.cpp
@@ -254,6 +258,10 @@ void hacking_finish( player_activity *act, player *p );
 void spellcasting_finish( player_activity *act, player *p );
 void study_spell_finish( player_activity *act, player *p );
 void sex_with_littlemaid_finish( player_activity *act, player *p );
+void littlemaid_kiss_finish( player_activity *act, player *p );
+void littlemaid_petting_finish( player_activity *act, player *p );
+void littlemaid_service_finish( player_activity *act, player *p );
+void littlemaid_special_finish( player_activity *act, player *p );
 void excrete_finish( player_activity *act, player *p );
 
 

@@ -116,6 +116,11 @@ const efftype_id effect_pet( "pet" );
 const efftype_id effect_controlled( "controlled" );
 const efftype_id effect_saddled( "saddled" );
 
+const efftype_id effect_happiness( "happiness" );
+const efftype_id effect_comfortness( "comfortness" );
+const efftype_id effect_ecstasy( "ecstasy" );
+
+
 static const trait_id trait_ILLITERATE( "ILLITERATE" );
 
 using namespace activity_handlers;
@@ -189,6 +194,10 @@ activity_handlers::do_turn_functions = {
     { activity_id( "ACT_READ" ), read_do_turn},
     { activity_id( "ACT_WAIT_STAMINA" ), wait_stamina_do_turn },
     { activity_id( "ACT_SEX_WITH_LITTLEMAID" ), sex_with_littlemaid_do_turn },
+    { activity_id( "ACT_LITTLEMAID_KISS" ), littlemaid_kiss_do_turn },
+    { activity_id( "ACT_LITTLEMAID_PETTING" ), littlemaid_petting_do_turn },
+    { activity_id( "ACT_LITTLEMAID_SERVICE" ), littlemaid_service_do_turn },
+    { activity_id( "ACT_LITTLEMAID_SPECIAL" ), littlemaid_special_do_turn },
     { activity_id( "ACT_EXCRETE" ), excrete_do_turn }
 };
 
@@ -261,6 +270,10 @@ activity_handlers::finish_functions = {
     { activity_id( "ACT_SPELLCASTING" ), spellcasting_finish },
     { activity_id( "ACT_STUDY_SPELL" ), study_spell_finish },
     { activity_id( "ACT_SEX_WITH_LITTLEMAID" ), sex_with_littlemaid_finish },
+    { activity_id( "ACT_LITTLEMAID_KISS" ), littlemaid_kiss_finish },
+    { activity_id( "ACT_LITTLEMAID_PETTING" ), littlemaid_petting_finish },
+    { activity_id( "ACT_LITTLEMAID_SERVICE" ), littlemaid_service_finish },
+    { activity_id( "ACT_LITTLEMAID_SPECIAL" ), littlemaid_special_finish },
     { activity_id( "ACT_EXCRETE" ), excrete_finish }
 
 };
@@ -4550,6 +4563,73 @@ void activity_handlers::mind_splicer_finish( player_activity *act, player *p )
     data_card.contents.clear();
     data_card.put_in( item( "mind_scan_robofac" ) );
 }
+
+static void littlemaid_ecstasy_check( player *p, shared_ptr_fast<monster> maid){
+    if( 99 <= p->get_effect_int(effect_comfortness,  num_bp)) {
+        p->remove_effect(effect_comfortness,  num_bp);
+        p->add_effect(effect_ecstasy, 5_minutes, num_bp);
+    }
+    if( 99 <= maid->get_effect_int(effect_comfortness,  num_bp)) {
+        maid->remove_effect(effect_comfortness,  num_bp);
+        maid->add_effect(effect_ecstasy, 5_minutes, num_bp);
+    }
+}
+
+void activity_handlers::littlemaid_kiss_do_turn( player_activity *act, player *p ){
+    (void)act;
+    (void)p;
+}
+void activity_handlers::littlemaid_kiss_finish( player_activity *act, player *p ){
+    shared_ptr_fast<monster> maid = act->monsters[0].lock();
+    p->add_msg_if_player( m_good, _( "You finished kissing with littlemaid." ) );
+    maid->add_effect( effect_happiness, 30_minutes );
+    p->add_effect( effect_happiness, 30_minutes );
+
+    littlemaid_ecstasy_check(p, maid);
+    act->set_to_null();
+}
+void activity_handlers::littlemaid_petting_do_turn( player_activity *act, player *p ){
+    (void)act;
+    (void)p;
+}
+void activity_handlers::littlemaid_petting_finish( player_activity *act, player *p ){
+    shared_ptr_fast<monster> maid = act->monsters[0].lock();
+    p->add_msg_if_player( m_good, _( "You finished kissing with littlemaid." ) );
+    maid->add_effect( effect_happiness, 30_minutes );
+    p->add_effect( effect_happiness, 30_minutes );
+    p->add_effect( effect_comfortness, 30_minutes );
+
+    littlemaid_ecstasy_check(p, maid);
+    act->set_to_null();
+}
+void activity_handlers::littlemaid_service_do_turn( player_activity *act, player *p ){
+    (void)act;
+    (void)p;
+}
+void activity_handlers::littlemaid_service_finish( player_activity *act, player *p ){
+    shared_ptr_fast<monster> maid = act->monsters[0].lock();
+    p->add_msg_if_player( m_good, _( "You finished kissing with littlemaid." ) );
+    maid->add_effect( effect_happiness, 30_minutes );
+    p->add_effect( effect_happiness, 30_minutes );
+
+    littlemaid_ecstasy_check(p, maid);
+    act->set_to_null();
+}
+void activity_handlers::littlemaid_special_do_turn( player_activity *act, player *p ){
+    (void)act;
+    (void)p;
+}
+void activity_handlers::littlemaid_special_finish( player_activity *act, player *p ){
+    shared_ptr_fast<monster> maid = act->monsters[0].lock();
+    p->add_msg_if_player( m_good, _( "You finished kissing with littlemaid." ) );
+    maid->add_effect( effect_happiness, 30_minutes );
+    p->add_effect( effect_happiness, 30_minutes );
+
+    littlemaid_ecstasy_check(p, maid);
+    act->set_to_null();
+}
+
+
 
 void activity_handlers::sex_with_littlemaid_do_turn( player_activity *act, player *p ){
     (void)act;
