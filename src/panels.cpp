@@ -482,32 +482,32 @@ static std::string get_moon()
             return "";
     }
 }
-
-static std::string time_approx()
-{
-    const int iHour = hour_of_day<int>( calendar::turn );
-    if( iHour >= 23 || iHour <= 1 ) {
-        return _( "Around midnight" );
-    } else if( iHour <= 4 ) {
-        return _( "Dead of night" );
-    } else if( iHour <= 6 ) {
-        return _( "Around dawn" );
-    } else if( iHour <= 8 ) {
-        return _( "Early morning" );
-    } else if( iHour <= 10 ) {
-        return _( "Morning" );
-    } else if( iHour <= 13 ) {
-        return _( "Around noon" );
-    } else if( iHour <= 16 ) {
-        return _( "Afternoon" );
-    } else if( iHour <= 18 ) {
-        return _( "Early evening" );
-    } else if( iHour <= 20 ) {
-        return _( "Around dusk" );
+/*
+    static std::string time_approx()
+    {
+        const int iHour = hour_of_day<int>( calendar::turn );
+        if( iHour >= 23 || iHour <= 1 ) {
+            return _( "Around midnight" );
+        } else if( iHour <= 4 ) {
+            return _( "Dead of night" );
+        } else if( iHour <= 6 ) {
+            return _( "Around dawn" );
+        } else if( iHour <= 8 ) {
+            return _( "Early morning" );
+        } else if( iHour <= 10 ) {
+            return _( "Morning" );
+        } else if( iHour <= 13 ) {
+            return _( "Around noon" );
+        } else if( iHour <= 16 ) {
+            return _( "Afternoon" );
+        } else if( iHour <= 18 ) {
+            return _( "Early evening" );
+        } else if( iHour <= 20 ) {
+            return _( "Around dusk" );
+        }
+        return _( "Night" );
     }
-    return _( "Night" );
-}
-
+*/
 static nc_color value_color( int stat )
 {
     nc_color valuecolor = c_light_gray;
@@ -1358,7 +1358,11 @@ static void draw_loc_labels( const avatar &u, const catacurses::window &w, bool 
         mvwprintz( w, point( 1, 4 ), c_light_gray, _( "Time : %s" ),
                    to_string_time_of_day( calendar::turn ) );
     } else if( g->get_levz() >= 0 ) {
-        mvwprintz( w, point( 1, 4 ), c_light_gray, _( "Time : %s" ), time_approx() );
+        // mvwprintz( w, point( 1, 4 ), c_light_gray, _( "Time : %s" ), time_approx() );
+        // change to graphic time
+        mvwprintz( w, point( 1, 4 ), c_light_gray, _( "Time : %s" ), "" );
+        wmove( w, point( 8, 4 ) );
+        draw_time_graphic( w );
     } else {
         // NOLINTNEXTLINE(cata-text-style): the question mark does not end a sentence
         mvwprintz( w, point( 1, 4 ), c_light_gray, _( "Time : ???" ) );
