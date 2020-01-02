@@ -3119,7 +3119,38 @@ void iexamine::keg( player &p, const tripoint &examp )
         }
     }
 }
+void iexamine::bath( player &p, const tripoint &examp )
+{
+    const auto keg_name = g->m.name( examp );
+    units::volume keg_cap = get_keg_capacity( examp );
 
+    const std::vector<item *> content_liquid = map_cursor( examp ).items_with( []( const item & it ) {
+        return it.made_of_from_type( LIQUID );
+    } );
+
+    if( 0 < content_liquid.size() ){
+        for( item *it : content_liquid ){
+            if( ((keg_cap * 3 ) / 4 ) <  it->volume() ){
+                add_msg( m_info, _("too few"));
+                add_msg( m_info, _("now  : %d F"), it->volume());
+                add_msg( m_info, _("need : %d F"), ((keg_cap * 3 ) / 4 ));
+                continue;
+            }
+            if( it->temperature < 100 ) {
+                add_msg( m_info, _("too cold"));
+                add_msg( m_info, _("now  : %d F"), it->temperature);
+                add_msg( m_info, _("need : %d F"), 100);
+                continue;
+            }
+            if( query_yn( _("take bath?") ) ){
+                //  activity
+                return;
+            }
+            break;
+        }
+    }
+    keg( p, examp );
+}
 /**
  * Pour liquid into a keg (furniture) on the map. The transferred charges (if any)
  * will be removed from the liquid item.
@@ -5717,6 +5748,7 @@ iexamine_function iexamine_function_from_string( const std::string &function_nam
             { "fvat_empty", &iexamine::fvat_empty },
             { "fvat_full", &iexamine::fvat_full },
             { "keg", &iexamine::keg },
+            { "bath", &iexamine::bath },
             { "harvest_furn_nectar", &iexamine::harvest_furn_nectar },
             { "harvest_furn", &iexamine::harvest_furn },
             { "harvest_ter_nectar", &iexamine::harvest_ter_nectar },

@@ -188,6 +188,7 @@ activity_handlers::do_turn_functions = {
     { activity_id( "ACT_STUDY_SPELL" ), study_spell_do_turn},
     { activity_id( "ACT_READ" ), read_do_turn},
     { activity_id( "ACT_WAIT_STAMINA" ), wait_stamina_do_turn },
+    { activity_id( "ACT_TAKE_BATH" ), take_bath_do_turn },
     { activity_id( "ACT_SEX_WITH_LITTLEMAID" ), sex_with_littlemaid_do_turn },
     { activity_id( "ACT_EXCRETE" ), excrete_do_turn }
 };
@@ -260,6 +261,7 @@ activity_handlers::finish_functions = {
     { activity_id( "ACT_HACKING" ), hacking_finish },
     { activity_id( "ACT_SPELLCASTING" ), spellcasting_finish },
     { activity_id( "ACT_STUDY_SPELL" ), study_spell_finish },
+    { activity_id( "ACT_TAKE_BATH" ), take_bath_finish },
     { activity_id( "ACT_SEX_WITH_LITTLEMAID" ), sex_with_littlemaid_finish },
     { activity_id( "ACT_EXCRETE" ), excrete_finish }
 
@@ -4576,6 +4578,20 @@ void activity_handlers::excrete_do_turn( player_activity *act, player *p ){
     if( calendar::once_every( 5_minutes ) ) {
         // say some messages?
     }
+}
+
+void activity_handlers::take_bath_do_turn( player_activity *act, player *p ){
+    (void)act;
+    (void)p;
+    if( calendar::once_every( 10_minutes ) ) {
+        add_msg( m_info, "* It's good bath, ahaha! *");
+    }
+}
+
+void activity_handlers::take_bath_finish( player_activity *act, player *p ){
+    p->add_msg_if_player( m_good, _( "Good enough, you get out the bath." ) );
+    p->add_morale( MORALE_TAKE_BATH, 30, 60, 180_minutes );
+    act->set_to_null();
 }
 
 void activity_handlers::excrete_finish( player_activity *act, player *p ){

@@ -11,8 +11,34 @@
     "required_str": -1,
     "flags": [ "TRANSPARENT", "FLAMMABLE_HARD", "CONTAINER", "PLACE_ITEM", "BLOCKSDOOR", "MOUNTABLE" ],
     "max_volume": 800,
-    "examine_action": "keg",
+    "examine_action": "bath",
     "keg_capacity": 600,
+    "bash": {
+      "str_min": 12,
+      "str_max": 50,
+      "sound": "porcelain breaking!",
+      "sound_fail": "whunk!",
+      "items": [
+        { "item": "cu_pipe", "prob": 50 },
+        { "item": "water_faucet", "prob": 50 },
+        { "item": "ceramic_shard", "count": [ 6, 18 ] }
+      ]
+    }
+  },
+  {
+    "type": "furniture",
+    "id": "f_bathtub_makeshift",
+    "name": "makeshift bathtub",
+    "symbol": "~",
+    "description": "makeshift bathtub.",
+    "color": "white",
+    "move_cost_mod": 2,
+    "coverage": 30,
+    "required_str": -1,
+    "flags": [ "TRANSPARENT", "FLAMMABLE_HARD", "CONTAINER", "PLACE_ITEM", "BLOCKSDOOR", "MOUNTABLE" ],
+    "max_volume": 400,
+    "examine_action": "bath",
+    "keg_capacity": 300,
     "bash": {
       "str_min": 12,
       "str_max": 50,
