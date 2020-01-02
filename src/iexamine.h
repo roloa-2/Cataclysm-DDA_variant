@@ -96,6 +96,7 @@ void fireplace( player &p, const tripoint &examp );
 void fvat_empty( player &p, const tripoint &examp );
 void fvat_full( player &p, const tripoint &examp );
 void keg( player &p, const tripoint &examp );
+void bath( player &p, const tripoint &examp );
 void reload_furniture( player &p, const tripoint &examp );
 void curtains( player &p, const tripoint &examp );
 void sign( player &p, const tripoint &examp );

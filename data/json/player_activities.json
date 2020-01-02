@@ -789,6 +789,13 @@
   },
   
   {
+    "id": "ACT_TAKE_BATH",
+    "type": "activity_type",
+    "activity_level": "LIGHT_EXERCISE",
+    "verb": "taking bath",
+    "based_on": "time"
+  },
+  {
     "id": "ACT_EXCRETE",
     "type": "activity_type",
     "activity_level": "NO_EXERCISE",

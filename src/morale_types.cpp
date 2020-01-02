@@ -195,6 +195,7 @@ const morale_type MORALE_TREE_COMMUNION( "morale_tree_communion" );
 const morale_type MORALE_ACCOMPLISHMENT( "morale_accomplishment" );
 const morale_type MORALE_FAILURE( "morale_failure" );
 const morale_type MORALE_SEX_WITH_LITTLEMAID( "morale_sex_with_littlemaid" );
+const morale_type MORALE_TAKE_BATH( "morale_take_bath" );
 const morale_type MORALE_EXCRETE( "morale_excrete" );
 const morale_type MORALE_INCONTINENT( "morale_incontinent" );
 
