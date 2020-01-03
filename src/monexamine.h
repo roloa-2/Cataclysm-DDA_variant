@@ -31,6 +31,7 @@ void maid_itemize( monster &z );
 void maid_talk( monster &z );
 void maid_toggle_speak( monster &z );
 void maid_sex( monster &z );
+void maid_change_costume( monster &z );
 
 /*
 *Manages the milking and milking cool down of monsters.

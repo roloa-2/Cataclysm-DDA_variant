@@ -80,9 +80,10 @@ bool monexamine::pet_menu( monster &z )
         check_bat,
         littlemaid_talk,
         littlemaid_sex,
-        littlemaid_itemize,
         littlemaid_toggle_speak,
         littlemaid_stay,
+        littlemaid_itemize,
+        littlemaid_change_costume,
     };
 
     uilist amenu;
@@ -194,7 +195,6 @@ bool monexamine::pet_menu( monster &z )
     if( z.has_flag( MF_LITTLE_MAID ) ) {
         amenu.addentry( littlemaid_talk, true, 't', _( "Talk with littlemaid" ));
         amenu.addentry( littlemaid_sex, true, 'l', _( "Lovely activity" ));
-        amenu.addentry( littlemaid_itemize, true, 'i', _( "Itemize littlemaid" ));
         if( z.has_effect( effect_littlemaid_speak_off ) ){
             amenu.addentry( littlemaid_toggle_speak, true, 's', _( "Allow speak" ));
         } else {
@@ -205,6 +205,8 @@ bool monexamine::pet_menu( monster &z )
         } else {
             amenu.addentry( littlemaid_stay, true, 'f', _( "Stay here" ));
         }
+        amenu.addentry( littlemaid_itemize, true, 'i', _( "Itemize littlemaid" ));
+        amenu.addentry( littlemaid_change_costume, true, 'C', _( "Change costume" ));
     }
     amenu.query();
     int choice = amenu.ret;
@@ -284,6 +286,8 @@ bool monexamine::pet_menu( monster &z )
         case littlemaid_toggle_speak:
             maid_toggle_speak( z );
             break;
+        case littlemaid_change_costume:
+            maid_change_costume( z );
         default:
             break;
     }
@@ -746,6 +750,18 @@ void monexamine::maid_itemize( monster &z )
         g->u.moves -= 100;
         g->u.i_add( item( "little_maid_R18_milk_sanpo" ) );
         g->remove_zombie( z );
+    }
+}
+
+void monexamine::maid_change_costume( monster &z )
+{
+    if( query_yn( _( "Change %s's costume?" ), z.name() ) ) {
+        g->u.moves -= 100;
+        if (z.type->id == mtype_id("mon_little_maid_R18_milk_sanpo")) {
+            z.poly( mtype_id("mon_little_maid_R18_milk_sanpo_altanate"));
+        } else {
+            z.poly( mtype_id("mon_little_maid_R18_milk_sanpo"));
+        }
     }
 }
 
