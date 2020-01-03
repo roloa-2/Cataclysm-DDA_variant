@@ -1204,6 +1204,10 @@ static const std::unordered_set<efftype_id> hardcoded_movement_impairing = {{
         efftype_id( "lightsnare" ),
         efftype_id( "tied" ),
         efftype_id( "webbed" ),
+        efftype_id( "littlemaid_in_kiss" ),
+        efftype_id( "littlemaid_in_petting" ),
+        efftype_id( "littlemaid_in_service" ),
+        efftype_id( "littlemaid_in_special" ),
     }
 };
 

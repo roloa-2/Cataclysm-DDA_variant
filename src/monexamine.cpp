@@ -768,7 +768,6 @@ void monexamine::maid_toggle_speak( monster &z )
 
 void monexamine::maid_sex( monster &z )
 {
-    z.add_effect( effect_littlemaid_stay, 1_turns, num_bp, true );
 
     enum maid_choices {
         littlemaid_kiss = 0,
@@ -803,12 +802,13 @@ void monexamine::maid_sex( monster &z )
     case littlemaid_special:
         act_id = activity_id( "ACT_LITTLEMAID_SPECIAL" );
         break;
+    default:
+        return;
     }
     player_activity act = player_activity( act_id,
                         to_moves<int>( 10_minutes ),-1,0,"having fun with littlemaid" );
     act.monsters.emplace_back( g->shared_from( z ) );
     g->u.assign_activity(act);
-
 }
 
 void monexamine::milk_source( monster &source_mon )

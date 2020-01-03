@@ -119,7 +119,11 @@ const efftype_id effect_saddled( "saddled" );
 const efftype_id effect_happiness( "happiness" );
 const efftype_id effect_comfortness( "comfortness" );
 const efftype_id effect_ecstasy( "ecstasy" );
-
+const efftype_id effect_maid_fatigue( "maid_fatigue" );
+const efftype_id effect_littlemaid_in_kiss( "littlemaid_in_kiss" );
+const efftype_id effect_littlemaid_in_petting( "littlemaid_in_petting" );
+const efftype_id effect_littlemaid_in_service( "littlemaid_in_service" );
+const efftype_id effect_littlemaid_in_special( "littlemaid_in_special" );
 
 static const trait_id trait_ILLITERATE( "ILLITERATE" );
 
@@ -4567,65 +4571,249 @@ void activity_handlers::mind_splicer_finish( player_activity *act, player *p )
 }
 
 static void littlemaid_ecstasy_check( player *p, shared_ptr_fast<monster> maid){
-    if( 99 <= p->get_effect_int(effect_comfortness,  num_bp)) {
+
+    // int player_h = p->   get_effect_int(effect_happiness  , num_bp);
+    int player_c = p->   get_effect_int(effect_comfortness, num_bp);
+    int maid_h   = maid->get_effect_int(effect_happiness  , num_bp);
+    int maid_c   = maid->get_effect_int(effect_comfortness, num_bp);
+    int maid_f   = maid->get_effect_int(effect_maid_fatigue, num_bp);
+
+    bool player_ecstacy = 99 <= player_c;
+    bool maid_ecstacy   = 99 <= maid_c;
+    if( player_ecstacy && maid_ecstacy ) {
+        p->add_msg_if_player( m_good, _( "You and Maid are raised up ecstacy at the moment!" ) );
         p->remove_effect(effect_comfortness,  num_bp);
         p->add_effect(effect_ecstasy, 5_minutes, num_bp);
-    }
-    if( 99 <= maid->get_effect_int(effect_comfortness,  num_bp)) {
+        p->mod_fatigue( 50 );
         maid->remove_effect(effect_comfortness,  num_bp);
         maid->add_effect(effect_ecstasy, 5_minutes, num_bp);
+        maid->add_effect(effect_maid_fatigue, 150_minutes, num_bp);
+
+        int mp_amount = maid->get_effect_int(effect_happiness, num_bp);
+        mp_amount = mp_amount * 5;
+        p->add_msg_if_player( m_good, _( "%d maid points produced." ), mp_amount );
+        item mp( "maid_point", calendar::turn );
+        mp.charges = mp_amount;
+        p->i_add_or_drop(mp);
+
+    } else if(player_ecstacy) {
+        p->add_msg_if_player( m_good, _( "You raised up ecstacy!" ) );
+        p->remove_effect(effect_comfortness,  num_bp);
+        p->add_effect(effect_ecstasy, 5_minutes, num_bp);
+        p->mod_fatigue( 50 );
+
+    } else if(maid_ecstacy) {
+        p->add_msg_if_player( m_good, _( "Littlemaid raised up ecstacy!" ) );
+        maid->remove_effect(effect_comfortness,  num_bp);
+        maid->add_effect(effect_ecstasy, 5_minutes, num_bp);
+        maid->add_effect(effect_maid_fatigue, 150_minutes, num_bp);
+
+        int mp_amount = maid->get_effect_int(effect_happiness, num_bp);
+        p->add_msg_if_player( m_good, _( "%d maid points produced." ), mp_amount );
+        item mp( "maid_point", calendar::turn );
+        mp.charges = mp_amount;
+        p->i_add_or_drop(mp);
+    } else {
+        std::string hint = "";
+        if( 30 < maid_f && rng(1, maid_c * 2 + maid_h) < rng(1, maid_f) ){
+            if( 70 < maid_f) {
+                hint = "Littlemaid seems pretty tired.";
+            } else {
+                hint = "Littlemaid seems pretty tired.";
+            }
+        } else if( rng(1, maid_c * 2) < rng(1, maid_h) ){
+            if( 40 < maid_h ){
+                hint = "Littlemaid seems happy.";
+            } else if( 60 < maid_h ){
+                hint = "Littlemaid seems so happy.";
+            } else if( 80 < maid_h ){
+                hint = "Littlemaid seems happiest.";
+            }
+        } else {
+            if( 40 < maid_c ){
+                hint = "Littlemaid seems in comfort.";
+            } else if( 60 < maid_c ){
+                hint = "Littlemaid seems in very comfort.";
+            } else if( 80 < maid_c ){
+                hint = "Littlemaid seems near ecstacy.";
+            }
+        }
+        if( 0 < hint.size()) {
+            p->add_msg_if_player( m_neutral, _( hint ) );
+        }
     }
 }
 
 void activity_handlers::littlemaid_kiss_do_turn( player_activity *act, player *p ){
-    (void)act;
     (void)p;
+    if( calendar::once_every( 10_seconds ) ) {
+        shared_ptr_fast<monster> maid = act->monsters[0].lock();
+        maid->add_effect( effect_littlemaid_in_kiss, 20_seconds, num_bp);
+    }
+
 }
 void activity_handlers::littlemaid_kiss_finish( player_activity *act, player *p ){
     shared_ptr_fast<monster> maid = act->monsters[0].lock();
     p->add_msg_if_player( m_good, _( "You finished kissing with littlemaid." ) );
-    maid->add_effect( effect_happiness, 30_minutes );
-    p->add_effect( effect_happiness, 30_minutes );
+
+    int player_h = p->   get_effect_int(effect_happiness  , num_bp);
+    int player_c = p->   get_effect_int(effect_comfortness, num_bp);
+    int maid_h   = maid->get_effect_int(effect_happiness  , num_bp);
+    int maid_c   = maid->get_effect_int(effect_comfortness, num_bp);
+    int maid_f   = maid->get_effect_int(effect_maid_fatigue, num_bp);
+
+    int player_h_mod = 25;
+    int player_c_mod = 2;
+    int maid_h_mod   = 30 * 100 / ( 100 + maid_f);
+    int maid_c_mod   = 2  * 100 / ( 100 + maid_f);
+
+    player_h_mod = rng(player_h_mod / 2, player_h_mod);
+    player_c_mod = rng(player_c_mod / 2, player_c_mod);
+    maid_h_mod   = rng(maid_h_mod   / 2, maid_h_mod);
+    maid_c_mod   = rng(maid_c_mod   / 2, maid_c_mod);
+
+    p->add_effect(    effect_happiness  , player_h_mod * 1_minutes );
+    p->add_effect(    effect_comfortness, player_c_mod * 1_minutes );
+    maid->add_effect( effect_happiness  , maid_h_mod   * 1_minutes );
+    maid->add_effect( effect_comfortness, maid_c_mod   * 1_minutes );
+
+    add_msg( m_debug, _("Player h: %2d+%2d=%2d c:%2d+%2d=%2d"),
+            player_h,player_h_mod,p->get_effect_int(effect_happiness  , num_bp),
+            player_c,player_c_mod,p->get_effect_int(effect_comfortness, num_bp));
+    add_msg( m_debug, _("Maid   h: %2d+%2d=%2d c:%2d+%2d=%2d"),
+            maid_h,maid_h_mod,maid->get_effect_int(effect_happiness  , num_bp),
+            maid_c,maid_c_mod,maid->get_effect_int(effect_comfortness, num_bp));
 
     littlemaid_ecstasy_check(p, maid);
     act->set_to_null();
 }
 void activity_handlers::littlemaid_petting_do_turn( player_activity *act, player *p ){
-    (void)act;
     (void)p;
+    if( calendar::once_every( 10_seconds ) ) {
+        shared_ptr_fast<monster> maid = act->monsters[0].lock();
+        maid->add_effect( effect_littlemaid_in_petting, 20_seconds, num_bp);
+    }
+
 }
 void activity_handlers::littlemaid_petting_finish( player_activity *act, player *p ){
     shared_ptr_fast<monster> maid = act->monsters[0].lock();
-    p->add_msg_if_player( m_good, _( "You finished kissing with littlemaid." ) );
-    maid->add_effect( effect_happiness, 30_minutes );
-    p->add_effect( effect_happiness, 30_minutes );
-    p->add_effect( effect_comfortness, 30_minutes );
+    p->add_msg_if_player( m_good, _( "You finished petting with littlemaid." ) );
+
+    int player_h = p->   get_effect_int(effect_happiness  , num_bp);
+    int player_c = p->   get_effect_int(effect_comfortness, num_bp);
+    int maid_h   = maid->get_effect_int(effect_happiness  , num_bp);
+    int maid_c   = maid->get_effect_int(effect_comfortness, num_bp);
+    int maid_f   = maid->get_effect_int(effect_maid_fatigue, num_bp);
+
+    int player_h_mod = 25 * 100 / (100 + player_h);
+    int player_c_mod = 2;
+    int maid_h_mod   = 30 * 100 / (100 + maid_h) * 100 / ( 100 + maid_f);
+    int maid_c_mod   = 10 + 30 * maid_h / 100    * 100 / ( 100 + maid_f);
+
+    player_h_mod = rng(player_h_mod / 2, player_h_mod);
+    player_c_mod = rng(player_c_mod / 2, player_c_mod);
+    maid_h_mod   = rng(maid_h_mod   / 2, maid_h_mod);
+    maid_c_mod   = rng(maid_c_mod   / 2, maid_c_mod);
+
+    p->add_effect(    effect_happiness  , player_h_mod * 1_minutes );
+    p->add_effect(    effect_comfortness, player_c_mod * 1_minutes );
+    maid->add_effect( effect_happiness  , maid_h_mod   * 1_minutes );
+    maid->add_effect( effect_comfortness, maid_c_mod   * 1_minutes );
+
+    add_msg( m_debug, _("Player h: %2d+%2d=%2d c:%2d+%2d=%2d"),
+            player_h,player_h_mod,p->get_effect_int(effect_happiness  , num_bp),
+            player_c,player_c_mod,p->get_effect_int(effect_comfortness, num_bp));
+    add_msg( m_debug, _("Maid   h: %2d+%2d=%2d c:%2d+%2d=%2d"),
+            maid_h,maid_h_mod,maid->get_effect_int(effect_happiness  , num_bp),
+            maid_c,maid_c_mod,maid->get_effect_int(effect_comfortness, num_bp));
 
     littlemaid_ecstasy_check(p, maid);
     act->set_to_null();
 }
 void activity_handlers::littlemaid_service_do_turn( player_activity *act, player *p ){
-    (void)act;
     (void)p;
+    if( calendar::once_every( 10_seconds ) ) {
+        shared_ptr_fast<monster> maid = act->monsters[0].lock();
+        maid->add_effect( effect_littlemaid_in_service, 20_seconds, num_bp);
+    }
+
+
 }
 void activity_handlers::littlemaid_service_finish( player_activity *act, player *p ){
     shared_ptr_fast<monster> maid = act->monsters[0].lock();
-    p->add_msg_if_player( m_good, _( "You finished kissing with littlemaid." ) );
-    maid->add_effect( effect_happiness, 30_minutes );
-    p->add_effect( effect_happiness, 30_minutes );
+    p->add_msg_if_player( m_good, _( "You got service by littlemaid." ) );
+
+    int player_h = p->   get_effect_int(effect_happiness  , num_bp);
+    int player_c = p->   get_effect_int(effect_comfortness, num_bp);
+    int maid_h   = maid->get_effect_int(effect_happiness  , num_bp);
+    int maid_c   = maid->get_effect_int(effect_comfortness, num_bp);
+    int maid_f   = maid->get_effect_int(effect_maid_fatigue, num_bp);
+
+    int player_h_mod = 35 * 100 / (100 + player_h);
+    int player_c_mod = 15 + 20 * player_h / 100 + 10 * maid_h / 100;;
+    int maid_h_mod   = 20 * 100 / (100 + maid_h) * 100 / ( 100 + maid_f);;
+    int maid_c_mod   = 2                         * 100 / ( 100 + maid_f);;
+
+    player_h_mod = rng(player_h_mod / 2, player_h_mod);
+    player_c_mod = rng(player_c_mod / 2, player_c_mod);
+    maid_h_mod   = rng(maid_h_mod   / 2, maid_h_mod);
+    maid_c_mod   = rng(maid_c_mod   / 2, maid_c_mod);
+
+    p->add_effect(    effect_happiness  , player_h_mod * 1_minutes );
+    p->add_effect(    effect_comfortness, player_c_mod * 1_minutes );
+    maid->add_effect( effect_happiness  , maid_h_mod   * 1_minutes );
+    maid->add_effect( effect_comfortness, maid_c_mod   * 1_minutes );
+
+    add_msg( m_debug, _("Player h: %2d+%2d=%2d c:%2d+%2d=%2d"),
+            player_h,player_h_mod,p->get_effect_int(effect_happiness  , num_bp),
+            player_c,player_c_mod,p->get_effect_int(effect_comfortness, num_bp));
+    add_msg( m_debug, _("Maid   h: %2d+%2d=%2d c:%2d+%2d=%2d"),
+            maid_h,maid_h_mod,maid->get_effect_int(effect_happiness  , num_bp),
+            maid_c,maid_c_mod,maid->get_effect_int(effect_comfortness, num_bp));
 
     littlemaid_ecstasy_check(p, maid);
     act->set_to_null();
 }
 void activity_handlers::littlemaid_special_do_turn( player_activity *act, player *p ){
-    (void)act;
     (void)p;
+    if( calendar::once_every( 10_seconds ) ) {
+        shared_ptr_fast<monster> maid = act->monsters[0].lock();
+        maid->add_effect( effect_littlemaid_in_special, 20_seconds, num_bp);
+    }
+
+
 }
 void activity_handlers::littlemaid_special_finish( player_activity *act, player *p ){
     shared_ptr_fast<monster> maid = act->monsters[0].lock();
-    p->add_msg_if_player( m_good, _( "You finished kissing with littlemaid." ) );
-    maid->add_effect( effect_happiness, 30_minutes );
-    p->add_effect( effect_happiness, 30_minutes );
+    p->add_msg_if_player( m_good, _( "You finished special thing with littlemaid." ) );
+
+    int player_h = p->   get_effect_int(effect_happiness  , num_bp);
+    int player_c = p->   get_effect_int(effect_comfortness, num_bp);
+    int maid_h   = maid->get_effect_int(effect_happiness  , num_bp);
+    int maid_c   = maid->get_effect_int(effect_comfortness, num_bp);
+    int maid_f   = maid->get_effect_int(effect_maid_fatigue, num_bp);
+
+    int player_h_mod = 30 * 100 / (100 + player_h);
+    int player_c_mod = 10 + 50 * player_h / 100 + 10 * maid_h / 100;
+    int maid_h_mod   = 5 + 20 * maid_h / (100 + maid_h)            * 100 / ( 100 + maid_f);
+    int maid_c_mod   = 2 + 10 * player_h / 100 + 50 * maid_h / 100 * 100 / ( 100 + maid_f);
+
+    player_h_mod = rng(player_h_mod / 2, player_h_mod);
+    player_c_mod = rng(player_c_mod / 2, player_c_mod);
+    maid_h_mod   = rng(maid_h_mod   / 2, maid_h_mod);
+    maid_c_mod   = rng(maid_c_mod   / 2, maid_c_mod);
+
+    p->add_effect(    effect_happiness  , player_h_mod * 1_minutes );
+    p->add_effect(    effect_comfortness, player_c_mod * 1_minutes );
+    maid->add_effect( effect_happiness  , maid_h_mod   * 1_minutes );
+    maid->add_effect( effect_comfortness, maid_c_mod   * 1_minutes );
+
+    add_msg( m_debug, _("Player h: %2d+%2d=%2d c:%2d+%2d=%2d"),
+            player_h,player_h_mod,p->get_effect_int(effect_happiness  , num_bp),
+            player_c,player_c_mod,p->get_effect_int(effect_comfortness, num_bp));
+    add_msg( m_debug, _("Maid   h: %2d+%2d=%2d c:%2d+%2d=%2d"),
+            maid_h,maid_h_mod,maid->get_effect_int(effect_happiness  , num_bp),
+            maid_c,maid_c_mod,maid->get_effect_int(effect_comfortness, num_bp));
 
     littlemaid_ecstasy_check(p, maid);
     act->set_to_null();

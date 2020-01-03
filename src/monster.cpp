@@ -161,6 +161,10 @@ const efftype_id effect_tied( "tied" );
 const efftype_id effect_webbed( "webbed" );
 const efftype_id effect_littlemaid_stay( "littlemaid_stay" );
 const efftype_id effect_littlemaid_speak_off( "littlemaid_speak_off" );
+const efftype_id effect_littlemaid_in_kiss( "littlemaid_in_kiss" );
+const efftype_id effect_littlemaid_in_petting( "littlemaid_in_petting" );
+const efftype_id effect_littlemaid_in_service( "littlemaid_in_service" );
+const efftype_id effect_littlemaid_in_special( "littlemaid_in_special" );
 
 static const trait_id trait_ANIMALDISCORD( "ANIMALDISCORD" );
 static const trait_id trait_ANIMALDISCORD2( "ANIMALDISCORD2" );
@@ -1552,12 +1556,14 @@ bool monster::move_effects( bool )
     // IMPORTANT: If adding any new effects here, make SURE to
     // add them to hardcoded_movement_impairing in effect.cpp
 
-    if( has_effect( effect_littlemaid_stay ) ) {
-        return false;
-    }
-
     if( !effect_cache[MOVEMENT_IMPAIRED] ) {
         return true;
+    }
+
+    if( has_effect( effect_littlemaid_stay ) ||
+        has_effect( effect_littlemaid_in_kiss ) || has_effect( effect_littlemaid_in_petting ) ||
+        has_effect( effect_littlemaid_in_service ) || has_effect( effect_littlemaid_in_special ) ) {
+        return false;
     }
 
     bool u_see_me = g->u.sees( *this );

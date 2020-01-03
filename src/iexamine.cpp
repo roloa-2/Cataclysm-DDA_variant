@@ -3130,20 +3130,18 @@ void iexamine::bath( player &p, const tripoint &examp )
 
     if( 0 < content_liquid.size() ){
         for( item *it : content_liquid ){
-            if( ((keg_cap * 3 ) / 4 ) <  it->volume() ){
-                add_msg( m_info, _("too few"));
-                add_msg( m_info, _("now  : %d F"), it->volume());
-                add_msg( m_info, _("need : %d F"), ((keg_cap * 3 ) / 4 ));
-                continue;
+            if( it->volume() < keg_cap / 2 ){
+                add_msg( m_info, _("too few water to take bath."));
+                add_msg( m_info, _("require %.2f liter"), units::to_liter(keg_cap / 2));
             }
-            if( it->temperature < 100 ) {
-                add_msg( m_info, _("too cold"));
-                add_msg( m_info, _("now  : %d F"), it->temperature);
-                add_msg( m_info, _("need : %d F"), 100);
+            if( !it->has_flag("HOT") ) {
+                add_msg( m_info, _("too cold water to take bath."));
                 continue;
             }
             if( query_yn( _("take bath?") ) ){
-                //  activity
+                player_activity act = player_activity( activity_id( "ACT_TAKE_BATH" ),
+                                        to_moves<int>( 30_minutes ),-1,0,"taking bath" );
+                p.assign_activity(act);
                 return;
             }
             break;

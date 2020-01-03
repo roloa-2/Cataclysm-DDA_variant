@@ -154,6 +154,10 @@ const efftype_id effect_targeted( "targeted" );
 const efftype_id effect_teleglow( "teleglow" );
 const efftype_id effect_under_op( "under_operation" );
 const efftype_id effect_littlemaid_speak_off( "littlemaid_speak_off" );
+const efftype_id effect_littlemaid_in_kiss( "littlemaid_in_kiss" );
+const efftype_id effect_littlemaid_in_petting( "littlemaid_in_petting" );
+const efftype_id effect_littlemaid_in_service( "littlemaid_in_service" );
+const efftype_id effect_littlemaid_in_special( "littlemaid_in_special" );
 
 
 static const trait_id trait_ACIDBLOOD( "ACIDBLOOD" );
@@ -4361,14 +4365,27 @@ bool mattack::parrot_at_danger( monster *parrot )
 
 bool mattack::littlemaid_action( monster *maid )
 {
+    std::string speech_id = "";
     if( maid->has_effect( effect_littlemaid_speak_off ) ) {
         return true;
+    } else if( maid->has_effect( effect_littlemaid_in_kiss ) ) {
+        speech_id = maid->type->id.str() + "_in_kiss";
+    } else if( maid->has_effect( effect_littlemaid_in_petting ) ) {
+        speech_id = maid->type->id.str() + "_in_petting";
+    } else if( maid->has_effect( effect_littlemaid_in_service ) ) {
+        speech_id = maid->type->id.str() + "_in_service";
+    } else if( maid->has_effect( effect_littlemaid_in_special ) ) {
+        speech_id = maid->type->id.str() + "_in_special";
     } else if( one_in( 20 ) ) {
-        const SpeechBubble &speech = get_speech( maid->type->id.str() );
+        speech_id = maid->type->id.str();
+    }
+    if( 0 < speech_id.size() ){
+        const SpeechBubble &speech = get_speech( speech_id );
         sounds::sound( maid->pos(), speech.volume, sounds::sound_t::speech, speech.text.translated(),
                        false, "speech", maid->type->id.str() );
         return true;
     }
+
     return false;
 }
 
