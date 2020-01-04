@@ -1984,7 +1984,7 @@ bool cata_tiles::draw_sprite_at(
             case 1:
                 // 90 degrees (and 270, with just two sprites)
 #if defined(_WIN32)
-                destination.y -= 1;
+                destination.y -= 0;
 #endif
                 if( !tile_iso ) {
                     // never rotate isometric tiles
@@ -2006,7 +2006,7 @@ bool cata_tiles::draw_sprite_at(
             case 3:
                 // 270 degrees
 #if defined(_WIN32)
-                destination.x -= 1;
+                destination.x -= 0;
 #endif
                 if( !tile_iso ) {
                     // never rotate isometric tiles
@@ -3609,3 +3609,7 @@ std::vector<options_manager::id_and_option> cata_tiles::build_renderer_list()
 }
 
 #endif // SDL_TILES
+
+
+
+
