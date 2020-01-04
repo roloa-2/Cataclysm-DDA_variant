@@ -101,6 +101,7 @@ const morale_type &morale_type_data::convert_legacy( int lmt )
             morale_type( "morale_failure" ),
 
             morale_type( "morale_sex_with_littlemaid" ),
+            morale_type( "morale_ecstasy" ),
             morale_type( "morale_excrete" ),
             morale_type( "morale_incontinent" ),
 
@@ -195,6 +196,7 @@ const morale_type MORALE_TREE_COMMUNION( "morale_tree_communion" );
 const morale_type MORALE_ACCOMPLISHMENT( "morale_accomplishment" );
 const morale_type MORALE_FAILURE( "morale_failure" );
 const morale_type MORALE_SEX_WITH_LITTLEMAID( "morale_sex_with_littlemaid" );
+const morale_type MORALE_ECSTASY( "morale_ecstasy" );
 const morale_type MORALE_TAKE_BATH( "morale_take_bath" );
 const morale_type MORALE_EXCRETE( "morale_excrete" );
 const morale_type MORALE_INCONTINENT( "morale_incontinent" );

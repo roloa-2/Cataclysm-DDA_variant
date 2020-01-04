@@ -165,6 +165,8 @@ const efftype_id effect_littlemaid_in_kiss( "littlemaid_in_kiss" );
 const efftype_id effect_littlemaid_in_petting( "littlemaid_in_petting" );
 const efftype_id effect_littlemaid_in_service( "littlemaid_in_service" );
 const efftype_id effect_littlemaid_in_special( "littlemaid_in_special" );
+const efftype_id effect_littlemaid_goodnight( "littlemaid_goodnight" );
+
 
 static const trait_id trait_ANIMALDISCORD( "ANIMALDISCORD" );
 static const trait_id trait_ANIMALDISCORD2( "ANIMALDISCORD2" );
@@ -1560,7 +1562,7 @@ bool monster::move_effects( bool )
         return true;
     }
 
-    if( has_effect( effect_littlemaid_stay ) ||
+    if( has_effect( effect_littlemaid_stay ) || has_effect( effect_littlemaid_goodnight) ||
         has_effect( effect_littlemaid_in_kiss ) || has_effect( effect_littlemaid_in_petting ) ||
         has_effect( effect_littlemaid_in_service ) || has_effect( effect_littlemaid_in_special ) ) {
         return false;

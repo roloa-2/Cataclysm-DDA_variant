@@ -158,6 +158,11 @@ const efftype_id effect_littlemaid_in_kiss( "littlemaid_in_kiss" );
 const efftype_id effect_littlemaid_in_petting( "littlemaid_in_petting" );
 const efftype_id effect_littlemaid_in_service( "littlemaid_in_service" );
 const efftype_id effect_littlemaid_in_special( "littlemaid_in_special" );
+const efftype_id effect_littlemaid_goodnight( "littlemaid_goodnight" );
+const efftype_id effect_happiness( "happiness" );
+const efftype_id effect_comfortness( "comfortness" );
+const efftype_id effect_ecstasy( "ecstasy" );
+const efftype_id effect_maid_fatigue( "maid_fatigue" );
 
 
 static const trait_id trait_ACIDBLOOD( "ACIDBLOOD" );
@@ -4365,20 +4370,68 @@ bool mattack::parrot_at_danger( monster *parrot )
 
 bool mattack::littlemaid_action( monster *maid )
 {
+
     std::string speech_id = "";
     if( maid->has_effect( effect_littlemaid_speak_off ) ) {
         return true;
+    } else if( maid->has_effect( effect_littlemaid_goodnight ) ) {
+        if( g->u.in_sleep_state() ) {
+            return true;
+        } else {
+            speech_id = "mon_little_maid_R18_milk_sanpo_goodmorning";
+            maid->remove_effect( effect_littlemaid_goodnight );
+        }
+    } else if( g->u.in_sleep_state() ) {
+        speech_id = "mon_little_maid_R18_milk_sanpo_goodnight";
+        maid->add_effect( effect_littlemaid_goodnight, 12_hours, num_bp, false);
+    } else if( !one_in( 3 ) ){
+        return true;
     } else if( maid->has_effect( effect_littlemaid_in_kiss ) ) {
-        speech_id = maid->type->id.str() + "_in_kiss";
+        if ( 70 < maid->get_effect_int( effect_happiness) ){
+            speech_id = "mon_little_maid_R18_milk_sanpo_in_kiss_int2";
+        } else if ( 30 < maid->get_effect_int( effect_happiness) ){
+            speech_id = "mon_little_maid_R18_milk_sanpo_in_kiss_int1";
+        } else {
+            speech_id = "mon_little_maid_R18_milk_sanpo_in_kiss";
+        }
     } else if( maid->has_effect( effect_littlemaid_in_petting ) ) {
-        speech_id = maid->type->id.str() + "_in_petting";
+        if ( 70 < maid->get_effect_int( effect_comfortness) ){
+            speech_id = "mon_little_maid_R18_milk_sanpo_in_petting_int2";
+        } else if ( 30 < maid->get_effect_int( effect_comfortness) ){
+            speech_id = "mon_little_maid_R18_milk_sanpo_in_petting_int1";
+        } else {
+            speech_id = "mon_little_maid_R18_milk_sanpo_in_petting";
+        }
     } else if( maid->has_effect( effect_littlemaid_in_service ) ) {
-        speech_id = maid->type->id.str() + "_in_service";
+        if ( 70 < g->u.get_effect_int( effect_comfortness) ){
+            speech_id = "mon_little_maid_R18_milk_sanpo_in_service_int2";
+        } else if ( 30 < g->u.get_effect_int( effect_comfortness) ){
+            speech_id = "mon_little_maid_R18_milk_sanpo_in_service_int1";
+        } else {
+            speech_id = "mon_little_maid_R18_milk_sanpo_in_service";
+        }
     } else if( maid->has_effect( effect_littlemaid_in_special ) ) {
-        speech_id = maid->type->id.str() + "_in_special";
-    } else if( one_in( 20 ) ) {
-        speech_id = maid->type->id.str();
+        if ( 70 < maid->get_effect_int( effect_comfortness) ){
+            speech_id = "mon_little_maid_R18_milk_sanpo_in_special_int2";
+        } else if ( 30 < maid->get_effect_int( effect_comfortness) ){
+            speech_id = "mon_little_maid_R18_milk_sanpo_in_special_int1";
+        } else {
+            speech_id = "mon_little_maid_R18_milk_sanpo_in_special";
+        }
+    } else if( one_in( 2 ) && maid->has_effect( effect_ecstasy )) {
+        speech_id = "mon_little_maid_R18_milk_sanpo_in_ecstasy";
+    } else if( one_in( 3 ) && std::none_of(g->u.worn.begin(), g->u.worn.end(), [](item it){
+        return it.covers( bp_leg_l ) || it.covers( bp_leg_r );}) ){
+        // player is not covering leg
+        speech_id = "mon_little_maid_R18_milk_sanpo_player_is_naked";
+    } else if( one_in( 3 ) ) {
+        if ( maid->type->id.str() == "mon_little_maid_R18_milk_sanpo_altanate" ) {
+            speech_id = "mon_little_maid_R18_milk_sanpo_altanate";
+        } else {
+            speech_id = "mon_little_maid_R18_milk_sanpo";
+        }
     }
+
     if( 0 < speech_id.size() ){
         const SpeechBubble &speech = get_speech( speech_id );
         sounds::sound( maid->pos(), speech.volume, sounds::sound_t::speech, speech.text.translated(),

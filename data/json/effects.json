@@ -1914,7 +1914,6 @@
     "id": "ecstasy",
     "name": ["ecstasy"],
     "desc": ["You are on ecstasy."],
-    "apply_message": "You rised on ecstasy.",
     "base_mods": {
     },
     "scaling_mods": {
@@ -1963,6 +1962,13 @@
     "desc": ["This is little maid AI control effect."],
     "max_duration": "20 s"
   },
+  {
+    "type": "effect_type",
+    "id": "littlemaid_goodnight",
+    "name": ["goodnight"],
+    "desc": ["This is little maid AI control effect."]
+  },
+
 
   {
     "type": "effect_type",

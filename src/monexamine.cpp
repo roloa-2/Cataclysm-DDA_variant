@@ -78,12 +78,12 @@ bool monexamine::pet_menu( monster &z )
         remove_bat,
         insert_bat,
         check_bat,
-        littlemaid_talk,
-        littlemaid_sex,
+        littlemaid_change_costume,
+        littlemaid_itemize,
         littlemaid_toggle_speak,
         littlemaid_stay,
-        littlemaid_itemize,
-        littlemaid_change_costume,
+        littlemaid_talk,
+        littlemaid_sex,
     };
 
     uilist amenu;
@@ -193,8 +193,8 @@ bool monexamine::pet_menu( monster &z )
         }
     }
     if( z.has_flag( MF_LITTLE_MAID ) ) {
-        amenu.addentry( littlemaid_talk, true, 't', _( "Talk with littlemaid" ));
-        amenu.addentry( littlemaid_sex, true, 'l', _( "Lovely activity" ));
+        amenu.addentry( littlemaid_itemize, true, 'i', _( "Itemize littlemaid" ));
+        amenu.addentry( littlemaid_change_costume, true, 'C', _( "Change costume" ));
         if( z.has_effect( effect_littlemaid_speak_off ) ){
             amenu.addentry( littlemaid_toggle_speak, true, 's', _( "Allow speak" ));
         } else {
@@ -205,8 +205,8 @@ bool monexamine::pet_menu( monster &z )
         } else {
             amenu.addentry( littlemaid_stay, true, 'f', _( "Stay here" ));
         }
-        amenu.addentry( littlemaid_itemize, true, 'i', _( "Itemize littlemaid" ));
-        amenu.addentry( littlemaid_change_costume, true, 'C', _( "Change costume" ));
+        amenu.addentry( littlemaid_talk, true, 't', _( "Talk with littlemaid" ));
+        amenu.addentry( littlemaid_sex, true, 'l', _( "Lovely activity" ));
     }
     amenu.query();
     int choice = amenu.ret;

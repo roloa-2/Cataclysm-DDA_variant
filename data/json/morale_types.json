@@ -377,7 +377,7 @@
   {
     "id": "morale_sex_with_littlemaid",
     "type": "morale_type",
-    "text": "Have sex with littlemaid"
+    "text": "Played with littlemaid"
   },
   {
     "id": "morale_excrete",
@@ -393,6 +393,11 @@
     "id": "morale_take_bath",
     "type": "morale_type",
     "text": "Took a bath"
+  },
+  {
+    "id": "morale_ecstasy",
+    "type": "morale_type",
+    "text": "Rised on the ecstasy"
   },
 
   {
