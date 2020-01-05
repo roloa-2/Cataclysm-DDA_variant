@@ -463,9 +463,6 @@ void vpart_info::finalize()
         if( e.second.location == "on_roof" ) {
             e.second.z_order = 9;
             e.second.list_order = 3;
-        } else if( e.second.location == "on_cargo" ) {
-            e.second.z_order = 8;
-            e.second.list_order = 6;
         } else if( e.second.location == "center" ) {
             e.second.z_order = 7;
             e.second.list_order = 7;
