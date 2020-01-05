@@ -1840,6 +1840,24 @@ void vehicle::use_bike_rack( int part )
     }
 }
 
+void vehicle::use_shower( int p ) {
+    (void)p;
+    if( fuel_left( "water_clean" ) < 120 ) {
+        add_msg( m_bad, _( "You need 120 charges (30 litter) of clean water for take a shower." ) );
+    } else if( 0 < g->u.worn.size()  ) {
+        add_msg( m_bad,
+                 _( "You must take off all clothes to take a shower." ) );
+    } else {
+        if( query_yn( _("Take a shower?") ) ) {
+            drain( "water_clean", 120 );
+
+            g->u.assign_activity(player_activity(activity_id( "ACT_TAKE_SHOWER" ),
+                    to_moves<int>( 10_minutes ),-1,0,"taking shower" ));
+        }
+    }
+
+}
+
 void vehicle::use_toilet( int p ) {
 
     auto items = get_items( p );
@@ -1885,6 +1903,8 @@ void vehicle::interact_with( const tripoint &pos, int interact_part )
     const bool has_kitchen = avail_part_with_feature( interact_part, "KITCHEN", true ) >= 0;
     const bool has_faucet = avail_part_with_feature( interact_part, "FAUCET", true ) >= 0;
     const bool has_towel = avail_part_with_feature( interact_part, "TOWEL", true ) >= 0;
+    const int shower_part = avail_part_with_feature( interact_part, "SHOWER", true );
+    const bool has_shower = shower_part >= 0;
     const bool has_weldrig = avail_part_with_feature( interact_part, "WELDRIG", true ) >= 0;
     const bool has_chemlab = avail_part_with_feature( interact_part, "CHEMLAB", true ) >= 0;
     const bool has_purify = avail_part_with_feature( interact_part, "WATER_PURIFIER", true ) >= 0;
@@ -1925,7 +1945,7 @@ void vehicle::interact_with( const tripoint &pos, int interact_part )
     enum {
         EXAMINE, TRACK, CONTROL, CONTROL_ELECTRONICS, GET_ITEMS, GET_ITEMS_ON_GROUND, FOLD_VEHICLE, UNLOAD_TURRET, RELOAD_TURRET,
         USE_HOTPLATE, FILL_CONTAINER, DRINK, USE_WELDER, USE_PURIFIER, PURIFY_TANK, USE_AUTOCLAVE, USE_WASHMACHINE, USE_DISHWASHER,
-        USE_MONSTER_CAPTURE, USE_BIKE_RACK, USE_HARNESS, RELOAD_PLANTER, WORKBENCH, USE_TOWEL, PEEK_CURTAIN, TOILET
+        USE_MONSTER_CAPTURE, USE_BIKE_RACK, USE_HARNESS, RELOAD_PLANTER, WORKBENCH, USE_TOWEL, PEEK_CURTAIN, TOILET, SHOWER
     };
     uilist selectmenu;
 
@@ -1980,6 +2000,9 @@ void vehicle::interact_with( const tripoint &pos, int interact_part )
     }
     if( has_towel ) {
         selectmenu.addentry( USE_TOWEL, true, 't', _( "Use a towel" ) );
+    }
+    if( has_shower ) {
+        selectmenu.addentry( SHOWER, true, 'S', _( "Take a shower" ) );
     }
     if( has_weldrig && fuel_left( "battery", true ) > 0 ) {
         selectmenu.addentry( USE_WELDER, true, 'w', _( "Use the welding rig" ) );
@@ -2062,6 +2085,10 @@ void vehicle::interact_with( const tripoint &pos, int interact_part )
         }
         case USE_TOWEL: {
             iuse::towel_common( &g->u, nullptr, false );
+            return;
+        }
+        case SHOWER: {
+            use_shower( shower_part );
             return;
         }
         case USE_AUTOCLAVE: {

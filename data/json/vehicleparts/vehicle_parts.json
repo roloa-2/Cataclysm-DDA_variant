@@ -3542,6 +3542,28 @@
     "breaks_into": [ {"item": "vehicle_toilet"} ],
     "damage_reduction": { "all": 3 }
   },
+  {
+    "type": "vehicle_part",
+    "id": "vehicle_part_shower",
+    "name": "vehicle shower booth",
+    "symbol": "&",
+    "color": "white",
+    "broken_symbol": "&",
+    "broken_color": "white",
+    "damage_modifier": 60,
+    "durability": 95,
+    "description": "A small but comfortable shower booth.",
+    "item": "vehicle_shower",
+    "location": "center",
+    "requirements": {
+      "install": { "skills": [ [ "mechanics", 1 ] ], "time": "60 m", "using": [ [ "welding_standard", 5 ] ] },
+      "removal": { "skills": [ [ "mechanics", 2 ] ], "time": "30 m", "using": [ [ "vehicle_weld_removal", 1 ] ] },
+      "repair": { "skills": [ [ "mechanics", 2 ] ], "time": "60 m", "using": [ [ "welding_standard", 5 ] ] }
+    },
+    "flags": [ "SHOWER", "BOARDABLE", "MOUNTABLE" ],
+    "breaks_into": [ {"item": "vehicle_shower"} ],
+    "damage_reduction": { "all": 3 }
+  },
   
   {
     "type": "vehicle_part",

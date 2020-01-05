@@ -199,6 +199,7 @@ activity_handlers::do_turn_functions = {
     { activity_id( "ACT_READ" ), read_do_turn},
     { activity_id( "ACT_WAIT_STAMINA" ), wait_stamina_do_turn },
     { activity_id( "ACT_TAKE_BATH" ), take_bath_do_turn },
+    { activity_id( "ACT_TAKE_SHOWER" ), take_shower_do_turn },
     { activity_id( "ACT_SEX_WITH_LITTLEMAID" ), sex_with_littlemaid_do_turn },
     { activity_id( "ACT_LITTLEMAID_KISS" ), littlemaid_kiss_do_turn },
     { activity_id( "ACT_LITTLEMAID_PETTING" ), littlemaid_petting_do_turn },
@@ -276,6 +277,7 @@ activity_handlers::finish_functions = {
     { activity_id( "ACT_SPELLCASTING" ), spellcasting_finish },
     { activity_id( "ACT_STUDY_SPELL" ), study_spell_finish },
     { activity_id( "ACT_TAKE_BATH" ), take_bath_finish },
+    { activity_id( "ACT_TAKE_SHOWER" ), take_shower_finish },
     { activity_id( "ACT_SEX_WITH_LITTLEMAID" ), sex_with_littlemaid_finish },
     { activity_id( "ACT_LITTLEMAID_KISS" ), littlemaid_kiss_finish },
     { activity_id( "ACT_LITTLEMAID_PETTING" ), littlemaid_petting_finish },
@@ -4910,4 +4912,20 @@ void activity_handlers::excrete_finish( player_activity *act, player *p ){
     act->set_to_null();
 
 }
+
+void activity_handlers::take_shower_do_turn( player_activity *act, player *p ){
+    (void)act;
+    if( calendar::once_every( 1_minutes ) ) {
+        body_part_set drenched_parts{ { bp_leg_l, bp_leg_r, bp_torso, bp_arm_l, bp_arm_r, bp_head } };
+        p->drench( 50, drenched_parts, true );
+    }
+}
+
+void activity_handlers::take_shower_finish( player_activity *act, player *p ){
+    p->add_msg_if_player( m_good, _( "You finished taking a shower." ) );
+    p->add_morale( MORALE_TAKE_BATH, 30, 60, 180_minutes, 120_minutes );
+    act->set_to_null();
+}
+
+
 

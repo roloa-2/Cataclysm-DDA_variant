@@ -1582,6 +1582,7 @@ class vehicle
         void use_bike_rack( int part );
         void use_harness( int part, const tripoint &pos );
         void use_toilet( int part );
+        void use_shower( int part );
 
         void interact_with( const tripoint &pos, int interact_part );
 

@@ -665,6 +665,27 @@
   },
   {
     "type": "recipe",
+    "result": "vehicle_shower",
+    "category": "CC_OTHER",
+    "subcategory": "CSC_OTHER_PARTS",
+    "skill_used": "fabrication",
+    "difficulty": 5,
+    "time": "120 m",
+    "autolearn": true,
+    "using": [ [ "welding_standard", 20 ], [ "steel_tiny", 4 ] ],
+    "tools": [],
+    "qualities": [],
+    "components": [
+        [ [ "plastic_chunk", 24 ] ],
+        [ [ "glass_sheet", 4 ] ],
+        [ [ "sheet", 1 ] ],
+        [ [ "metal_tank_little", 2 ] ],
+        [ [ "element", 8 ] ],
+        [ [ "hose", 2 ] ],
+        [ [ "water_faucet", 2 ] ] ]
+  },
+  {
+    "type": "recipe",
     "result": "wood_plate",
     "category": "CC_OTHER",
     "subcategory": "CSC_OTHER_PARTS",

@@ -73,6 +73,21 @@
     "bashing": 4,
     "category": "veh_parts"
   },
+  {
+    "type": "GENERIC",
+    "id": "vehicle_shower",
+    "name": "vehicle shower booth",
+    "description": "vehicle mountable shower booth.",
+    "price": 50000,
+    "weight": "50000 g",
+    "to_hit": -2,
+    "color": "white",
+    "symbol": "&",
+    "material": ["steel", "plastic"],
+    "volume": "80 L",
+    "bashing": 8,
+    "category": "veh_parts"
+  },
   
 
   {
