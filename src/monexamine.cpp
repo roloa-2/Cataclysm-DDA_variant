@@ -288,6 +288,7 @@ bool monexamine::pet_menu( monster &z )
             break;
         case littlemaid_change_costume:
             maid_change_costume( z );
+            break;
         default:
             break;
     }
