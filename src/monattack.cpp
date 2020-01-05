@@ -4384,9 +4384,10 @@ bool mattack::littlemaid_action( monster *maid )
     } else if( g->u.in_sleep_state() ) {
         speech_id = "mon_little_maid_R18_milk_sanpo_goodnight";
         maid->add_effect( effect_littlemaid_goodnight, 12_hours, num_bp, false);
-    } else if( !one_in( 3 ) ){
-        return true;
     } else if( maid->has_effect( effect_littlemaid_in_kiss ) ) {
+        if( !one_in( 10 ) ){
+            return true;
+        }
         if ( 70 < maid->get_effect_int( effect_happiness) ){
             speech_id = "mon_little_maid_R18_milk_sanpo_in_kiss_int2";
         } else if ( 30 < maid->get_effect_int( effect_happiness) ){
@@ -4395,6 +4396,9 @@ bool mattack::littlemaid_action( monster *maid )
             speech_id = "mon_little_maid_R18_milk_sanpo_in_kiss";
         }
     } else if( maid->has_effect( effect_littlemaid_in_petting ) ) {
+        if( !one_in( 10 ) ){
+            return true;
+        }
         if ( 70 < maid->get_effect_int( effect_comfortness) ){
             speech_id = "mon_little_maid_R18_milk_sanpo_in_petting_int2";
         } else if ( 30 < maid->get_effect_int( effect_comfortness) ){
@@ -4403,6 +4407,9 @@ bool mattack::littlemaid_action( monster *maid )
             speech_id = "mon_little_maid_R18_milk_sanpo_in_petting";
         }
     } else if( maid->has_effect( effect_littlemaid_in_service ) ) {
+        if( !one_in( 10 ) ){
+            return true;
+        }
         if ( 70 < g->u.get_effect_int( effect_comfortness) ){
             speech_id = "mon_little_maid_R18_milk_sanpo_in_service_int2";
         } else if ( 30 < g->u.get_effect_int( effect_comfortness) ){
@@ -4411,6 +4418,9 @@ bool mattack::littlemaid_action( monster *maid )
             speech_id = "mon_little_maid_R18_milk_sanpo_in_service";
         }
     } else if( maid->has_effect( effect_littlemaid_in_special ) ) {
+        if( !one_in( 10 ) ){
+            return true;
+        }
         if ( 70 < maid->get_effect_int( effect_comfortness) ){
             speech_id = "mon_little_maid_R18_milk_sanpo_in_special_int2";
         } else if ( 30 < maid->get_effect_int( effect_comfortness) ){
@@ -4418,18 +4428,20 @@ bool mattack::littlemaid_action( monster *maid )
         } else {
             speech_id = "mon_little_maid_R18_milk_sanpo_in_special";
         }
-    } else if( one_in( 2 ) && maid->has_effect( effect_ecstasy )) {
+    } else if( one_in( 3 ) && maid->has_effect( effect_ecstasy )) {
         speech_id = "mon_little_maid_R18_milk_sanpo_in_ecstasy";
-    } else if( one_in( 3 ) && std::none_of(g->u.worn.begin(), g->u.worn.end(), [](item it){
-        return it.covers( bp_leg_l ) || it.covers( bp_leg_r );}) ){
-        // player is not covering leg
-        speech_id = "mon_little_maid_R18_milk_sanpo_player_is_naked";
     } else if( one_in( 3 ) ) {
-        if ( maid->type->id.str() == "mon_little_maid_R18_milk_sanpo_altanate" ) {
+        if( one_in( 2 ) && std::none_of(g->u.worn.begin(), g->u.worn.end(), [](item it){
+            return it.covers( bp_leg_l ) || it.covers( bp_leg_r );}) ){
+            // player is not covering leg
+            speech_id = "mon_little_maid_R18_milk_sanpo_player_is_naked";
+        } else if ( one_in( 2 ) && maid->type->id.str() == "mon_little_maid_R18_milk_sanpo_altanate") {
             speech_id = "mon_little_maid_R18_milk_sanpo_altanate";
         } else {
             speech_id = "mon_little_maid_R18_milk_sanpo";
         }
+    } else {
+        return true;
     }
 
     if( 0 < speech_id.size() ){

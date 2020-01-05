@@ -4587,12 +4587,12 @@ static void littlemaid_ecstasy_check( player *p, shared_ptr_fast<monster> maid){
     if( player_ecstacy && maid_ecstacy ) {
         p->add_msg_if_player( m_good, _( "You and Maid are raised up ecstacy at the moment!" ) );
         p->remove_effect(effect_comfortness,  num_bp);
-        p->add_effect(effect_ecstasy, 5_minutes, num_bp);
+        p->add_effect(effect_ecstasy, 1_minutes, num_bp);
         p->mod_fatigue( 50 );
         p->add_morale( MORALE_ECSTASY, 50, 50 , 120_minutes, 60_minutes);
 
         maid->remove_effect(effect_comfortness,  num_bp);
-        maid->add_effect(effect_ecstasy, 5_minutes, num_bp);
+        maid->add_effect(effect_ecstasy, 1_minutes, num_bp);
         maid->add_effect(effect_maid_fatigue, 150_minutes, num_bp);
 
         int mp_amount = maid->get_effect_int(effect_happiness, num_bp);
@@ -4610,7 +4610,7 @@ static void littlemaid_ecstasy_check( player *p, shared_ptr_fast<monster> maid){
     } else if(player_ecstacy) {
         p->add_msg_if_player( m_good, _( "You raised up ecstacy!" ) );
         p->remove_effect(effect_comfortness,  num_bp);
-        p->add_effect(effect_ecstasy, 5_minutes, num_bp);
+        p->add_effect(effect_ecstasy, 1_minutes, num_bp);
         p->mod_fatigue( 50 );
         p->add_morale( MORALE_ECSTASY, 50, 50 , 120_minutes, 60_minutes);
 
@@ -4621,7 +4621,7 @@ static void littlemaid_ecstasy_check( player *p, shared_ptr_fast<monster> maid){
     } else if(maid_ecstacy) {
         p->add_msg_if_player( m_good, _( "Littlemaid raised up ecstacy!" ) );
         maid->remove_effect(effect_comfortness,  num_bp);
-        maid->add_effect(effect_ecstasy, 5_minutes, num_bp);
+        maid->add_effect(effect_ecstasy, 1_minutes, num_bp);
         maid->add_effect(effect_maid_fatigue, 150_minutes, num_bp);
 
         int mp_amount = maid->get_effect_int(effect_happiness, num_bp);
