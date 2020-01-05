@@ -309,6 +309,14 @@
     "chance": 15
   },
   {
+    "id": "emit_shower_vehicle",
+    "type": "emit",
+    "field": "fd_hot_air2",
+    "intensity": 3,
+    "qty": 3,
+    "chance": 100
+  },
+  {
     "id": "emit_fog_plume",
     "type": "emit",
     "field": "fd_fog",

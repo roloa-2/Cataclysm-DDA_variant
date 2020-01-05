@@ -1844,12 +1844,15 @@ void vehicle::use_shower( int p ) {
     (void)p;
     if( fuel_left( "water_clean" ) < 120 ) {
         add_msg( m_bad, _( "You need 120 charges (30 litter) of clean water for take a shower." ) );
+    } else if( fuel_left( "battery", true ) < 3000 ) {
+        add_msg( m_bad, _( "You need 3000 charges of battery for take a shower." ) );
     } else if( 0 < g->u.worn.size()  ) {
         add_msg( m_bad,
                  _( "You must take off all clothes to take a shower." ) );
     } else {
         if( query_yn( _("Take a shower?") ) ) {
             drain( "water_clean", 120 );
+            discharge_battery( 3000 );
 
             g->u.assign_activity(player_activity(activity_id( "ACT_TAKE_SHOWER" ),
                     to_moves<int>( 10_minutes ),-1,0,"taking shower" ));

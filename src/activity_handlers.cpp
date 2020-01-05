@@ -4919,6 +4919,7 @@ void activity_handlers::take_shower_do_turn( player_activity *act, player *p ){
         body_part_set drenched_parts{ { bp_leg_l, bp_leg_r, bp_torso, bp_arm_l, bp_arm_r, bp_head } };
         p->drench( 50, drenched_parts, true );
     }
+    g->m.emit_field( p->pos(), emit_id( "emit_shower_vehicle" ) , 1.0f );
 }
 
 void activity_handlers::take_shower_finish( player_activity *act, player *p ){
