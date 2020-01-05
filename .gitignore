@@ -192,3 +192,4 @@ Xcode/
 /data/mods/KawaiiMaidMod/*
 /gfx/MSX++DeadPeopleEdition/*
 /lang/po/ja.po
+*.stackdump
