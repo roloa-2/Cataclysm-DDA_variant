@@ -1,75 +1,65 @@
-# Cataclysm-DDA-varient-sca
 
-## なにこれ？
+# Cataclysm-DDA-variant-sca
 
-うんち
+## これはなに？
 
-[![Build Status](https://travis-ci.org/CleverRaven/Cataclysm-DDA.svg?branch=master)](https://travis-ci.org/CleverRaven/Cataclysm-DDA)
-[![Coverage Status](https://coveralls.io/repos/github/CleverRaven/Cataclysm-DDA/badge.svg?branch=master)](https://coveralls.io/github/CleverRaven/Cataclysm-DDA?branch=master)
-[![Open Source Helpers](https://www.codetriage.com/cleverraven/cataclysm-dda/badges/users.svg)](https://www.codetriage.com/cleverraven/cataclysm-dda)
+Cadaclysm DDAを独自改造したバージョン、いわゆるヴァリアントになります。
+バージョン#9954がベースです。
 
-# Cataclysm: Dark Days Ahead
+ **「うんち」** や **「えっちな事」** が苦手な方はごめんなさい！
 
-Cataclysm: Dark Days Ahead is a roguelike set in a post-apocalyptic world. While some have described it as a "zombie game", there is far more to Cataclysm than that. Struggle to survive in a harsh, persistent, procedurally generated world. Scavenge the remnants of a dead civilization for food, equipment, or, if you are lucky, a vehicle with a full tank of gas to get you the hell out of Dodge. Fight to defeat or escape from a wide variety of powerful monstrosities, from zombies to giant insects to killer robots and things far stranger and deadlier, and against the others like yourself, who want what you have...
+## 新要素
 
+### うんち
+@さんが食事を消化するにしたがって、腸内に何かがたまってきます。
+もよおしてきたら、ちょっとゾンビに邪魔されない所でかがんで、出すものを出しましょう。
+出すべきところで出せば、さらなる意欲アップにつながります。
 
-## Download
+### お風呂
 
-Visit [our website](http://cataclysmdda.org) for download links to all stable and experimental releases.
+完全に趣味の領域になりますが、適当なバスタブにお水を100リットル汲んで、ホットプレートで温めてから、服を全部脱げば、お風呂に入れます。
+車載シャワーブースはもっと簡単で、車載タンクの綺麗な水30リットルと車用バッテリー1個分の電気を、10分かけて@さんの意欲に変えてくれます。
 
-The source can either be downloaded as [an archive](https://github.com/CleverRaven/Cataclysm-DDA/archive/master.zip), or you can clone it from [our GitHub repository](https://github.com/CleverRaven/Cataclysm-DDA/).
+### リトルメイドと楽しむ
 
+Battle Maid Mod内ではアイテムだけの存在だった愛玩用リトルメイドを、友好モンスターとして召喚したり逆に片付けたりできます。
+命令すれば、おしゃべりを止めたり、勝手に歩き回るのを止めたり、従順な子です。
+時間をかけてリトルメイドと遊ぶことで、多少のMaid Pointを稼いだりできます。
+その内容は...えっちすぎるのでここには書けません！
+（ソースコード内ではセーフそうな言葉でごまかしてます）
 
-## Compile
+### その他の調整
+- 結構な頻度で酸性雨が降ります。結構な苦痛だけでなく少量のダメージも与えてきますが、レインコートで9割、傘(や折り畳み傘など)で完全に防げるようになりました。ところで傘はバニラからフェンシング対応だったっけ？
+- 雨がめっちゃ降るようにしました。半分以上が雨。
+- 車載ヒーターを強くしました。車内なら冬でも全裸で大丈夫なように。
+- サイドバーのラベル表示の時計を持ってないときの時刻表示を古い型の[\_.+ * +.\_]みたいなやつにしました。
+- 嵐が訪れるアーティファクトは夏でも吹雪を呼んでましたがこれを酸性雨に。それともやっぱ雷雨がいいかな。
+- 充電ステーションのタイルを消しちゃいました。あのでっかいトランジスタでカーゴとかを上書きしてほしくなかった。
+- 
 
-Please read [COMPILING.md](doc/COMPILING/COMPILING.md) - it covers general information and more specific recipes for Linux, OS X, Windows and BSD. See [COMPILER_SUPPORT.md](doc/COMPILING/COMPILER_SUPPORT.md) for details on which compilers we support. And you can always dig for more information in [doc/](https://github.com/CleverRaven/Cataclysm-DDA/tree/master/doc).
+## ダウンロードと遊び方
 
-We also have the following build guides:
-* Building on Windows with `MSYS2` at [COMPILING-MSYS.md](doc/COMPILING/COMPILING-MSYS.md)
-* Building on Windows with `vcpkg` at [COMPILING-VS-VCPKG.md](doc/COMPILING/COMPILING-VS-VCPKG.md)
-* Building with `cmake` at [COMPILING-CMAKE.md](doc/COMPILING/COMPILING-CMAKE.md)  (*unofficial guide*)
+** 残念ながら、今はまだ非公開です。公開準備中です。 ** 
 
-## Contribute
+公開準備の覚え書き
+- ヴァリアントで遊ぶのに必要なもの
+	- ヴァリアント本体
+		- Githubで配布する
+	- 追加翻訳ファイル
+	- 必須の外部Modファイル
+	- 追加タイル
+		- Githubには載せられないあんなことやこんなことが書いてあるので、某Mod Uploaderで配布予定
+	- DeadPeopleタイルセット
+		- 今の入手方法がわからん...
+	- #9954対応のBattle Maid Mod
+		- 考え中。某Uploaderにあるかも。
+	
+## 謝辞（謝罪）
 
-Cataclysm:Dark Days Ahead is the result of contributions from over 900 volunteers under the Creative Commons Attribution ShareAlike 3.0 license. The code and content of the game is free to use, modify, and redistribute for any purpose whatsoever. See http://creativecommons.org/licenses/by-sa/3.0/ for details.
-Some code distributed with the project is not part of the project and is released under different software licenses, the files covered by different software licenses have their own license notices.
+以下の皆様に感謝とともに非礼をお詫びいたします。
+こんなヴァリアントつくってすみません。でも作りたかったんです。
 
-[![Bountysource](https://www.bountysource.com/badge/tracker?tracker_id=146201)](https://www.bountysource.com/trackers/146201-clever-raven-cataclysm-dda?utm_source=146201&utm_medium=shield&utm_campaign=TRACKER_BADGE)
+Kevin Granadeさま、ならびにCDDAコントリビューターの皆さま
+Battle Maid Mod作者さま
+DeadPeopleタイルセットに入ってるリトルメイドのチップの作者さま
 
-Please see [CONTRIBUTING.md](https://github.com/CleverRaven/Cataclysm-DDA/blob/master/.github/CONTRIBUTING.md) for details.
-
-## Community
-
-Forums:
-https://discourse.cataclysmdda.org
-
-Wiki:
-http://cddawiki.chezzo.com/cdda_wiki/index.php
-
-GitHub repo:
-https://github.com/CleverRaven/Cataclysm-DDA
-
-IRC:
-`irc.freenode.net` ; `#CataclysmDDA`
-http://webchat.freenode.net/?channels=#CataclysmDDA
-
-Official Discord:
-https://discord.gg/jFEc7Yp
-
-## Frequently Asked Questions
-
-#### Is there a tutorial?
-
-Yes, you can find the tutorial in the **Special** menu at the main menu (be aware that due to many code changes the tutorial may not function). You can also access documentation in-game via the `?` key.
-
-#### How can I change the key bindings?
-
-Press the `?` key, followed by the `1` key to see the full list of key commands. Press the `+` key to add a key binding, select which action with the corresponding letter key `a-w`, and then the key you wish to assign to that action.
-
-#### How can I start a new world?
-
-**World** on the main menu will generate a fresh world for you. Select **Create World**.
-
-#### I've found a bug / I would like to make a suggestion. What should I do?
-
-Please submit an issue on [our GitHub page](https://github.com/CleverRaven/Cataclysm-DDA/issues/). If you're not able to, send an email to `kevin.granade@gmail.com`.
