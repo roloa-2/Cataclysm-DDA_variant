@@ -79,3 +79,8 @@ Battle Maid Mod内ではアイテムだけの存在だった愛玩用リトル�
 
 こんなヴァリアントつくってすみません。でも作りたかったんです。
 
+## ライセンスについて
+
+クリエイティブコモンズの 表示 - 継承 3.0 非移植 ライセンスとします。
+詳しくは以下のファイルを見てください。
+https://github.com/roloa/Cataclysm-DDA/blob/variant_sca/LICENSE.txt
