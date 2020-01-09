@@ -1652,6 +1652,10 @@ class vehicle
         std::unordered_multimap<point, zone_data> loot_zones;
         active_item_cache active_items;
 
+        bool lightmode_idle;
+        bool lightmode_cargo;
+        bool lightmode_turret;
+
     private:
         mutable units::mass mass_cache;
         // cached pivot point

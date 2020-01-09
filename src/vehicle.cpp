@@ -217,6 +217,10 @@ vehicle::vehicle( const vproto_id &type_id, int init_veh_fuel,
     move.init( 0 );
     of_turn_carry = 0;
 
+    lightmode_idle = false;
+    lightmode_cargo = false;
+    lightmode_turret = false;
+
     if( !type.str().empty() && type.is_valid() ) {
         const vehicle_prototype &proto = type.obj();
         // Copy the already made vehicle. The blueprint is created when the json data is loaded
@@ -5257,9 +5261,15 @@ void vehicle::gain_moves()
 
     // turrets which are enabled will try to reload and then automatically fire
     // Turrets which are disabled but have targets set are a special case
-    for( auto e : turrets() ) {
-        if( e->enabled || e->target.second != e->target.first ) {
-            automatic_fire_turret( *e );
+    if ( lightmode_turret && !calendar::once_every( 1_minutes ) ) {
+        // skip turret process
+        add_msg( m_debug, _("skip turret process by lightmode"));
+
+    } else {
+        for( auto e : turrets() ) {
+            if( e->enabled || e->target.second != e->target.first ) {
+                automatic_fire_turret( *e );
+            }
         }
     }
 
@@ -6192,6 +6202,11 @@ void vehicle::update_time( const time_point &update_to )
     if( update_to < update_from ) {
         // Special case going backwards in time - that happens
         last_update = update_to;
+        return;
+    }
+
+    if( lightmode_idle && update_to >= update_from && update_to - update_from < 10_minutes){
+        add_msg( m_debug, _("skip idle process by lightmode"));
         return;
     }
 
