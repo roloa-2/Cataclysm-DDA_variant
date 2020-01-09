@@ -1652,10 +1652,6 @@ class vehicle
         std::unordered_multimap<point, zone_data> loot_zones;
         active_item_cache active_items;
 
-        bool lightmode_idle;
-        bool lightmode_cargo;
-        bool lightmode_turret;
-
     private:
         mutable units::mass mass_cache;
         // cached pivot point
@@ -1786,6 +1782,10 @@ class vehicle
         bool is_falling = false;
         // zone_data positions are outdated and need refreshing
         bool zones_dirty = true;
+
+        bool lightmode_idle   = false;
+        bool lightmode_cargo  = false;
+        bool lightmode_turret = false;
 
         // current noise of vehicle (engine working, etc.)
         unsigned char vehicle_noise = 0;

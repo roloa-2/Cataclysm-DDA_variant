@@ -4443,7 +4443,6 @@ void map::process_items_in_vehicles( submap &current_submap, const int gridz,
         }
 
         if( cur_veh->lightmode_cargo && !calendar::once_every( 1_minutes )) {
-            add_msg( m_debug, _("skip cargo process by lightmode"));
             continue;
         }
 
