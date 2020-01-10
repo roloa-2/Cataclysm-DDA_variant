@@ -59,11 +59,14 @@ Battle Maid Mod内ではアイテムだけの存在だった愛玩用リトル�
 	- 追加タイル
 		- Githubには載せられないあんなことやこんなことが書いてあるので、某Mod Uploaderで配布してます。
 		- お手数おかけしてすみません。
-	- DeadPeopleタイルセット
-		- 各自ご用意をお願いします、としか言えないです。すみません。
 	- #9954対応のBattle Maid Mod
 		- [https://ux.getuploader.com/cataclysm_jp/download/25](https://ux.getuploader.com/cataclysm_jp/download/25)
 		- こちらで公開されているBattleMaidMod#9977対応版が使えそうです。
+    - オプションのModファイル
+        - [ https://ux.getuploader.com/cataclysm_jp/download/42](https://ux.getuploader.com/cataclysm_jp/download/42)
+        - 必須ではないものの、このヴァリアントでのみ利用できる要素が含まれています。
+	- DeadPeopleタイルセット
+		- 各自ご用意をお願いします、としか言えないです。すみません。
 		
 	
 ## 謝辞（謝罪）
@@ -76,3 +79,8 @@ Battle Maid Mod内ではアイテムだけの存在だった愛玩用リトル�
 
 こんなヴァリアントつくってすみません。でも作りたかったんです。
 
+## ライセンスについて
+
+クリエイティブコモンズの 表示 - 継承 3.0 非移植 ライセンスとします。
+詳しくは以下のファイルを見てください。
+https://github.com/roloa/Cataclysm-DDA/blob/variant_sca/LICENSE.txt
