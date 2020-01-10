@@ -9,6 +9,7 @@
 #include <memory>
 #include <string>
 #include <unordered_set>
+#include <chrono>
 
 #include "enums.h"
 #include "item_location.h"
@@ -54,6 +55,7 @@ class player_activity
          *  an identical activity. This value is set dynamically.
          */
         bool auto_resume;
+        // std::chrono::system_clock::time_point start_time = std::chrono::system_clock::now();
 
         player_activity();
         player_activity( activity_id, int turns = 0, int Index = -1, int pos = INT_MIN,

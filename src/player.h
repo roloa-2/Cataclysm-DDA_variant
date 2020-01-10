@@ -15,6 +15,7 @@
 #include <unordered_map>
 #include <utility>
 #include <vector>
+#include <chrono>
 
 #include "calendar.h"
 #include "cata_utility.h"
@@ -1183,6 +1184,8 @@ class player : public Character
         recipe_id lastrecipe;
         int last_batch;
         itype_id lastconsumed;        //used in crafting.cpp and construction.cpp
+
+        std::chrono::system_clock::time_point start_time = std::chrono::system_clock::now();
 
         int get_used_bionics_slots( body_part bp ) const;
         int get_total_bionics_slots( body_part bp ) const;
