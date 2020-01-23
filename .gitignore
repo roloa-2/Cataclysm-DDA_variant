@@ -194,3 +194,5 @@ Xcode/
 /gfx/MSX++DeadPeopleEdition/*
 /lang/po/ja.po
 *.stackdump
+/out/*
+msvc-full-features/Cataclysm-vcpkg-static.vcxproj
