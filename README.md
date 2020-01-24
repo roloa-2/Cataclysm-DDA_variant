@@ -50,25 +50,28 @@ Battle Maid Mod内ではアイテムだけの存在だった愛玩用リトル�
 
 テストプレイは自己責任でお願いします。
 
-- ヴァリアントで遊ぶのに必要なもの
+- ヴァリアント本体に同梱されているもの
 	- ヴァリアント本体
-		- [https://github.com/roloa/Cataclysm-DDA/releases/tag/first_release](https://github.com/roloa/Cataclysm-DDA/releases/tag/first_release)
-		- こちらで配布しています。
+		- [https://ux.getuploader.com/cdda_vibrator/](https://ux.getuploader.com/cdda_vibrator/)
+		- こちらの外部サイトで配布しています。
 	- 追加翻訳ファイル
-	- 必須の外部Modファイル
+	- 追加Modファイル
 	- 追加タイル
-		- Githubには載せられないあんなことやこんなことが書いてあるので、某Mod Uploaderで配布してます。
-		- お手数おかけしてすみません。
+		- 同梱するようにしました。
 	- #9954対応のBattle Maid Mod
-		- [https://ux.getuploader.com/cataclysm_jp/download/25](https://ux.getuploader.com/cataclysm_jp/download/25)
-		- こちらで公開されているBattleMaidMod#9977対応版が使えそうです。
-    - オプションのModファイル
-        - [ https://ux.getuploader.com/cataclysm_jp/download/42](https://ux.getuploader.com/cataclysm_jp/download/42)
-        - 必須ではないものの、このヴァリアントでのみ利用できる要素が含まれています。
+		- 再配布は大丈夫との事だそうなので、これも同梱させて頂いています。
+
+- 各自ご用意いただきたい物
 	- DeadPeopleタイルセット
 		- 各自ご用意をお願いします、としか言えないです。すみません。
-		
-	
+
+- 同梱modについて
+	- コアコンテンツパック/LittleMaid
+		- 愛玩用リトルメイドから召喚可能なリトルメイドをクラフトできるようにします。
+	- アイテム追加/Vibrator Junkyard
+		- こまごまとした様々なアイテムを追加します。ほとんどが名前の通りJunkでヴァリアントとはあまり関係ないオマケアイテムです。
+
+
 ## 謝辞（謝罪）
 
 - Kevin Granadeさま、ならびにCDDAコントリビューターの皆さま
