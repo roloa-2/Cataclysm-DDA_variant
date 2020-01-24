@@ -1298,6 +1298,7 @@ void options_manager::add_options_interface()
         { "fr", no_translation( R"(Français)" ) },
         { "hu", no_translation( R"(Magyar)" ) },
         { "ja", no_translation( R"(日本語)" ) },
+        { "ja_variant", no_translation( R"(日本語_variant)" ) },
         { "ko", no_translation( R"(한국어)" ) },
         { "pl", no_translation( R"(Polski)" ) },
         { "ru", no_translation( R"(Русский)" ) },
