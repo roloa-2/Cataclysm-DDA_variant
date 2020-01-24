@@ -192,7 +192,8 @@ Xcode/
 /data/mods/Hentai_Zombie/*
 /data/mods/KawaiiMaidMod/*
 /gfx/MSX++DeadPeopleEdition/*
-/lang/po/ja.po
 *.stackdump
 /out/*
 msvc-full-features/Cataclysm-vcpkg-static.vcxproj
+msvc-full-features/*
+/lang/po/ja_variant.po
