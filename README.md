@@ -92,3 +92,10 @@ Battle Maid Mod内ではアイテムだけの存在だった愛玩用リトル�
 クリエイティブコモンズの 表示 - 継承 3.0 非移植 ライセンスとします。
 詳しくは以下のファイルを見てください。
 https://github.com/roloa/Cataclysm-DDA/blob/variant_sca/LICENSE.txt
+
+## Discord
+
+[https://discord.gg/kGNU8Jg](https://discord.gg/kGNU8Jg)
+サーバー参加時のランダムメッセージは切ってあるのでご気軽にご参加して、こっそり脱退してみてください。
+
+
