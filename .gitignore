@@ -191,9 +191,14 @@ Xcode/
 /data/mods/Vibrator_Junkyard/*
 /data/mods/Hentai_Zombie/*
 /data/mods/KawaiiMaidMod/*
+/data/mods/Magiclysm/*
+/data/mods/tainted_blood_modify/*
+
 /gfx/MSX++DeadPeopleEdition/*
+/gfx/edit_MSX++DeadPeopleEdition/*
 *.stackdump
 /out/*
 msvc-full-features/Cataclysm-vcpkg-static.vcxproj
 msvc-full-features/*
 /lang/po/ja_variant.po
+
