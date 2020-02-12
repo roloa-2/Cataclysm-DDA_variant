@@ -229,7 +229,6 @@
     "//": "your bog standard zombie",
     "type": "harvest",
     "entries": [
-      { "drop": "tainted_blood", "type": "flesh", "mass_ratio": 0.1 },
       { "drop": "meat_tainted", "type": "flesh", "mass_ratio": 0.25 },
       { "drop": "fat_tainted", "type": "flesh", "mass_ratio": 0.08 },
       { "drop": "bone_tainted", "type": "bone", "mass_ratio": 0.1 },
@@ -241,7 +240,6 @@
     "//": "any zombie that might drop leather. mostly animals.",
     "type": "harvest",
     "entries": [
-      { "drop": "tainted_blood", "type": "flesh", "mass_ratio": 0.1 },
       { "drop": "meat_tainted", "type": "flesh", "mass_ratio": 0.25 },
       { "drop": "fat_tainted", "type": "flesh", "mass_ratio": 0.08 },
       { "drop": "bone_tainted", "type": "bone", "mass_ratio": 0.1 },
@@ -254,7 +252,6 @@
     "//": "any zombie that might drop leather. mostly animals.",
     "type": "harvest",
     "entries": [
-      { "drop": "tainted_blood", "type": "flesh", "mass_ratio": 0.1 },
       { "drop": "meat_tainted", "type": "flesh", "mass_ratio": 0.25 },
       { "drop": "fat_tainted", "type": "flesh", "mass_ratio": 0.08 },
       { "drop": "bone_tainted", "type": "bone", "mass_ratio": 0.1 },
@@ -267,7 +264,6 @@
     "//": "no bones or organs",
     "type": "harvest",
     "entries": [
-      { "drop": "tainted_blood", "type": "flesh", "mass_ratio": 0.2 },
       { "drop": "meat_tainted", "type": "flesh", "mass_ratio": 0.4 },
       { "drop": "fat_tainted", "type": "flesh", "mass_ratio": 0.1 },
       { "drop": "fat_tainted", "type": "offal", "mass_ratio": 0.1 }
