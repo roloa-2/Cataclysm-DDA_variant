@@ -3881,7 +3881,9 @@ void Character::update_stomach( const time_point &from, const time_point &to )
             mod_stored_kcal( digested_to_body.nutr.kcal );
             vitamins_mod( digested_to_body.nutr.vitamins, false );
             // increase unchi amount
-            mod_excrete_amount( units::to_milliliter<int>(digested_to_body.solids) / 4 + units::to_milliliter<int>(digested_to_body.water) / 8 );
+            if( get_option<bool>( "EXCREMENT_FEATURE" ) ){
+                mod_excrete_amount( units::to_milliliter<int>(digested_to_body.solids) / 4 + units::to_milliliter<int>(digested_to_body.water) / 8 );
+            }
         }
     }
     if( stomach.time_since_ate() > 10_minutes ) {

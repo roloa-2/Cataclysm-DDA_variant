@@ -2090,6 +2090,18 @@ void options_manager::add_options_world_default()
 
     add_empty_line();
 
+    add( "EXCREMENT_FEATURE", "world_default", translate_marker( "Excrement feature" ),
+         translate_marker( "Player need excrement after consume food." ),
+         false
+       );
+
+    add( "ACID_RAIN", "world_default", translate_marker( "Acid rain" ),
+         translate_marker( "set acid rain frequency." ),
+         0, 100, 0
+       );
+
+    add_empty_line();
+
     add( "STATIC_NPC", "world_default", translate_marker( "Static NPCs" ),
          translate_marker( "If true, static NPCs will spawn at pre-defined locations.  Requires world reset." ),
          true
