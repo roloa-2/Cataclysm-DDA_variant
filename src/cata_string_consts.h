@@ -1386,6 +1386,31 @@ static const ammotype ammo_plutonium( "plutonium" );
 
 const vitamin_id vitamin_iron( "iron" );
 
+// littlemaid order things
+const efftype_id effect_littlemaid_sex( "littlemaid_sex" );
+const efftype_id effect_littlemaid_itemize( "littlemaid_itemize" );
+const efftype_id effect_littlemaid_talk( "littlemaid_talk" );
+
+// littlemaid order status things
+const efftype_id effect_littlemaid_stay( "littlemaid_stay" );
+const efftype_id effect_littlemaid_speak_off( "littlemaid_speak_off" );
+
+// littlemaid play things
+const efftype_id effect_littlemaid_in_kiss( "littlemaid_in_kiss" );
+const efftype_id effect_littlemaid_in_petting( "littlemaid_in_petting" );
+const efftype_id effect_littlemaid_in_service( "littlemaid_in_service" );
+const efftype_id effect_littlemaid_in_special( "littlemaid_in_special" );
+
+// littlemaid playing status things
+const efftype_id effect_happiness( "happiness" );
+const efftype_id effect_comfortness( "comfortness" );
+const efftype_id effect_ecstasy( "ecstasy" );
+const efftype_id effect_maid_fatigue( "maid_fatigue" );
+
+// littlemaid auto move things
+const efftype_id effect_littlemaid_goodnight( "littlemaid_goodnight" );
+
+
 static const std::string null_item_id( "null" );
 
 #endif // STRING_CONSTS_H
