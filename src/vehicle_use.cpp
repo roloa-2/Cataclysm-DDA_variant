@@ -1949,7 +1949,7 @@ void vehicle::interact_with( const tripoint &pos, int interact_part )
         EXAMINE, TRACK, CONTROL, CONTROL_ELECTRONICS, GET_ITEMS, GET_ITEMS_ON_GROUND, FOLD_VEHICLE, UNLOAD_TURRET, RELOAD_TURRET,
         USE_HOTPLATE, FILL_CONTAINER, DRINK, USE_WELDER, USE_PURIFIER, PURIFY_TANK, USE_AUTOCLAVE, USE_WASHMACHINE, USE_DISHWASHER,
         USE_MONSTER_CAPTURE, USE_BIKE_RACK, USE_HARNESS, RELOAD_PLANTER, WORKBENCH, USE_TOWEL, PEEK_CURTAIN, TOILET, SHOWER,
-        LIGHTMODE_IDLE, LIGHTMODE_CARGO, LIGHTMODE_MOVES, LIGHTMODE_TURRET,
+        LIGHTMODE_IDLE, LIGHTMODE_CARGO, LIGHTMODE_TURRET,
     };
     uilist selectmenu;
 
@@ -1962,8 +1962,6 @@ void vehicle::interact_with( const tripoint &pos, int interact_part )
                 lightmode_idle   ? _("Toggle Lightmode idle  : ON") : _("Toggle Lightmode idle  : OFF"));
         selectmenu.addentry( LIGHTMODE_CARGO  , true, 'L',
                 lightmode_cargo  ? _("Toggle Lightmode cargo : ON") : _("Toggle Lightmode cargo : OFF"));
-        selectmenu.addentry( LIGHTMODE_MOVES  , true, 'L',
-                lightmode_moves ? _("Toggle Lightmode moves : ON") : _("Toggle Lightmode moves : OFF"));
         selectmenu.addentry( LIGHTMODE_TURRET  , true, 'L',
                 lightmode_turret ? _("Toggle Lightmode turret: ON") : _("Toggle Lightmode turret: OFF"));
     }
@@ -2233,10 +2231,6 @@ void vehicle::interact_with( const tripoint &pos, int interact_part )
         }
         case LIGHTMODE_CARGO: {
             lightmode_cargo = !lightmode_cargo;
-            return;
-        }
-        case LIGHTMODE_MOVES: {
-            lightmode_moves = !lightmode_moves;
             return;
         }
         case LIGHTMODE_TURRET: {

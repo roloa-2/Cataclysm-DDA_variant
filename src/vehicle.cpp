@@ -5213,10 +5213,6 @@ void vehicle::place_spawn_items()
 
 void vehicle::gain_moves()
 {
-    if( lightmode_moves && !calendar::once_every( 1_minutes )) {
-        return;
-    }
-
     fuel_used_last_turn.clear();
     check_falling_or_floating();
     const bool pl_control = player_in_control( g->u );

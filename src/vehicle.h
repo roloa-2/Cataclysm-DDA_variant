@@ -1785,7 +1785,6 @@ class vehicle
 
         bool lightmode_idle   = false;
         bool lightmode_cargo  = false;
-        bool lightmode_moves = false;
         bool lightmode_turret = false;
 
         // current noise of vehicle (engine working, etc.)
