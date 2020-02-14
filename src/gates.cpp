@@ -31,6 +31,7 @@
 #include "type_id.h"
 #include "colony.h"
 #include "point.h"
+#include "cata_string_consts.h"
 
 // Gates namespace
 
@@ -63,7 +64,7 @@ struct gate_data {
     int bash_dmg;
     bool was_loaded;
 
-    void load( JsonObject &jo, const std::string &src );
+    void load( const JsonObject &jo, const std::string &src );
     void check() const;
 
     bool is_suitable_wall( const tripoint &pos ) const;
@@ -78,7 +79,7 @@ generic_factory<gate_data> gates_data( "gate type", "handle", "other_handles" );
 
 } // namespace
 
-void gate_data::load( JsonObject &jo, const std::string & )
+void gate_data::load( const JsonObject &jo, const std::string & )
 {
     mandatory( jo, was_loaded, "door", door );
     mandatory( jo, was_loaded, "floor", floor );
@@ -135,7 +136,7 @@ bool gate_data::is_suitable_wall( const tripoint &pos ) const
     return iter != walls.end();
 }
 
-void gates::load( JsonObject &jo, const std::string &src )
+void gates::load( const JsonObject &jo, const std::string &src )
 {
     gates_data.load( jo, src );
 }
@@ -241,7 +242,7 @@ void gates::open_gate( const tripoint &pos, player &p )
     const gate_data &gate = gates_data.obj( gid );
 
     p.add_msg_if_player( gate.pull_message );
-    p.assign_activity( activity_id( "ACT_OPEN_GATE" ), gate.moves );
+    p.assign_activity( ACT_OPEN_GATE, gate.moves );
     p.activity.placement = pos;
 }
 
@@ -319,7 +320,7 @@ void doors::close_door( map &m, Character &who, const tripoint &closep )
                                        items_in_way.size() == 1 ? items_in_way.only_item().tname() : _( "stuff" ) );
                 who.mod_moves( -std::min( items_in_way.stored_volume() / ( max_nudge / 50 ), 100 ) );
 
-                if( m.has_flag( "NOITEM", closep ) ) {
+                if( m.has_flag( flag_NOITEM, closep ) ) {
                     // Just plopping items back on their origin square will displace them to adjacent squares
                     // since the door is closed now.
                     for( auto &elem : items_in_way ) {
@@ -335,6 +336,7 @@ void doors::close_door( map &m, Character &who, const tripoint &closep )
     }
 
     if( didit ) {
-        who.mod_moves( -90 ); // TODO: Vary this? Based on strength, broken legs, and so on.
+        // TODO: Vary this? Based on strength, broken legs, and so on.
+        who.mod_moves( -90 );
     }
 }
