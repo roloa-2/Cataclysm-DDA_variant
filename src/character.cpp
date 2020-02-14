@@ -3560,14 +3560,14 @@ void Character::mod_fatigue( int nfatigue )
 void Character::set_excrete_amount( int nexcrete )
 {
     if( excrete_amount != nexcrete ) {
-    	excrete_amount = nexcrete;
+        excrete_amount = nexcrete;
         on_stat_change( "excrete_amount", excrete_amount );
     }}
 
 
 void Character::mod_excrete_amount( int nexcrete )
 {
-	set_excrete_amount( excrete_amount + nexcrete );
+    set_excrete_amount( excrete_amount + nexcrete );
 }
 
 int Character::get_excrete_amount() const
@@ -3578,14 +3578,14 @@ int Character::get_excrete_amount() const
 void Character::set_excrete_need( int nexcrete )
 {
     if( excrete_need != nexcrete ) {
-    	excrete_need = nexcrete;
+        excrete_need = nexcrete;
         on_stat_change( "excrete_need", excrete_amount );
     }}
 
 
 void Character::mod_excrete_need( int nexcrete )
 {
-	set_excrete_need( excrete_need + nexcrete );
+    set_excrete_need( excrete_need + nexcrete );
 }
 
 int Character::get_excrete_need() const
@@ -3880,6 +3880,8 @@ void Character::update_stomach( const time_point &from, const time_point &to )
         if( !is_npc() || !get_option<bool>( "NO_NPC_FOOD" ) ) {
             mod_stored_kcal( digested_to_body.nutr.kcal );
             vitamins_mod( digested_to_body.nutr.vitamins, false );
+            // increase unchi amount
+            mod_excrete_amount( units::to_milliliter<int>(digested_to_body.solids) / 4 + units::to_milliliter<int>(digested_to_body.water) / 8 );
         }
     }
     if( stomach.time_since_ate() > 10_minutes ) {
@@ -4043,6 +4045,18 @@ void Character::update_needs( int rate_multiplier )
 
     if( get_painkiller() > 0 ) {
         mod_painkiller( -std::min( get_painkiller(), rate_multiplier ) );
+    }
+
+    if( is_player() ) {
+        if( 500 < get_excrete_amount() ) {
+            if( asleep ){
+                int excrete_delta = (get_excrete_amount() / 144 ) * rate_multiplier;
+                mod_excrete_need( excrete_delta );
+            } else {
+                int excrete_delta = (get_excrete_amount() / 72 ) * rate_multiplier;
+                mod_excrete_need( excrete_delta );
+            }
+        }
     }
 
     // Huge folks take penalties for cramming themselves in vehicles
@@ -4330,6 +4344,37 @@ void Character::check_needs_extremes()
                 }
             }
 
+        }
+    }
+
+    // unchi morasu
+    if( is_player() ) {
+        if( PATIENTING < get_excrete_need() ){
+            if( calendar::once_every( 30_minutes ) ) {
+                if( INCONTINENTED < get_excrete_need()) {
+                    add_msg_if_player( m_bad,
+                            _( "You could not in time." ) );
+                    g->m.spawn_item( pos(), "feces_human", 1, get_excrete_amount() / 125, calendar::turn , 0);
+                    set_excrete_need( 0 );
+                    set_excrete_amount( 0 );
+                    moves -= 1000;
+
+                    for( auto &i : worn ) {
+                        if( i.covers( bp_leg_l ) || i.covers( bp_leg_r ) ) {
+                            i.item_tags.insert( "FILTHY" );
+                            morale->on_worn_item_be_filthy(i);
+                        }
+                    }
+
+                    add_morale( MORALE_INCONTINENT, -30, -60 );
+                } else if( INCONTINENTING < get_excrete_need()) {
+                    add_msg_if_player( m_warning,
+                            _( "You need take a crap immidiately." ) );
+                } else {
+                    add_msg_if_player( m_neutral,
+                            _( "You need excrete." ) );
+                }
+            }
         }
     }
 }
