@@ -311,7 +311,7 @@
   {
     "id": "emit_shower_vehicle",
     "type": "emit",
-    "field": "fd_hot_air2",
+    "field": "fd_hot_air3",
     "intensity": 3,
     "qty": 3,
     "chance": 100
