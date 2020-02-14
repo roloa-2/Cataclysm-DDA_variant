@@ -5786,13 +5786,3 @@ std::pair<std::string, nc_color> player::get_excrete_description() const
     return std::make_pair( excrete_string, excrete_color );
 }
 
-
-void player::enforce_minimum_healing()
-{
-    for( int i = 0; i < num_hp_parts; i++ ) {
-        if( healed_total[i] <= 0 ) {
-            heal( static_cast<hp_part>( i ), 1 );
-        }
-        healed_total[i] = 0;
-    }
-}

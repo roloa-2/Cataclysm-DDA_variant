@@ -104,6 +104,15 @@ static const activity_id ACT_WAIT_WEATHER( "ACT_WAIT_WEATHER" );
 static const activity_id ACT_WASH( "ACT_WASH" );
 static const activity_id ACT_WEAR( "ACT_WEAR" );
 
+static const activity_id ACT_TAKE_BATH("ACT_TAKE_BATH");
+static const activity_id ACT_TAKE_SHOWER("ACT_TAKE_SHOWER");
+static const activity_id ACT_SEX_WITH_LITTLEMAID("ACT_SEX_WITH_LITTLEMAID");
+static const activity_id ACT_LITTLEMAID_KISS("ACT_LITTLEMAID_KISS");
+static const activity_id ACT_LITTLEMAID_PETTING("ACT_LITTLEMAID_PETTING");
+static const activity_id ACT_LITTLEMAID_SERVICE("ACT_LITTLEMAID_SERVICE");
+static const activity_id ACT_LITTLEMAID_SPECIAL("ACT_LITTLEMAID_SPECIAL");
+static const activity_id ACT_EXCRETE("ACT_EXCRETE");
+
 
 static const bionic_id bio_adrenaline( "bio_adrenaline" );
 static const bionic_id bio_ads( "bio_ads" );

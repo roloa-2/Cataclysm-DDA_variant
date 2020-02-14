@@ -35,7 +35,7 @@
     "coverage": 30,
     "required_str": -1,
     "flags": [ "TRANSPARENT", "FLAMMABLE_HARD", "CONTAINER", "PLACE_ITEM", "BLOCKSDOOR", "MOUNTABLE" ],
-    "max_volume": 400,
+    "max_volume": "100 L",
     "examine_action": "bath",
     "keg_capacity": 300,
     "bash": {

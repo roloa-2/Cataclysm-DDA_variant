@@ -101,17 +101,6 @@
 
 #define dbg(x) DebugLog((x),D_GAME) << __FILE__ << ":" << __LINE__ << ": "
 
-const efftype_id effect_happiness( "happiness" );
-const efftype_id effect_comfortness( "comfortness" );
-const efftype_id effect_ecstasy( "ecstasy" );
-const efftype_id effect_maid_fatigue( "maid_fatigue" );
-const efftype_id effect_littlemaid_in_kiss( "littlemaid_in_kiss" );
-const efftype_id effect_littlemaid_in_petting( "littlemaid_in_petting" );
-const efftype_id effect_littlemaid_in_service( "littlemaid_in_service" );
-const efftype_id effect_littlemaid_in_special( "littlemaid_in_special" );
-
-static const trait_id trait_ILLITERATE( "ILLITERATE" );
-
 using namespace activity_handlers;
 
 const std::map< activity_id, std::function<void( player_activity *, player * )> >
@@ -182,7 +171,7 @@ activity_handlers::do_turn_functions = {
     { ACT_STUDY_SPELL, study_spell_do_turn},
     { ACT_READ, read_do_turn},
     { ACT_WAIT_STAMINA, wait_stamina_do_turn },
-    { "ACT_TAKE_BATH, take_bath_do_turn },
+    { ACT_TAKE_BATH, take_bath_do_turn },
     { ACT_TAKE_SHOWER, take_shower_do_turn },
     { ACT_SEX_WITH_LITTLEMAID, sex_with_littlemaid_do_turn },
     { ACT_LITTLEMAID_KISS, littlemaid_kiss_do_turn },
@@ -262,13 +251,13 @@ activity_handlers::finish_functions = {
     { ACT_SPELLCASTING, spellcasting_finish },
     { ACT_STUDY_SPELL, study_spell_finish },
     { ACT_TAKE_BATH, take_bath_finish },
-    { "ACT_TAKE_SHOWER, take_shower_finish },
-    { "ACT_SEX_WITH_LITTLEMAID, sex_with_littlemaid_finish },
-    { "ACT_LITTLEMAID_KISS, littlemaid_kiss_finish },
-    { "ACT_LITTLEMAID_PETTING, littlemaid_petting_finish },
-    { "ACT_LITTLEMAID_SERVICE, littlemaid_service_finish },
-    { "ACT_LITTLEMAID_SPECIAL, littlemaid_special_finish },
-    { "ACT_EXCRETE, excrete_finish }};
+    { ACT_TAKE_SHOWER, take_shower_finish },
+    { ACT_SEX_WITH_LITTLEMAID, sex_with_littlemaid_finish },
+    { ACT_LITTLEMAID_KISS, littlemaid_kiss_finish },
+    { ACT_LITTLEMAID_PETTING, littlemaid_petting_finish },
+    { ACT_LITTLEMAID_SERVICE, littlemaid_service_finish },
+    { ACT_LITTLEMAID_SPECIAL, littlemaid_special_finish },
+    { ACT_EXCRETE, excrete_finish }};
 
 bool activity_handlers::resume_for_multi_activities( player &p )
 {

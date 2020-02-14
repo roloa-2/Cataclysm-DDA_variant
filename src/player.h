@@ -1057,6 +1057,11 @@ class player : public Character
 
         std::set<tripoint> camps;
 
+        /**
+         * use for measure waiting time
+         */
+        std::chrono::system_clock::time_point start_time = std::chrono::system_clock::now();
+
     protected:
 
         trap_map known_traps;
