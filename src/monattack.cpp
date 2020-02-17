@@ -4364,6 +4364,8 @@ bool mattack::littlemaid_action( monster *maid )
     std::string speech_id = "";
     if( maid->has_effect( effect_littlemaid_speak_off ) ) {
         return true;
+    } else if ( !maid->sees( g->u ) ){
+        return true;
     } else if( maid->has_effect( effect_littlemaid_goodnight ) ) {
         if( g->u.in_sleep_state() ) {
             return true;
@@ -4375,7 +4377,7 @@ bool mattack::littlemaid_action( monster *maid )
         speech_id = "mon_little_maid_R18_milk_sanpo_goodnight";
         maid->add_effect( effect_littlemaid_goodnight, 12_hours, num_bp, false);
     } else if( maid->has_effect( effect_littlemaid_in_kiss ) ) {
-        if( !one_in( 10 ) ){
+        if( !one_in( 20 ) ){
             return true;
         }
         if ( 70 < maid->get_effect_int( effect_happiness) ){
@@ -4386,7 +4388,7 @@ bool mattack::littlemaid_action( monster *maid )
             speech_id = "mon_little_maid_R18_milk_sanpo_in_kiss";
         }
     } else if( maid->has_effect( effect_littlemaid_in_petting ) ) {
-        if( !one_in( 10 ) ){
+        if( !one_in( 20 ) ){
             return true;
         }
         if ( 70 < maid->get_effect_int( effect_comfortness) ){
@@ -4397,7 +4399,7 @@ bool mattack::littlemaid_action( monster *maid )
             speech_id = "mon_little_maid_R18_milk_sanpo_in_petting";
         }
     } else if( maid->has_effect( effect_littlemaid_in_service ) ) {
-        if( !one_in( 10 ) ){
+        if( !one_in( 20 ) ){
             return true;
         }
         if ( 70 < g->u.get_effect_int( effect_comfortness) ){
@@ -4408,7 +4410,7 @@ bool mattack::littlemaid_action( monster *maid )
             speech_id = "mon_little_maid_R18_milk_sanpo_in_service";
         }
     } else if( maid->has_effect( effect_littlemaid_in_special ) ) {
-        if( !one_in( 10 ) ){
+        if( !one_in( 20 ) ){
             return true;
         }
         if ( 70 < maid->get_effect_int( effect_comfortness) ){
@@ -4421,6 +4423,9 @@ bool mattack::littlemaid_action( monster *maid )
     } else if( one_in( 3 ) && maid->has_effect( effect_ecstasy )) {
         speech_id = "mon_little_maid_R18_milk_sanpo_in_ecstasy";
     } else if( one_in( 3 ) ) {
+        if( !g->u.activity.is_null() && !one_in( 20 ) ){
+            return true;
+        }
         if( one_in( 2 ) && std::none_of(g->u.worn.begin(), g->u.worn.end(), [](item it){
             return it.covers( bp_leg_l ) || it.covers( bp_leg_r );}) ){
             // player is not covering leg
