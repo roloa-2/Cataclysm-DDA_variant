@@ -3369,6 +3369,7 @@ bool mattack::searchlight( monster *z )
     }
 
     //battery charge from the generator is enough for some time of work
+    /*
     if( calendar::once_every( 10_minutes ) ) {
 
         bool generator_ok = false;
@@ -3390,7 +3391,7 @@ bool mattack::searchlight( monster *z )
             return true;
         }
     }
-
+    */
     for( int i = 0; i < max_lamp_count; i++ ) {
 
         item &settings = z->inv[i];
@@ -3425,7 +3426,7 @@ bool mattack::searchlight( monster *z )
 
         for( int i = 0; i < rng( 1, 2 ); i++ ) {
 
-            if( !z->sees( g->u ) ) {
+            if( z->friendly || !z->sees( g->u ) ) {
                 shift = settings.get_var( "SL_DIR", shift );
 
                 switch( shift ) {
