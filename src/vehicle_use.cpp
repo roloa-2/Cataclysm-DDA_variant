@@ -1845,7 +1845,7 @@ void vehicle::use_bike_rack( int part )
     }
 }
 
-void vehicle::use_shower( int p ) {
+void vehicle::use_shower( int p , const std::string &temperature ) {
     (void)p;
     if( fuel_left( "water_clean" ) < 120 ) {
         add_msg( m_bad, _( "You need 120 charges (30 litter) of clean water for take a shower." ) );
@@ -1858,12 +1858,11 @@ void vehicle::use_shower( int p ) {
         if( query_yn( _("Take a shower?") ) ) {
             drain( "water_clean", 120 );
             discharge_battery( 3000 );
-
             g->u.assign_activity(player_activity(activity_id( "ACT_TAKE_SHOWER" ),
-                    to_moves<int>( 10_minutes ),-1,0,"taking shower" ));
+                    to_moves<int>( 10_minutes ), -1, 0, "taking shower" ));
+            g->u.activity.str_values.push_back( temperature );
         }
     }
-
 }
 
 void vehicle::use_toilet( int p ) {
@@ -1953,7 +1952,7 @@ void vehicle::interact_with( const tripoint &pos, int interact_part )
     enum {
         EXAMINE, TRACK, CONTROL, CONTROL_ELECTRONICS, GET_ITEMS, GET_ITEMS_ON_GROUND, FOLD_VEHICLE, UNLOAD_TURRET, RELOAD_TURRET,
         USE_HOTPLATE, FILL_CONTAINER, DRINK, USE_WELDER, USE_PURIFIER, PURIFY_TANK, USE_AUTOCLAVE, USE_WASHMACHINE, USE_DISHWASHER,
-        USE_MONSTER_CAPTURE, USE_BIKE_RACK, USE_HARNESS, RELOAD_PLANTER, WORKBENCH, USE_TOWEL, PEEK_CURTAIN, TOILET, SHOWER,
+        USE_MONSTER_CAPTURE, USE_BIKE_RACK, USE_HARNESS, RELOAD_PLANTER, WORKBENCH, USE_TOWEL, PEEK_CURTAIN, TOILET, SHOWER, SHOWER_HOT,
         LIGHTMODE_IDLE, LIGHTMODE_CARGO, LIGHTMODE_TURRET,
     };
     uilist selectmenu;
@@ -2019,6 +2018,7 @@ void vehicle::interact_with( const tripoint &pos, int interact_part )
     }
     if( has_shower ) {
         selectmenu.addentry( SHOWER, true, 'S', _( "Take a shower" ) );
+        selectmenu.addentry( SHOWER_HOT, true, 'H', _( "Take a hot shower" ) );
     }
     if( has_weldrig && fuel_left( "battery", true ) > 0 ) {
         selectmenu.addentry( USE_WELDER, true, 'w', _( "Use the welding rig" ) );
@@ -2104,7 +2104,11 @@ void vehicle::interact_with( const tripoint &pos, int interact_part )
             return;
         }
         case SHOWER: {
-            use_shower( shower_part );
+            use_shower( shower_part , "normal");
+            return;
+        }
+        case SHOWER_HOT: {
+            use_shower( shower_part , "hot");
             return;
         }
         case USE_AUTOCLAVE: {
