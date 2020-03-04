@@ -4930,21 +4930,63 @@ void activity_handlers::excrete_finish( player_activity *act, player *p ){
 
     if( EXCRETETABLE < p->get_excrete_need() ) {
 
+        int morale_delta = 10;
         bool isOnTheToilet = g->m.has_flag_ter_or_furn("TOILET", p->pos()) || g->m.veh_at(p->pos()).part_with_feature("TOILET", true);
 
         item unchi( "feces_human", calendar::turn );
         unchi.charges = p->get_excrete_amount() / 125;
-        put_into_vehicle_or_drop(*p, item_drop_reason::tumbling, { unchi });
 
         p->set_excrete_need( 0 );
         p->set_excrete_amount( 0 );
 
+        // search paper
+        std::vector<const std::list<item> *> paper_list;
+        // std::vector<const std::list<item> *>
+        const_invslice inventory = g->u.inv.const_slice();
+
+        // can use to toiletpaper item: material is paper, volume is 0.25L, not filthy
+        for( const std::list<item> *itemstack : inventory ){
+            auto item = itemstack->front();
+            if( item.made_of( material_id( "paper" )) &&
+                item.volume( false ) == units::from_milliliter<int>( 250 ) &&
+                item.has_flag( flag_FILTHY )
+            ){
+                paper_list.push_back( itemstack );
+            }
+        }
+        // select menu
+        uilist amenu;
+        const int SELECT_NOT_USE_PAPER = -1;
+        amenu.text = string_format( _( "use paper?" ) );
+        amenu.addentry( -1 , true, '0', _( "not use paper" ));
+
+        for(long long unsigned int i = 0 ; i < paper_list.size() ; i++) {
+            item item = paper_list.at(i)->front();
+            amenu.addentry( i , true, -1 , item.tname());
+        }
+        amenu.query();
+        int choice = amenu.ret;
+
+        if( choice == UILIST_CANCEL || choice == SELECT_NOT_USE_PAPER ){
+            put_into_vehicle_or_drop(*p, item_drop_reason::tumbling, { unchi });
+
+            morale_delta = 10;
+        } else {
+            const item *using_paper = &(paper_list.at(choice)->front());
+            item used_paper = g->u.inv.remove_item(using_paper);
+            used_paper.set_flag( flag_FILTHY );
+            put_into_vehicle_or_drop(*p, item_drop_reason::tumbling, { unchi, used_paper });
+
+            morale_delta = 20;
+        }
+
         if( isOnTheToilet ){
+            // on the toilet do twice morale
             p->add_msg_if_player( m_good, _( "you execrete to toilet." ) );
-            p->add_morale( MORALE_EXCRETE, 30, 60 );
+            p->add_morale( MORALE_EXCRETE, morale_delta * 2, morale_delta * 2, 180_minutes, 120_minutes);
         } else {
             p->add_msg_if_player( m_good, _( "you finish execrete." ) );
-            p->add_morale( MORALE_EXCRETE, 15, 30 );
+            p->add_morale( MORALE_EXCRETE, morale_delta, morale_delta, 180_minutes, 120_minutes);
         }
     } else {
         p->add_msg_if_player( m_neutral, _( "you could not execrete." ) );
