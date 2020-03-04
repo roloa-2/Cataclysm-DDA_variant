@@ -166,7 +166,8 @@ w_point weather_generator::get_weather( const tripoint &location, const time_poi
     int option_acid_frequency = get_option<int>( "ACID_RAIN" );
     const double acid_content = base_acid * A * option_acid_frequency / 100;
     bool acid = acid_content >= 1.0;
-    return w_point {T, H, P, W, wind_desc, current_winddir, acid};
+    bool acid_weak = acid_content >= 0.5;
+    return w_point {T, H, P, W, wind_desc, current_winddir, acid, acid_weak};
 }
 
 weather_type weather_generator::get_weather_conditions( const tripoint &location,
@@ -184,19 +185,19 @@ weather_type weather_generator::get_weather_conditions( const tripoint &location
 weather_type weather_generator::get_weather_conditions( const w_point &w ) const
 {
     weather_type r( WEATHER_CLEAR );
-    if( w.pressure > 1005 && w.humidity < 70 ) {
+    if( w.pressure > 1004 && w.humidity < 70 ) {
         r = WEATHER_SUNNY;
     }
     if( w.pressure < 1002 && w.humidity > 45 ) {
         r = WEATHER_CLOUDY;
     }
-    if( r == WEATHER_CLOUDY && ( w.humidity > 95 || w.pressure < 1002 ) ) {
+    if( r == WEATHER_CLOUDY && ( w.humidity > 95 || w.pressure < 1000 ) ) {
         r = WEATHER_LIGHT_DRIZZLE;
     }
-    if( r == WEATHER_CLOUDY && ( w.humidity > 96 || w.pressure < 1000 ) ) {
+    if( r == WEATHER_LIGHT_DRIZZLE && ( w.humidity > 96 || w.pressure < 999 ) ) {
         r = WEATHER_DRIZZLE;
     }
-    if( r >= WEATHER_CLOUDY && ( w.humidity > 97 || w.pressure < 998 ) ) {
+    if( r >= WEATHER_DRIZZLE && ( w.humidity > 97 || w.pressure < 998 ) ) {
         r = WEATHER_RAINY;
     }
     if( r == WEATHER_RAINY && w.pressure < 996 ) {
@@ -218,10 +219,49 @@ weather_type weather_generator::get_weather_conditions( const w_point &w ) const
         }
     }
 
-    if( r == WEATHER_DRIZZLE && w.acidic ) {
-        r = WEATHER_ACID_DRIZZLE;
-    } else if( r > WEATHER_DRIZZLE && w.acidic ) {
-        r = WEATHER_ACID_RAIN;
+    if( w.acidic ){
+        switch( r ) {
+            case WEATHER_DRIZZLE:
+                r = WEATHER_ACID_DRIZZLE;
+                break;
+            case WEATHER_RAINY:
+                r = WEATHER_ACID_RAIN;
+                break;
+            case WEATHER_FLURRIES:
+                r = WEATHER_ACID_FLURRIES;
+                break;
+            case WEATHER_SNOW:
+                r = WEATHER_ACID_SNOW;
+                break;
+            case WEATHER_THUNDER:
+            case WEATHER_LIGHTNING:
+            case WEATHER_SNOWSTORM:
+                r = WEATHER_ACID_STORM;
+                break;
+            default:
+                break;
+        }
+    } else if( w.acidic_weak ) {
+        switch( r ) {
+            case WEATHER_DRIZZLE:
+            case WEATHER_RAINY:
+                r = WEATHER_ACID_DRIZZLE;
+                break;
+            case WEATHER_SNOW:
+                r = WEATHER_ACID_FLURRIES;
+                break;
+            case WEATHER_SNOWSTORM:
+                r = WEATHER_ACID_SNOW;
+                break;
+            case WEATHER_THUNDER:
+                r = WEATHER_ACID_RAIN;
+                break;
+            case WEATHER_LIGHTNING:
+                r = WEATHER_ACID_STORM;
+                break;
+            default:
+                break;
+        }
     }
     return r;
 }
