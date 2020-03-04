@@ -4954,20 +4954,31 @@ void activity_handlers::excrete_finish( player_activity *act, player *p ){
 }
 
 void activity_handlers::take_shower_do_turn( player_activity *act, player *p ){
-    (void)act;
     if( calendar::once_every( 1_minutes ) ) {
-        body_part_set drenched_parts{ { bp_leg_l, bp_leg_r, bp_torso, bp_arm_l, bp_arm_r, bp_head } };
+        body_part_set drenched_parts;
+        if( !act->str_values.empty() && act->str_values[0] == "hands" ){
+            drenched_parts = { { bp_hand_l, bp_hand_r } };
+        } else {
+            drenched_parts = { { bp_torso, bp_head, bp_arm_l, bp_arm_r, bp_hand_l, bp_hand_r, bp_leg_l, bp_leg_r, bp_foot_l, bp_foot_r } };
+        }
         p->drench( 50, drenched_parts, true );
     }
     if( !act->str_values.empty() && act->str_values[0] == "hot" ) {
         g->m.emit_field( p->pos(), emit_id( "emit_shower_vehicle" ) , 1.0f );
     }
-
 }
 
 void activity_handlers::take_shower_finish( player_activity *act, player *p ){
-    p->add_msg_if_player( m_good, _( "You finished taking a shower." ) );
-    p->add_morale( MORALE_TAKE_BATH, 30, 60, 180_minutes, 120_minutes );
+    if( !act->str_values.empty() && act->str_values[0] == "hands" ){
+        p->add_msg_if_player( m_good, _( "You finished washing hands." ) );
+        p->add_morale( MORALE_TAKE_BATH, 5, 10, 180_minutes, 120_minutes );
+    } else if( !act->str_values.empty() && act->str_values[0] == "hot" ){
+        p->add_msg_if_player( m_good, _( "You finished taking a hot shower." ) );
+        p->add_morale( MORALE_TAKE_BATH, 30, 60, 180_minutes, 120_minutes );
+    } else {
+        p->add_msg_if_player( m_good, _( "You finished taking a shower." ) );
+        p->add_morale( MORALE_TAKE_BATH, 20, 40, 180_minutes, 120_minutes );
+    }
     act->set_to_null();
 }
 

@@ -1845,23 +1845,59 @@ void vehicle::use_bike_rack( int part )
     }
 }
 
-void vehicle::use_shower( int p , const std::string &temperature ) {
+void vehicle::use_shower( int p , const std::string &mode ) {
     (void)p;
-    if( fuel_left( "water_clean" ) < 120 ) {
-        add_msg( m_bad, _( "You need 120 charges (30 litter) of clean water for take a shower." ) );
-    } else if( fuel_left( "battery", true ) < 3000 ) {
-        add_msg( m_bad, _( "You need 3000 charges of battery for take a shower." ) );
-    } else if( 0 < g->u.worn.size()  ) {
-        add_msg( m_bad,
-                 _( "You must take off all clothes to take a shower." ) );
-    } else {
-        if( query_yn( _("Take a shower?") ) ) {
-            drain( "water_clean", 120 );
-            discharge_battery( 3000 );
-            g->u.assign_activity(player_activity(activity_id( "ACT_TAKE_SHOWER" ),
-                    to_moves<int>( 10_minutes ), -1, 0, "taking shower" ));
-            g->u.activity.str_values.push_back( temperature );
+
+    int consume_water = 120;
+    int consume_battery = 2000;
+    int time_to_take = to_moves<int>( 10_minutes );
+    std::string message = _("Take a shower?");
+    if( mode == "hands" ){
+        consume_water = 20;
+        consume_battery = 200;
+        time_to_take = to_moves<int>( 1_minutes );
+        message = _("Wash hands?");
+    } else if( mode == "hot" ){
+        consume_battery = 5000;
+    }
+
+    if( fuel_left( "water_clean" ) < consume_water ) {
+        int litter = consume_water / 4;
+        add_msg( m_bad, _( "You need %d charges (%d litter) of clean water for take a shower." ),
+                consume_water, litter);
+        return;
+    }
+    if( fuel_left( "battery", true ) < consume_battery ) {
+        add_msg( m_bad, _( "You need %d charges of battery for take a shower." ),
+                consume_battery);
+        return;
+    }
+    bool wearing_not_water_friendly = false;
+    for( auto cloth : g->u.worn ){
+
+        if( mode == "hands"){
+            if( !cloth.has_flag("WATER_FRIENDLY") &&
+                    (cloth.covers( bp_hand_l ) || cloth.covers( bp_hand_r )) ){
+                wearing_not_water_friendly = true;
+                break;
+            }
+        } else if( !cloth.has_flag("WATER_FRIENDLY") ){
+            wearing_not_water_friendly = true;
+            break;
         }
+    }
+    if( wearing_not_water_friendly ) {
+        return;
+        add_msg( m_bad,
+                 _( "You must take off all not water friendly clothes to take a shower." ) );
+    }
+    if( query_yn( _( "%s This takes %s clean water and %s battery charge."),
+            message, consume_water, consume_battery) ) {
+        drain( "water_clean", consume_water );
+        discharge_battery( consume_battery );
+        g->u.assign_activity(player_activity(activity_id( "ACT_TAKE_SHOWER" ),
+                time_to_take , -1, 0, "taking shower" ));
+        g->u.activity.str_values.push_back( mode );
     }
 }
 
@@ -1952,7 +1988,7 @@ void vehicle::interact_with( const tripoint &pos, int interact_part )
     enum {
         EXAMINE, TRACK, CONTROL, CONTROL_ELECTRONICS, GET_ITEMS, GET_ITEMS_ON_GROUND, FOLD_VEHICLE, UNLOAD_TURRET, RELOAD_TURRET,
         USE_HOTPLATE, FILL_CONTAINER, DRINK, USE_WELDER, USE_PURIFIER, PURIFY_TANK, USE_AUTOCLAVE, USE_WASHMACHINE, USE_DISHWASHER,
-        USE_MONSTER_CAPTURE, USE_BIKE_RACK, USE_HARNESS, RELOAD_PLANTER, WORKBENCH, USE_TOWEL, PEEK_CURTAIN, TOILET, SHOWER, SHOWER_HOT,
+        USE_MONSTER_CAPTURE, USE_BIKE_RACK, USE_HARNESS, RELOAD_PLANTER, WORKBENCH, USE_TOWEL, PEEK_CURTAIN, TOILET, SHOWER_HAND, SHOWER, SHOWER_HOT,
         LIGHTMODE_IDLE, LIGHTMODE_CARGO, LIGHTMODE_TURRET,
     };
     uilist selectmenu;
@@ -2017,6 +2053,7 @@ void vehicle::interact_with( const tripoint &pos, int interact_part )
         selectmenu.addentry( USE_TOWEL, true, 't', _( "Use a towel" ) );
     }
     if( has_shower ) {
+        selectmenu.addentry( SHOWER_HAND, true, 'W', _( "Wash hands" ) );
         selectmenu.addentry( SHOWER, true, 'S', _( "Take a shower" ) );
         selectmenu.addentry( SHOWER_HOT, true, 'H', _( "Take a hot shower" ) );
     }
@@ -2101,6 +2138,10 @@ void vehicle::interact_with( const tripoint &pos, int interact_part )
         }
         case USE_TOWEL: {
             iuse::towel_common( &g->u, nullptr, false );
+            return;
+        }
+        case SHOWER_HAND: {
+            use_shower( shower_part , "hands");
             return;
         }
         case SHOWER: {
