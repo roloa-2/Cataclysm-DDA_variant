@@ -1905,7 +1905,7 @@ void vehicle::use_toilet( int p ) {
 
     auto items = get_items( p );
     bool non_excretive = std::any_of( items.begin(), items.end(), []( const item & i ) {
-        return !i.made_of(material_id("feces"));
+        return !( i.made_of(material_id("feces")) || i.made_of(material_id("paper")) );
     } );
 
     if( items.empty() ) {
