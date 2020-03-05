@@ -4300,7 +4300,9 @@ static void process_vehicle_items( vehicle &cur_veh, int part )
             static const std::string fragrant( "FRAGRANT" );
             if( time_left <= 0_turns ) {
                 n.item_tags.erase( filthy );
-                n.item_tags.insert( fragrant );
+                if( n.is_armor() ){
+                    n.item_tags.insert( fragrant );
+                }
                 washing_machine_finished = true;
                 cur_veh.parts[part].enabled = false;
             } else if( calendar::once_every( 15_minutes ) ) {
