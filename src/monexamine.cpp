@@ -720,7 +720,9 @@ void monexamine::maid_stay_or_follow( monster &z )
 
 void monexamine::maid_itemize( monster &z )
 {
-    if( query_yn( _( "Itemize the %s?" ), z.name() ) ) {
+    if( z.storage_item || z.armor_item || !z.inv.empty() || z.tied_item ){
+        add_msg( m_info, _("remove all equipment from littlemaid before itemize.") );
+    } else if( query_yn( _( "Itemize the %s?" ), z.name() ) ) {
         g->u.moves -= 100;
         g->u.i_add( item( "little_maid_R18_milk_sanpo" ) );
         g->remove_zombie( z );
