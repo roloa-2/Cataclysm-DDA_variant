@@ -172,6 +172,7 @@ const morale_type MORALE_PERM_NOFACE( "morale_perm_noface" );
 const morale_type MORALE_PERM_FPMODE_ON( "morale_perm_fpmode_on" );
 const morale_type MORALE_PERM_HOARDER( "morale_perm_hoarder" );
 const morale_type MORALE_PERM_FANCY( "morale_perm_fancy" );
+const morale_type MORALE_PERM_FRAGRANT( "morale_perm_fragrant" );
 const morale_type MORALE_PERM_OPTIMIST( "morale_perm_optimist" );
 const morale_type MORALE_PERM_BADTEMPER( "morale_perm_badtemper" );
 const morale_type MORALE_PERM_CONSTRAINED( "morale_perm_constrained" );

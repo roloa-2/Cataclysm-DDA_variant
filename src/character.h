@@ -1806,6 +1806,8 @@ class Character : public Creature, public visitable<Character>
         void update_morale();
         /** Ensures persistent morale effects are up-to-date */
         void apply_persistent_morale();
+        /** update fragrant gear morale */
+        void apply_fragrant_morale();
         /** Used to apply morale modifications from food and medication **/
         void modify_morale( item &food, int nutr = 0 );
         // Modified by traits, &c
