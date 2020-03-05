@@ -7472,6 +7472,10 @@ bool Character::armor_absorb( damage_unit &du, item &armor )
     // TODO: add some check for power armor
     armor.mitigate_damage( du );
 
+    // attacked armor is lose fragrant
+    static const std::string fragrant( "FRAGRANT" );
+    armor.item_tags.erase( fragrant );
+
     // We want armor's own resistance to this type, not the resistance it grants
     const int armors_own_resist = armor.damage_resist( du.type, true );
     if( armors_own_resist > 1000 ) {

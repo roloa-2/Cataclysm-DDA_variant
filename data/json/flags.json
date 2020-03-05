@@ -228,6 +228,13 @@
     "conflicts": [ "DURABLE_MELEE" ]
   },
   {
+    "id": "FRAGRANT",
+    "type": "json_flag",
+    "context": [ "ARMOR", "TOOL_ARMOR" ],
+    "//": "Well washed clothes are good fragrant!",
+    "info": "This item has <good>good fragrant</good>."
+  },
+  {
     "id": "GAS_PROOF",
     "type": "json_flag",
     "context": [ "ARMOR", "TOOL_ARMOR" ],

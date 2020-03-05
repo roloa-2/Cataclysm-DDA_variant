@@ -1540,10 +1540,6 @@ void vehicle::use_washing_machine( int p )
     } );
 
     auto items = get_items( p );
-    static const std::string filthy( "FILTHY" );
-    bool filthy_items = std::all_of( items.begin(), items.end(), []( const item & i ) {
-        return i.has_flag( filthy );
-    } );
 
     bool cbms = std::any_of( items.begin(), items.end(), []( const item & i ) {
         return i.is_bionic();
@@ -1561,9 +1557,6 @@ void vehicle::use_washing_machine( int p )
                  name );
     } else if( detergents.empty() ) {
         add_msg( m_bad, _( "You need 5 charges of a detergent for the washing machine." ) );
-    } else if( !filthy_items ) {
-        add_msg( m_bad,
-                 _( "You need to remove all non-filthy items from the washing machine to start the washing program." ) );
     } else if( cbms ) {
         add_msg( m_bad,
                  _( "CBMs can't be cleaned in a washing machine.  You need to remove them." ) );
