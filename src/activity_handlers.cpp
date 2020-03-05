@@ -4949,16 +4949,16 @@ void activity_handlers::excrete_finish( player_activity *act, player *p ){
             auto item = itemstack->front();
             if( item.made_of( material_id( "paper" )) &&
                 item.volume( false ) == units::from_milliliter<int>( 250 ) &&
-                item.has_flag( flag_FILTHY )
+                !item.has_flag( flag_FILTHY )
             ){
                 paper_list.push_back( itemstack );
             }
         }
         // select menu
         uilist amenu;
-        const int SELECT_NOT_USE_PAPER = -1;
+        const int SELECT_NOT_USE_PAPER = -99;
         amenu.text = string_format( _( "use paper?" ) );
-        amenu.addentry( -1 , true, '0', _( "not use paper" ));
+        amenu.addentry( SELECT_NOT_USE_PAPER , true, '0', _( "not use paper" ));
 
         for(long long unsigned int i = 0 ; i < paper_list.size() ; i++) {
             item item = paper_list.at(i)->front();
@@ -4967,17 +4967,17 @@ void activity_handlers::excrete_finish( player_activity *act, player *p ){
         amenu.query();
         int choice = amenu.ret;
 
-        if( choice == UILIST_CANCEL || choice == SELECT_NOT_USE_PAPER ){
-            put_into_vehicle_or_drop(*p, item_drop_reason::tumbling, { unchi });
-
-            morale_delta = 10;
-        } else {
+        if( 0 <= choice ){
             const item *using_paper = &(paper_list.at(choice)->front());
             item used_paper = g->u.inv.remove_item(using_paper);
             used_paper.set_flag( flag_FILTHY );
             put_into_vehicle_or_drop(*p, item_drop_reason::tumbling, { unchi, used_paper });
 
             morale_delta = 20;
+        } else {
+            put_into_vehicle_or_drop(*p, item_drop_reason::tumbling, { unchi });
+
+            morale_delta = 10;
         }
 
         if( isOnTheToilet ){
