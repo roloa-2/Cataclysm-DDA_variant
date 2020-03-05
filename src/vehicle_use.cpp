@@ -1880,9 +1880,14 @@ void vehicle::use_shower( int p , const std::string &mode ) {
         }
     }
     if( wearing_not_water_friendly ) {
+        if( mode == "hands" ) {
+            add_msg( m_bad,
+                     _( "You must take off all not water friendly gloves to wash hands." ) );
+        } else {
+            add_msg( m_bad,
+                     _( "You must take off all not water friendly clothes to take a shower." ) );
+        }
         return;
-        add_msg( m_bad,
-                 _( "You must take off all not water friendly clothes to take a shower." ) );
     }
     if( query_yn( _( "%s This takes %s clean water and %s battery charge."),
             message, consume_water, consume_battery) ) {
