@@ -4424,10 +4424,50 @@ bool mattack::littlemaid_action( monster *maid )
     } else if( one_in( 3 ) && maid->has_effect( effect_ecstasy )) {
         speech_id = "mon_little_maid_R18_milk_sanpo_in_ecstasy";
     } else if( one_in( 3 ) ) {
-        if( !g->u.activity.is_null() && !one_in( 20 ) ){
-            return true;
+
+        // search nearest monster
+        Creature *target = nullptr;
+        int closest = maid->sight_range( default_daylight_level() );
+        for( monster &mons : g->all_monsters() ) {
+            if( mons.friendly != 0 ) {
+                continue;
+            }
+            const int dist = rl_dist_fast( maid->pos(), mons.pos() );
+            if( dist <= 0 ) {
+                continue;
+            }
+            if( dist >= closest ) {
+                continue;
+            }
+            if( !maid->sees( mons ) ) {
+                continue;
+            }
+            closest = dist;
+            target = &mons;
         }
-        if( one_in( 2 ) && std::none_of(g->u.worn.begin(), g->u.worn.end(), [](item it){
+
+        if( maid->get_hp() < maid->get_hp_max() && target != nullptr && rl_dist( maid->pos(), target->pos() ) < 3 ) {
+            speech_id = "mon_little_maid_R18_milk_sanpo_maid_in_attacked";
+        } else if( !g->u.activity.is_null() && !one_in( 20 ) ){
+            // reduce talk frequency at master is working
+            return true;
+        } else if( target != nullptr && one_in( 2 )){
+            // talk about saw monster
+            if( target->in_species( ZOMBIE )){
+                if(rl_dist( maid->pos(), target->pos() ) < 10 ){
+                    speech_id = "mon_little_maid_R18_milk_sanpo_saw_zombie_near";
+                } else {
+                    speech_id = "mon_little_maid_R18_milk_sanpo_saw_zombie_far";
+                }
+            } else if( target->in_species( FUNGUS )) {
+                speech_id = "mon_little_maid_R18_milk_sanpo_saw_fungus";
+            } else if( target->in_species( INSECT ) || target->in_species( SPIDER )) {
+                speech_id = "mon_little_maid_R18_milk_sanpo_saw_insect";
+            } else {
+                // other specie
+                return true;
+            }
+        } else if( one_in( 2 ) && std::none_of(g->u.worn.begin(), g->u.worn.end(), [](item it){
             return it.covers( bp_leg_l ) || it.covers( bp_leg_r );}) ){
             // player is not covering leg
             speech_id = "mon_little_maid_R18_milk_sanpo_player_is_naked";
