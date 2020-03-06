@@ -4944,11 +4944,12 @@ void activity_handlers::excrete_finish( player_activity *act, player *p ){
         // std::vector<const std::list<item> *>
         const_invslice inventory = g->u.inv.const_slice();
 
-        // can use to toiletpaper item: material is paper, volume is 0.25L, not filthy
+        // can use to toiletpaper item: material is paper, volume between 0.10L to 0.50L, not filthy
         for( const std::list<item> *itemstack : inventory ){
             auto item = itemstack->front();
             if( item.made_of( material_id( "paper" )) &&
-                item.volume( false ) == units::from_milliliter<int>( 250 ) &&
+                item.volume( false ) <= units::from_milliliter<int>( 500 ) &&
+                units::from_milliliter<int>( 100 ) <= item.volume( false ) &&
                 !item.has_flag( flag_FILTHY )
             ){
                 paper_list.push_back( itemstack );
