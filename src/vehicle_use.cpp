@@ -1929,6 +1929,20 @@ void vehicle::use_toilet( int p ) {
 
 }
 
+bool vehicle::is_available_washlet_resource( ){
+    bool water = (4 <= fuel_left( "water" ) || 4 <= fuel_left( "water_clean" ));
+    bool battery = (500 <= fuel_left( "battery", true ));
+    return water && battery;
+}
+void vehicle::consume_washlet_resource( ){
+    if( 4 <= fuel_left( "water_clean" ) ) {
+        drain( "water_clean", 4 );
+    } else {
+        drain( "water", 4 );
+    }
+    drain( "battery", 500 );
+}
+
 // Handles interactions with a vehicle in the examine menu.
 void vehicle::interact_with( const tripoint &pos, int interact_part )
 {

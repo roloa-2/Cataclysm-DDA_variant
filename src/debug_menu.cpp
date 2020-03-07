@@ -707,6 +707,10 @@ void character_edit_menu()
             smenu.addentry( 4, true, 'd', "%s: %d", _( "Sleep Deprivation" ), p.get_sleep_deprivation() );
             smenu.addentry( 5, true, 'a', _( "Reset all basic needs" ) );
 
+            smenu.addentry( 66, true, 'u', "%s: %d", _( "unchi_needs" ), p.get_excrete_need() );
+            smenu.addentry( 77, true, 'U', "%s: %d", _( "unchi_amount" ), p.get_excrete_amount() );
+
+
             const auto &vits = vitamin::all();
             for( const auto &v : vits ) {
                 smenu.addentry( -1, true, 0, "%s: %d", v.second.name(), p.vitamin_get( v.first ) );
@@ -752,6 +756,18 @@ void character_edit_menu()
                     p.set_fatigue( 0 );
                     p.set_sleep_deprivation( 0 );
                     p.set_stored_kcal( p.get_healthy_kcal() );
+                    break;
+                case 66:
+                    if( query_int( value, _( "Set unchi needs to?  Currently: %d" ),
+                                   p.get_excrete_need() ) ) {
+                        p.set_excrete_need( value );
+                    }
+                    break;
+                case 77:
+                    if( query_int( value, _( "Set unchi amount to?  Currently: %d" ),
+                                   p.get_excrete_amount() ) ) {
+                        p.set_excrete_amount( value );
+                    }
                     break;
                 default:
                     if( smenu.ret >= 6 && smenu.ret < static_cast<int>( vits.size() + 6 ) ) {

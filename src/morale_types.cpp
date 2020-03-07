@@ -199,6 +199,8 @@ const morale_type MORALE_FAILURE( "morale_failure" );
 const morale_type MORALE_SEX_WITH_LITTLEMAID( "morale_sex_with_littlemaid" );
 const morale_type MORALE_ECSTASY( "morale_ecstasy" );
 const morale_type MORALE_TAKE_BATH( "morale_take_bath" );
+const morale_type MORALE_TAKE_WASHLET( "morale_take_washlet" );
+const morale_type MORALE_USE_TOILETPAPER( "morale_use_toiletpaper" );
 const morale_type MORALE_EXCRETE( "morale_excrete" );
 const morale_type MORALE_INCONTINENT( "morale_incontinent" );
 const morale_type MORALE_MORALE_TAKE_BATH( "morale_take_bath" );

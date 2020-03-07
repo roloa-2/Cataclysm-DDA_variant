@@ -401,6 +401,16 @@
     "text": "Took a bath"
   },
   {
+    "id": "morale_take_washlet",
+    "type": "morale_type",
+    "text": "Took a washlet"
+  },
+  {
+    "id": "morale_use_toiletpaper",
+    "type": "morale_type",
+    "text": "Used toilet paper"
+  },
+  {
     "id": "morale_ecstasy",
     "type": "morale_type",
     "text": "Rised on the ecstasy"

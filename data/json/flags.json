@@ -235,6 +235,12 @@
     "info": "This item has <good>good fragrant</good>."
   },
   {
+    "id": "TOILETPAPER",
+    "type": "json_flag",
+    "context": [ "GENERIC", "TOOL" ],
+    "info": "This item can use as toilet paper."
+  },
+  {
     "id": "GAS_PROOF",
     "type": "json_flag",
     "context": [ "ARMOR", "TOOL_ARMOR" ],

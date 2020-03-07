@@ -106,6 +106,7 @@ static const activity_id ACT_WEAR( "ACT_WEAR" );
 
 static const activity_id ACT_TAKE_BATH("ACT_TAKE_BATH");
 static const activity_id ACT_TAKE_SHOWER("ACT_TAKE_SHOWER");
+static const activity_id ACT_TAKE_WASHLET("ACT_TAKE_WASHLET");
 static const activity_id ACT_SEX_WITH_LITTLEMAID("ACT_SEX_WITH_LITTLEMAID");
 static const activity_id ACT_LITTLEMAID_KISS("ACT_LITTLEMAID_KISS");
 static const activity_id ACT_LITTLEMAID_PETTING("ACT_LITTLEMAID_PETTING");
@@ -1203,6 +1204,7 @@ static const std::string flag_THIN_OBSTACLE( "THIN_OBSTACLE" );
 static const std::string flag_TINDER( "TINDER" );
 static const std::string flag_TINY( "TINY" );
 static const std::string flag_TOBACCO( "TOBACCO" );
+static const std::string flag_TOILETPAPER( "TOILETPAPER" );
 static const std::string flag_TRANSPARENT( "TRANSPARENT" );
 static const std::string flag_TREE( "TREE" );
 static const std::string flag_UNARMED_BONUS( "UNARMED_BONUS" );

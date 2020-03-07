@@ -173,6 +173,7 @@ activity_handlers::do_turn_functions = {
     { ACT_WAIT_STAMINA, wait_stamina_do_turn },
     { ACT_TAKE_BATH, take_bath_do_turn },
     { ACT_TAKE_SHOWER, take_shower_do_turn },
+    { ACT_TAKE_WASHLET, take_washlet_do_turn },
     { ACT_SEX_WITH_LITTLEMAID, sex_with_littlemaid_do_turn },
     { ACT_LITTLEMAID_KISS, littlemaid_kiss_do_turn },
     { ACT_LITTLEMAID_PETTING, littlemaid_petting_do_turn },
@@ -252,6 +253,7 @@ activity_handlers::finish_functions = {
     { ACT_STUDY_SPELL, study_spell_finish },
     { ACT_TAKE_BATH, take_bath_finish },
     { ACT_TAKE_SHOWER, take_shower_finish },
+    { ACT_TAKE_WASHLET, take_washlet_finish },
     { ACT_SEX_WITH_LITTLEMAID, sex_with_littlemaid_finish },
     { ACT_LITTLEMAID_KISS, littlemaid_kiss_finish },
     { ACT_LITTLEMAID_PETTING, littlemaid_petting_finish },
@@ -4926,11 +4928,99 @@ void activity_handlers::take_bath_finish( player_activity *act, player *p ){
     act->set_to_null();
 }
 
+int activity_handlers::use_toilet_paper( player *p ) {
+    // search paper
+    std::vector<const std::list<item> *> paper_list;
+    // std::vector<const std::list<item> *>
+    const_invslice inventory = g->u.inv.const_slice();
+
+    int paper_morale = 0;
+
+    // can use to toiletpaper item: material is paper, volume between 0.10L to 0.50L, not filthy
+    for( const std::list<item> *itemstack : inventory ){
+        auto item = itemstack->front();
+        if( !item.has_flag( flag_FILTHY ) &&
+            (
+                item.has_flag( flag_TOILETPAPER ) ||
+                (
+                    item.made_of( material_id( "paper" )) &&
+                    item.volume( false ) <= units::from_milliliter<int>( 500 ) &&
+                    units::from_milliliter<int>( 100 ) <= item.volume( false )
+                )
+            )
+        ){
+            paper_list.push_back( itemstack );
+        }
+    }
+
+    if( paper_list.size() == 0) {
+        // dont have paper
+        return paper_morale;
+    }
+    // paper select menu
+    uilist amenu;
+    const int SELECT_NOT_USE_PAPER = -99;
+    amenu.text = string_format( _( "use paper?" ) );
+    amenu.addentry( SELECT_NOT_USE_PAPER , true, '0', _( "not use paper" ));
+
+    for(long long unsigned int i = 0 ; i < paper_list.size() ; i++) {
+        item item = paper_list.at(i)->front();
+        amenu.addentry( i , true, -1 , item.tname());
+    }
+    amenu.query();
+    int choice = amenu.ret;
+
+    if( 0 <= choice ){
+        const item *using_paper = &(paper_list.at(choice)->front());
+        item used_paper = g->u.inv.remove_item(using_paper);
+        used_paper.set_flag( flag_FILTHY );
+        put_into_vehicle_or_drop(*p, item_drop_reason::tumbling, { used_paper });
+
+        paper_morale = 10;
+
+        // process specific toilet paper item status
+        if(used_paper.type->toiletpaper_morale != 0){
+            paper_morale += used_paper.type->toiletpaper_morale;
+        }
+        if( !used_paper.type->toiletpaper_message.empty()){
+            if( paper_morale < 10 ){
+                p->add_msg_if_player( m_bad,  used_paper.type->toiletpaper_message );
+            } else if( paper_morale == 10 ){
+                p->add_msg_if_player( m_neutral,  used_paper.type->toiletpaper_message );
+            } else {
+                p->add_msg_if_player( m_good,  used_paper.type->toiletpaper_message  );
+            }
+        }
+        p->add_morale( MORALE_USE_TOILETPAPER, paper_morale, paper_morale * 2, 180_minutes );
+    } else {
+
+    }
+    return paper_morale;
+}
+
+void activity_handlers::take_washlet_do_turn( player_activity *act, player *p ){
+    (void)act;
+    (void)p;
+}
+
+void activity_handlers::take_washlet_finish( player_activity *act, player *p ){
+    p->add_msg_if_player( m_good, _( "You used washlet." ) );
+    p->add_morale( MORALE_TAKE_WASHLET, 10, 20, 180_minutes );
+
+    use_toilet_paper(p);
+
+    act->set_to_null();
+}
+
+
+
 void activity_handlers::excrete_finish( player_activity *act, player *p ){
+
+    act->set_to_null();
 
     if( EXCRETETABLE < p->get_excrete_need() ) {
 
-        int morale_delta = 10;
+        int morale_delta = 5;
         bool isOnTheToilet = g->m.has_flag_ter_or_furn("TOILET", p->pos()) || g->m.veh_at(p->pos()).part_with_feature("TOILET", true);
 
         item unchi( "feces_human", calendar::turn );
@@ -4939,47 +5029,7 @@ void activity_handlers::excrete_finish( player_activity *act, player *p ){
         p->set_excrete_need( 0 );
         p->set_excrete_amount( 0 );
 
-        // search paper
-        std::vector<const std::list<item> *> paper_list;
-        // std::vector<const std::list<item> *>
-        const_invslice inventory = g->u.inv.const_slice();
-
-        // can use to toiletpaper item: material is paper, volume between 0.10L to 0.50L, not filthy
-        for( const std::list<item> *itemstack : inventory ){
-            auto item = itemstack->front();
-            if( item.made_of( material_id( "paper" )) &&
-                item.volume( false ) <= units::from_milliliter<int>( 500 ) &&
-                units::from_milliliter<int>( 100 ) <= item.volume( false ) &&
-                !item.has_flag( flag_FILTHY )
-            ){
-                paper_list.push_back( itemstack );
-            }
-        }
-        // select menu
-        uilist amenu;
-        const int SELECT_NOT_USE_PAPER = -99;
-        amenu.text = string_format( _( "use paper?" ) );
-        amenu.addentry( SELECT_NOT_USE_PAPER , true, '0', _( "not use paper" ));
-
-        for(long long unsigned int i = 0 ; i < paper_list.size() ; i++) {
-            item item = paper_list.at(i)->front();
-            amenu.addentry( i , true, -1 , item.tname());
-        }
-        amenu.query();
-        int choice = amenu.ret;
-
-        if( 0 <= choice ){
-            const item *using_paper = &(paper_list.at(choice)->front());
-            item used_paper = g->u.inv.remove_item(using_paper);
-            used_paper.set_flag( flag_FILTHY );
-            put_into_vehicle_or_drop(*p, item_drop_reason::tumbling, { unchi, used_paper });
-
-            morale_delta = 20;
-        } else {
-            put_into_vehicle_or_drop(*p, item_drop_reason::tumbling, { unchi });
-
-            morale_delta = 10;
-        }
+        put_into_vehicle_or_drop(*p, item_drop_reason::tumbling, { unchi });
 
         if( isOnTheToilet ){
             // on the toilet do twice morale
@@ -4989,11 +5039,28 @@ void activity_handlers::excrete_finish( player_activity *act, player *p ){
             p->add_msg_if_player( m_good, _( "you finish execrete." ) );
             p->add_morale( MORALE_EXCRETE, morale_delta, morale_delta, 180_minutes, 120_minutes);
         }
+
+        bool use_washlet = false;
+        // you can use washlet even could not excrete
+        optional_vpart_position part_at_player = g->m.veh_at(p->pos());
+        if( part_at_player.part_with_feature("WASHLET", true) ) {
+            if( part_at_player->vehicle().is_available_washlet_resource() ) {
+                if (query_yn( _("use washlet?") ) ){
+                    use_washlet = true;
+                }
+            }
+        }
+        if( use_washlet ){
+            part_at_player->vehicle().consume_washlet_resource();
+            g->u.assign_activity(player_activity(activity_id( "ACT_TAKE_WASHLET" ),
+                    to_moves<int>( 1_minutes ) , -1, 0, "taking washlet"));
+        } else {
+            use_toilet_paper(p);
+        }
+
     } else {
         p->add_msg_if_player( m_neutral, _( "you could not execrete." ) );
     }
-    act->set_to_null();
-
 }
 
 void activity_handlers::take_shower_do_turn( player_activity *act, player *p ){
@@ -5017,10 +5084,10 @@ void activity_handlers::take_shower_finish( player_activity *act, player *p ){
         p->add_morale( MORALE_TAKE_BATH, 5, 10, 180_minutes, 120_minutes );
     } else if( !act->str_values.empty() && act->str_values[0] == "hot" ){
         p->add_msg_if_player( m_good, _( "You finished taking a hot shower." ) );
-        p->add_morale( MORALE_TAKE_BATH, 30, 60, 180_minutes, 120_minutes );
+        p->add_morale( MORALE_TAKE_BATH, 20, 40, 180_minutes, 120_minutes );
     } else {
         p->add_msg_if_player( m_good, _( "You finished taking a shower." ) );
-        p->add_morale( MORALE_TAKE_BATH, 20, 40, 180_minutes, 120_minutes );
+        p->add_morale( MORALE_TAKE_BATH, 15, 30, 180_minutes, 120_minutes );
     }
     act->set_to_null();
 }

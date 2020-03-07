@@ -866,6 +866,8 @@ struct itype {
 
         std::string snippet_category;
         translation description; // Flavor text
+        translation toiletpaper_message; // more Flavor text
+        int toiletpaper_morale; // more Flavor text
 
         // The container it comes in
         cata::optional<itype_id> default_container;

@@ -2116,6 +2116,14 @@ void Item_factory::load_basic_info( const JsonObject &jo, itype &def, const std:
         jo.read( "description", def.description );
     }
 
+    if( jo.has_member( "toiletpaper_message" ) ) {
+        jo.read( "toiletpaper_message", def.toiletpaper_message );
+    }
+
+    if( jo.has_member( "toiletpaper_morale" ) ) {
+        jo.read( "toiletpaper_morale", def.toiletpaper_morale );
+    }
+
     if( jo.has_string( "symbol" ) ) {
         def.sym = jo.get_string( "symbol" );
     }
