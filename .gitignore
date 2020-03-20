@@ -195,7 +195,7 @@ Xcode/
 /data/mods/tainted_blood_modify/*
 
 /gfx/MSX++DeadPeopleEdition/*
-/gfx/edit_MSX++DeadPeopleEdition/*
+/gfx/MSX++UnDeadPeopleEdition/*
 *.stackdump
 /out/*
 msvc-full-features/Cataclysm-vcpkg-static.vcxproj
