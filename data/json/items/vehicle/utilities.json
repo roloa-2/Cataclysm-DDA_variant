@@ -96,7 +96,7 @@
   {
     "type": "GENERIC",
     "id": "food_storage_tag",
-    "name": "food_storage_tag",
+    "name": "Food storage tag",
     "description": "Tag for food storage on vehicle.",
     "weight": "100 g",
     "color": "white",
