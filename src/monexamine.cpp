@@ -749,6 +749,8 @@ void monexamine::maid_change_costume( monster &z )
             z.poly( mtype_id("mon_little_maid_R18_milk_sanpo_altanate"));
         } else if (z.type->id == mtype_id("mon_little_maid_R18_milk_sanpo_altanate") && one_in(10) ){
             z.poly( mtype_id("mon_little_maid_R18_milk_sanpo_classic"));
+        } else if (z.type->id == mtype_id("mon_little_maid_R18_milk_sanpo_altanate")  ){
+            z.poly( mtype_id("mon_little_maid_R18_milk_sanpo"));
         } else if (z.type->id == mtype_id("mon_little_maid_R18_milk_sanpo_classic")  ){
             z.poly( mtype_id("mon_little_maid_R18_milk_sanpo"));
 
@@ -757,6 +759,8 @@ void monexamine::maid_change_costume( monster &z )
             z.poly( mtype_id("mon_shoggoth_maid_altanate"));
         } else if (z.type->id == mtype_id("mon_shoggoth_maid_altanate") && one_in(10) ){
             z.poly( mtype_id("mon_shoggoth_maid_classic"));
+        } else if (z.type->id == mtype_id("mon_shoggoth_maid_altanate")  ){
+            z.poly( mtype_id("mon_shoggoth_maid"));
         } else if (z.type->id == mtype_id("mon_shoggoth_maid_classic")  ){
             z.poly( mtype_id("mon_shoggoth_maid"));
         }
