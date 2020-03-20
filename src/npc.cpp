@@ -104,6 +104,7 @@ npc::npc()
     fac_id = faction_id::NULL_ID();
     patience = 0;
     attitude = NPCATT_NULL;
+    next_food_storage_visit_time = calendar::turn;
 
     *path_settings = pathfinding_settings( 0, 1000, 1000, 10, true, true, true, false );
     for( direction threat_dir : npc_threat_dir ) {

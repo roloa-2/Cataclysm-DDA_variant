@@ -150,6 +150,12 @@
     "info": "If the center of balance of your vehicle is between all the wheels, the vehicle will be able to move, provided it has an active engine or motor with enough power to move the vehicle."
   },
   {
+    "id": "SHARED_FOOD_STORAGE",
+    "type": "json_flag",
+    "context": [ "vehicle_part" ],
+    "info": "Your allies can take food from here even forbid pickup items."
+  },
+  {
     "id": "FLAT_SURF",
     "type": "json_flag",
     "context": [ "vehicle_part" ],

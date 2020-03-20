@@ -3637,6 +3637,32 @@
   },
   {
     "type": "vehicle_part",
+    "id": "food_storage_tag",
+    "name": "Food storage tag",
+    "symbol": "o",
+    "color": "white",
+    "broken_symbol": "#",
+    "broken_color": "white",
+    "damage_modifier": 5,
+    "durability": 100,
+    "description": "Tag for food storage. your allies can take food here freely.",
+    "item": "food_storage_tag",
+    "location": "on_cargo",
+    "requirements": {
+      "install": { "skills": [ [ "mechanics", 1 ] ], "time": "3 m", "using": [ [ "vehicle_screw", 1 ] ] },
+      "removal": { "skills": [ [ "mechanics", 1 ] ], "time": "3 m", "using": [ [ "vehicle_screw", 1 ] ] },
+      "repair": { "skills": [ [ "mechanics", 1 ] ], "time": "3 m", "using": [ [ "adhesive", 1 ] ] }
+    },
+    "flags": [ "INTERNAL", "SHARED_FOOD_STORAGE", "FOLDABLE" ],
+    "folded_volume": 1,
+    "breaks_into": [
+      { "item": "scrap", "count": [ 1, 2 ] }
+    ],
+    "damage_reduction": { "all": 10 }
+  },
+  
+  {
+    "type": "vehicle_part",
     "id": "turret_mount",
     "name": "turret mount",
     "symbol": "X",

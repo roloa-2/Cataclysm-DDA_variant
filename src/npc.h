@@ -1308,6 +1308,7 @@ class npc : public player
         cata::optional<int> confident_range_cache;
         // Dummy point that indicates that the goal is invalid.
         static constexpr tripoint no_goal_point = tripoint_min;
+        time_point next_food_storage_visit_time;
 
         time_point last_updated;
         /**

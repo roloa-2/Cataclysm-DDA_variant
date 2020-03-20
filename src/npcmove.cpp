@@ -42,6 +42,7 @@
 #include "translations.h"
 #include "veh_type.h"
 #include "vehicle.h"
+#include "vehicle_selector.h"
 #include "visitable.h"
 #include "vpart_position.h"
 #include "vpart_range.h"
@@ -1165,6 +1166,137 @@ void npc::execute_action( npc_action action )
                 last_dest = vp->mount();
             }
 
+            if( to_turn<int>(next_food_storage_visit_time) < to_turn<int>(calendar::turn) ) {
+                const bool can_eat = 20 < get_hunger();
+                const bool is_thirsty = 60 < get_thirst();
+                const bool is_hungry = get_stored_kcal() < get_healthy_kcal() * 0.93;
+                if( can_eat && ( is_thirsty || is_hungry ) ) {
+                    // search nearest food storage
+                    int best_food_storage_index = -1;
+                    int nearest_food_storage_distance = INT_MAX;
+                    for( const vpart_reference &vp : veh->get_avail_parts( VPFLAG_SHARED_FOOD_STORAGE ) ) {
+                        tripoint part_pos = veh->global_part_pos3( vp.part_index() );
+                        std::vector<vehicle_part *> parts = veh->get_parts_at( part_pos, "CARGO", part_status_flag::any );
+                        vehicle_part* cargo = parts.front();
+                        int cargo_index = veh->index_of_part(cargo);
+                        if( cargo_index != -1 ) {
+                            // search nearest cargo
+                            int distance = rl_dist( pos(), part_pos );
+                            // if cargo dont have edible food, ignore it
+                            vehicle_stack cargo_stack = veh->get_items( cargo_index );
+                            bool there_is_edible_food = false;
+                            int want_hunger = std::max( 0, get_hunger() );
+                            int want_quench = std::max( 0, get_thirst() );
+                            for( item &it : cargo_stack ) {
+                                const item *food_item = it.get_food();
+                                if( food_item != nullptr ) {
+                                    float cur_weight = rate_food( *food_item, want_hunger, want_quench );
+                                    if( 0 < cur_weight && will_eat( *food_item ).success() ) {
+                                        there_is_edible_food = true;
+                                        break;
+                                    }
+                                }
+                            }
+                            if( there_is_edible_food && distance < nearest_food_storage_distance){
+                                nearest_food_storage_distance = distance;
+                                best_food_storage_index = cargo_index;
+                            }
+                        }
+                    }
+
+                    if( best_food_storage_index != -1 ) {
+                        // check am I adjacent at food storage
+                        tripoint food_storage_position = veh->global_part_pos3( best_food_storage_index );
+                        const int distance_to_food_storage = rl_dist( pos(), food_storage_position );
+                        // if player is near food_storage, dont touch storage
+                        // for prevent cause error from touch items in same time
+                        const int distance_storage_to_player = rl_dist( g->u.pos(), food_storage_position );
+                        if( distance_to_food_storage <= 1 && 2 <= distance_storage_to_player){
+                            // i'm adjacent at storage
+                            // select best food from storage
+                            // XXX almost copy and pesta from npc::consume_food()
+                            float best_weight = 0.0f;
+                            int want_hunger = std::max( 0, get_hunger() );
+                            int want_quench = std::max( 0, get_thirst() );
+
+                            vehicle_stack storage_stack = veh->get_items( best_food_storage_index );
+                            item* best_food = nullptr;
+
+                            for( item &it : storage_stack ) {
+                                const item *food_item = it.get_food();
+                                if( food_item != nullptr ) {
+                                    float cur_weight = rate_food( *food_item, want_hunger, want_quench );
+
+                                    // Note: will_eat is expensive, avoid calling it if possible
+                                    if( cur_weight > best_weight && will_eat( *food_item ).success() ) {
+                                        best_weight = cur_weight;
+                                        best_food = &it;
+                                    }
+                                }
+                            }
+
+                            if( best_food != nullptr ) {
+                                bool consumed_completely = consume_item( *best_food );
+                                if( consumed_completely ){
+                                    if( best_food->is_food_container() || !can_consume_as_is( *best_food ) ) {
+                                        best_food->contents.erase( best_food->contents.begin() );
+                                    } else {
+                                        vehicle_cursor veh_cursor = vehicle_cursor( *veh, best_food_storage_index);
+                                        item_location loc = item_location( veh_cursor, best_food);
+                                        loc.remove_item();
+                                    }
+                                }
+                                move_pause();
+                                break;
+                            } else {
+                                // storage is out of food
+                                if( is_thirsty && is_hungry ){
+                                    say("Can you put some food and drink on storage? I'm hungry and thirsty.");
+                                } else if ( is_hungry ) {
+                                    say("Can you put some food on storage? I'm hungry.");
+                                } else {
+                                    say("Can you put some drink on storage? I'm thirsty.");
+                                }
+                                next_food_storage_visit_time = calendar::turn + time_duration( 15_minutes );
+                                move_pause();
+                                break;
+                            }
+                        } else {
+                            // make path to food storage
+                            update_path( food_storage_position, true );
+
+                            // walk to food storage
+                            if( !path.empty() ) {
+                                // All is fine
+                                move_to_next();
+                                break;
+                            }
+                            // try adjacent on up, right, down. left
+                            update_path( food_storage_position + tripoint(0, -1, 0), true);
+                            if( !path.empty() ) {
+                                move_to_next();
+                                break;
+                            }
+                            update_path( food_storage_position + tripoint(1, 0, 0), true);
+                            if( !path.empty() ) {
+                                move_to_next();
+                                break;
+                            }
+                            update_path( food_storage_position + tripoint(0, 1, 0), true);
+                            if( !path.empty() ) {
+                                move_to_next();
+                                break;
+                            }
+                            update_path( food_storage_position + tripoint(-1, 0, 0), true);
+                            if( !path.empty() ) {
+                                move_to_next();
+                                break;
+                            }
+
+                        }
+                    }
+                }
+            }
             // Prioritize last found path, then seats
             // Don't change spots if ours is nice
             int my_spot = -1;

@@ -95,6 +95,19 @@
   },
   {
     "type": "GENERIC",
+    "id": "food_storage_tag",
+    "name": "food_storage_tag",
+    "description": "Tag for food storage on vehicle.",
+    "weight": "100 g",
+    "color": "white",
+    "symbol": "-",
+    "material": [ "steel" ],
+    "volume": "250 ml",
+    "category": "veh_parts",
+    "price": 10
+  },
+  {
+    "type": "GENERIC",
     "id": "washing_machine",
     "name": "washing machine",
     "description": "A very small washing machine designed for use in vehicles.",
