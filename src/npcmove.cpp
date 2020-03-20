@@ -863,6 +863,93 @@ void npc::move()
     execute_action( action );
 }
 
+// We want our food to:
+// Provide enough nutrition and quench
+// Not provide too much of either (don't waste food)
+// Not be unhealthy
+// Not have side effects
+// Be eaten before it rots (favor soon-to-rot perishables)
+static float rate_food( const item &it, int want_nutr, int want_quench )
+{
+    const auto &food = it.get_comestible();
+    if( !food ) {
+        return 0.0f;
+    }
+
+    if( food->parasites && !it.has_flag( "NO_PARASITES" ) ) {
+        return 0.0;
+    }
+
+    int nutr = food->get_default_nutr();
+    int quench = food->quench;
+
+    if( nutr <= 0 && quench <= 0 ) {
+        // Not food - may be salt, drugs etc.
+        return 0.0f;
+    }
+
+    if( !it.type->use_methods.empty() ) {
+        // TODO: Get a good method of telling apart:
+        // raw meat (parasites - don't eat unless mutant)
+        // zed meat (poison - don't eat unless mutant)
+        // alcohol (debuffs, health drop - supplement diet but don't bulk-consume)
+        // caffeine (fine to consume, but expensive and prevents sleep)
+        // hallucination mushrooms (NPCs don't hallucinate, so don't eat those)
+        // honeycomb (harmless iuse)
+        // royal jelly (way too expensive to eat as food)
+        // mutagenic crap (don't eat, we want player to micromanage muties)
+        // marloss (NPCs don't turn fungal)
+        // weed brownies (small debuff)
+        // seeds (too expensive)
+
+        // For now skip all of those
+        return 0.0f;
+    }
+
+    double relative_rot = it.get_relative_rot();
+    if( relative_rot >= 1.0f ) {
+        // TODO: Allow sapro mutants to eat it anyway and make them prefer it
+        return 0.0f;
+    }
+
+    float weight = std::max( 1.0, 10.0 * relative_rot );
+    if( it.get_comestible_fun() < 0 ) {
+        // This helps to avoid eating stuff like flour
+        weight /= ( -it.get_comestible_fun() ) + 1;
+    }
+
+    if( food->healthy < 0 ) {
+        weight /= ( -food->healthy ) + 1;
+    }
+
+    // Avoid wasting quench values unless it's about to rot away
+    if( relative_rot < 0.9f && quench > want_quench ) {
+        weight -= ( 1.0f - relative_rot ) * ( quench - want_quench );
+    }
+
+    if( quench < 0 && want_quench > 0 && want_nutr < want_quench ) {
+        // Avoid stuff that makes us thirsty when we're more thirsty than hungry
+        weight = weight * want_nutr / want_quench;
+    }
+
+    if( nutr > want_nutr ) {
+        // TODO: Allow overeating in some cases
+        if( nutr >= 5 ) {
+            return 0.0f;
+        }
+
+        if( relative_rot < 0.9f ) {
+            weight /= nutr - want_nutr;
+        }
+    }
+
+    if( it.poison > 0 ) {
+        weight -= it.poison;
+    }
+
+    return weight;
+}
+
 void npc::execute_action( npc_action action )
 {
     int oldmoves = moves;
@@ -3514,92 +3601,7 @@ void npc::use_painkiller()
     }
 }
 
-// We want our food to:
-// Provide enough nutrition and quench
-// Not provide too much of either (don't waste food)
-// Not be unhealthy
-// Not have side effects
-// Be eaten before it rots (favor soon-to-rot perishables)
-static float rate_food( const item &it, int want_nutr, int want_quench )
-{
-    const auto &food = it.get_comestible();
-    if( !food ) {
-        return 0.0f;
-    }
 
-    if( food->parasites && !it.has_flag( "NO_PARASITES" ) ) {
-        return 0.0;
-    }
-
-    int nutr = food->get_default_nutr();
-    int quench = food->quench;
-
-    if( nutr <= 0 && quench <= 0 ) {
-        // Not food - may be salt, drugs etc.
-        return 0.0f;
-    }
-
-    if( !it.type->use_methods.empty() ) {
-        // TODO: Get a good method of telling apart:
-        // raw meat (parasites - don't eat unless mutant)
-        // zed meat (poison - don't eat unless mutant)
-        // alcohol (debuffs, health drop - supplement diet but don't bulk-consume)
-        // caffeine (fine to consume, but expensive and prevents sleep)
-        // hallucination mushrooms (NPCs don't hallucinate, so don't eat those)
-        // honeycomb (harmless iuse)
-        // royal jelly (way too expensive to eat as food)
-        // mutagenic crap (don't eat, we want player to micromanage muties)
-        // marloss (NPCs don't turn fungal)
-        // weed brownies (small debuff)
-        // seeds (too expensive)
-
-        // For now skip all of those
-        return 0.0f;
-    }
-
-    double relative_rot = it.get_relative_rot();
-    if( relative_rot >= 1.0f ) {
-        // TODO: Allow sapro mutants to eat it anyway and make them prefer it
-        return 0.0f;
-    }
-
-    float weight = std::max( 1.0, 10.0 * relative_rot );
-    if( it.get_comestible_fun() < 0 ) {
-        // This helps to avoid eating stuff like flour
-        weight /= ( -it.get_comestible_fun() ) + 1;
-    }
-
-    if( food->healthy < 0 ) {
-        weight /= ( -food->healthy ) + 1;
-    }
-
-    // Avoid wasting quench values unless it's about to rot away
-    if( relative_rot < 0.9f && quench > want_quench ) {
-        weight -= ( 1.0f - relative_rot ) * ( quench - want_quench );
-    }
-
-    if( quench < 0 && want_quench > 0 && want_nutr < want_quench ) {
-        // Avoid stuff that makes us thirsty when we're more thirsty than hungry
-        weight = weight * want_nutr / want_quench;
-    }
-
-    if( nutr > want_nutr ) {
-        // TODO: Allow overeating in some cases
-        if( nutr >= 5 ) {
-            return 0.0f;
-        }
-
-        if( relative_rot < 0.9f ) {
-            weight /= nutr - want_nutr;
-        }
-    }
-
-    if( it.poison > 0 ) {
-        weight -= it.poison;
-    }
-
-    return weight;
-}
 
 bool npc::consume_food_from_camp()
 {
