@@ -4490,6 +4490,98 @@ bool mattack::littlemaid_action( monster *maid )
     return false;
 }
 
+bool mattack::shoggothmaid_action( monster *maid )
+{
+
+    std::string speech_id = "";
+    if( maid->has_effect( effect_littlemaid_speak_off ) ) {
+        return true;
+    } else if ( !maid->sees( g->u ) ){
+        return true;
+    } else if( maid->has_effect( effect_littlemaid_goodnight ) ) {
+        if( g->u.in_sleep_state() ) {
+            return true;
+        } else {
+            speech_id = "mon_shoggoth_maid_goodmorning";
+            maid->remove_effect( effect_littlemaid_goodnight );
+        }
+    } else if( g->u.in_sleep_state() ) {
+        speech_id = "mon_shoggoth_maid_goodnight";
+        maid->add_effect( effect_littlemaid_goodnight, 12_hours, num_bp, false);
+    } else if( maid->has_effect( effect_littlemaid_in_kiss ) ) {
+        if( !one_in( 20 ) ){
+            return true;
+        }
+        if ( 70 < maid->get_effect_int( effect_happiness) ){
+            speech_id = "mon_shoggoth_maid_in_kiss_int2";
+        } else if ( 30 < maid->get_effect_int( effect_happiness) ){
+            speech_id = "mon_shoggoth_maid_in_kiss_int1";
+        } else {
+            speech_id = "mon_shoggoth_maid_in_kiss";
+        }
+    } else if( maid->has_effect( effect_littlemaid_in_petting ) ) {
+        if( !one_in( 20 ) ){
+            return true;
+        }
+        if ( 70 < maid->get_effect_int( effect_comfortness) ){
+            speech_id = "mon_shoggoth_maid_in_petting_int2";
+        } else if ( 30 < maid->get_effect_int( effect_comfortness) ){
+            speech_id = "mon_shoggoth_maid_in_petting_int1";
+        } else {
+            speech_id = "mon_shoggoth_maid_in_petting";
+        }
+    } else if( maid->has_effect( effect_littlemaid_in_service ) ) {
+        if( !one_in( 20 ) ){
+            return true;
+        }
+        if ( 70 < g->u.get_effect_int( effect_comfortness) ){
+            speech_id = "mon_shoggoth_maid_in_service_int2";
+        } else if ( 30 < g->u.get_effect_int( effect_comfortness) ){
+            speech_id = "mon_shoggoth_maid_in_service_int1";
+        } else {
+            speech_id = "mon_shoggoth_maid_in_service";
+        }
+    } else if( maid->has_effect( effect_littlemaid_in_special ) ) {
+        if( !one_in( 20 ) ){
+            return true;
+        }
+        if ( 70 < maid->get_effect_int( effect_comfortness) ){
+            speech_id = "mon_shoggoth_maid_in_special_int2";
+        } else if ( 30 < maid->get_effect_int( effect_comfortness) ){
+            speech_id = "mon_shoggoth_maid_in_special_int1";
+        } else {
+            speech_id = "mon_shoggoth_maid_in_special";
+        }
+    } else if( one_in( 3 ) && maid->has_effect( effect_ecstasy )) {
+        speech_id = "mon_shoggoth_maid_in_ecstasy";
+    } else if( one_in( 3 ) ) {
+        if( !g->u.activity.is_null() && !one_in( 20 ) ){
+            // reduce talk frequency at master is working
+            return true;
+        } else if( one_in( 2 ) && std::none_of(g->u.worn.begin(), g->u.worn.end(), [](item it){
+            return it.covers( bp_leg_l ) || it.covers( bp_leg_r );}) ){
+            // player is not covering leg
+            speech_id = "mon_shoggoth_maid_player_is_naked";
+        } else if ( one_in( 2 ) && maid->type->id.str() == "mon_shoggoth_maid_altanate") {
+            speech_id = "mon_shoggoth_maid_altanate";
+        } else {
+            speech_id = "mon_shoggoth_maid";
+        }
+    } else {
+        return true;
+    }
+
+    if( 0 < speech_id.size() ){
+        const SpeechBubble &speech = get_speech( speech_id );
+        sounds::sound( maid->pos(), speech.volume, sounds::sound_t::speech, speech.text.translated(),
+                       false, "speech", maid->type->id.str() );
+        return true;
+    }
+
+    return false;
+}
+
+
 bool mattack::melee_bot( monster *bot )
 {
     if( !bot->can_act() ) {

@@ -4646,10 +4646,15 @@ static void littlemaid_ecstasy_check( player *p, shared_ptr_fast<monster> maid){
         mp.charges = mp_amount;
         p->i_add_or_drop(mp);
 
-        const SpeechBubble &speech = get_speech( "mon_little_maid_R18_milk_sanpo_ecstasy_cry" );
-        sounds::sound( maid->pos(), speech.volume, sounds::sound_t::speech, speech.text.translated(),
-                       false, "speech", maid->type->id.str() );
-
+        if( maid->has_flag( MF_LITTLE_MAID ) ){
+            const SpeechBubble &speech = get_speech( "mon_little_maid_R18_milk_sanpo_ecstasy_together" );
+            sounds::sound( maid->pos(), speech.volume, sounds::sound_t::speech, speech.text.translated(),
+                           false, "speech", maid->type->id.str() );
+        } else if( maid->has_flag( MF_SHOGGOTH_MAID ) ){
+            const SpeechBubble &speech = get_speech( "mon_shoggoth_maid_ecstasy_together" );
+            sounds::sound( maid->pos(), speech.volume, sounds::sound_t::speech, speech.text.translated(),
+                           false, "speech", maid->type->id.str() );
+        }
 
     } else if(player_ecstacy) {
         p->add_msg_if_player( m_good, _( "You raised up ecstacy!" ) );
@@ -4658,12 +4663,18 @@ static void littlemaid_ecstasy_check( player *p, shared_ptr_fast<monster> maid){
         p->mod_fatigue( 50 );
         p->add_morale( MORALE_ECSTASY, 50, 50 , 120_minutes, 60_minutes);
 
-        const SpeechBubble &speech = get_speech( "mon_little_maid_R18_milk_sanpo_player_ecstasy" );
-        sounds::sound( maid->pos(), speech.volume, sounds::sound_t::speech, speech.text.translated(),
-                       false, "speech", maid->type->id.str() );
+        if( maid->has_flag( MF_LITTLE_MAID ) ){
+            const SpeechBubble &speech = get_speech( "mon_little_maid_R18_milk_sanpo_player_ecstasy" );
+            sounds::sound( maid->pos(), speech.volume, sounds::sound_t::speech, speech.text.translated(),
+                           false, "speech", maid->type->id.str() );
+        } else if( maid->has_flag( MF_SHOGGOTH_MAID ) ){
+            const SpeechBubble &speech = get_speech( "mon_shoggoth_maid_player_ecstasy" );
+            sounds::sound( maid->pos(), speech.volume, sounds::sound_t::speech, speech.text.translated(),
+                           false, "speech", maid->type->id.str() );
+        }
 
     } else if(maid_ecstacy) {
-        p->add_msg_if_player( m_good, _( "Littlemaid raised up ecstacy!" ) );
+        p->add_msg_if_player( m_good, _( "Maid raised up ecstacy!" ) );
         maid->remove_effect(effect_comfortness,  num_bp);
         maid->add_effect(effect_ecstasy, 1_minutes, num_bp);
         maid->add_effect(effect_maid_fatigue, 150_minutes, num_bp);
@@ -4675,37 +4686,43 @@ static void littlemaid_ecstasy_check( player *p, shared_ptr_fast<monster> maid){
         mp.charges = mp_amount;
         p->i_add_or_drop(mp);
 
-        const SpeechBubble &speech = get_speech( "mon_little_maid_R18_milk_sanpo_ecstasy_cry" );
-        sounds::sound( maid->pos(), speech.volume, sounds::sound_t::speech, speech.text.translated(),
-                       false, "speech", maid->type->id.str() );
+        if( maid->has_flag( MF_LITTLE_MAID ) ){
+            const SpeechBubble &speech = get_speech( "mon_little_maid_R18_milk_sanpo_ecstasy_cry" );
+            sounds::sound( maid->pos(), speech.volume, sounds::sound_t::speech, speech.text.translated(),
+                           false, "speech", maid->type->id.str() );
+        } else if( maid->has_flag( MF_SHOGGOTH_MAID ) ){
+            const SpeechBubble &speech = get_speech( "mon_shoggoth_maid_ecstasy_cry" );
+            sounds::sound( maid->pos(), speech.volume, sounds::sound_t::speech, speech.text.translated(),
+                           false, "speech", maid->type->id.str() );
+        }
 
     } else {
         std::string hint = "";
         if( 30 < maid_f && rng(1, maid_c * 2 + maid_h) < rng(1, maid_f) ){
             if( 50 < maid_f) {
-                hint = "Littlemaid seems tired.";
+                hint = "%s seems tired.";
             } else {
-                hint = "Littlemaid seems pretty tired.";
+                hint = "%s seems pretty tired.";
             }
         } else if( rng(1, maid_c * 3) < rng(1, maid_h) ){
             if( 80 < maid_h ){
-                hint = "Littlemaid seems happiest.";
+                hint = "%s seems happiest.";
             } else if( 50 < maid_h ){
-                hint = "Littlemaid seems so happy.";
+                hint = "%s seems so happy.";
             } else if( 30 < maid_h ){
-                hint = "Littlemaid seems happy.";
+                hint = "%s seems happy.";
             }
         } else {
             if( 80 < maid_c ){
-                hint = "Littlemaid seems near ecstacy.";
+                hint = "%s seems near ecstacy.";
             } else if( 50 < maid_c ){
-                hint = "Littlemaid seems in very comfort.";
+                hint = "%s seems in very comfort.";
             } else if( 30 < maid_c ){
-                hint = "Littlemaid seems in comfort.";
+                hint = "%s seems in comfort.";
             }
         }
         if( 0 < hint.size()) {
-            p->add_msg_if_player( m_neutral, _( hint ) );
+            p->add_msg_if_player( m_neutral, _( hint ), maid->name() );
         }
     }
 }
@@ -4720,7 +4737,7 @@ void activity_handlers::littlemaid_kiss_do_turn( player_activity *act, player *p
 }
 void activity_handlers::littlemaid_kiss_finish( player_activity *act, player *p ){
     shared_ptr_fast<monster> maid = act->monsters[0].lock();
-    p->add_msg_if_player( m_good, _( "You finished kissing with littlemaid." ) );
+    p->add_msg_if_player( m_good, _( "You finished kissing with %s." ), maid->name() );
 
     int player_h = p->   get_effect_int(effect_happiness  , num_bp);
     int player_c = p->   get_effect_int(effect_comfortness, num_bp);
@@ -4763,7 +4780,7 @@ void activity_handlers::littlemaid_petting_do_turn( player_activity *act, player
 }
 void activity_handlers::littlemaid_petting_finish( player_activity *act, player *p ){
     shared_ptr_fast<monster> maid = act->monsters[0].lock();
-    p->add_msg_if_player( m_good, _( "You finished petting with littlemaid." ) );
+    p->add_msg_if_player( m_good, _( "You finished petting with %s." ), maid->name() );
 
     int player_h = p->   get_effect_int(effect_happiness  , num_bp);
     int player_c = p->   get_effect_int(effect_comfortness, num_bp);
@@ -4807,7 +4824,7 @@ void activity_handlers::littlemaid_service_do_turn( player_activity *act, player
 }
 void activity_handlers::littlemaid_service_finish( player_activity *act, player *p ){
     shared_ptr_fast<monster> maid = act->monsters[0].lock();
-    p->add_msg_if_player( m_good, _( "You got service by littlemaid." ) );
+    p->add_msg_if_player( m_good, _( "You got service by %s." ), maid->name() );
 
     int player_h = p->   get_effect_int(effect_happiness  , num_bp);
     int player_c = p->   get_effect_int(effect_comfortness, num_bp);
@@ -4851,7 +4868,7 @@ void activity_handlers::littlemaid_special_do_turn( player_activity *act, player
 }
 void activity_handlers::littlemaid_special_finish( player_activity *act, player *p ){
     shared_ptr_fast<monster> maid = act->monsters[0].lock();
-    p->add_msg_if_player( m_good, _( "You finished special thing with littlemaid." ) );
+    p->add_msg_if_player( m_good, _( "You finished special thing with %s." ), maid->name() );
 
     int player_h = p->   get_effect_int(effect_happiness  , num_bp);
     int player_c = p->   get_effect_int(effect_comfortness, num_bp);

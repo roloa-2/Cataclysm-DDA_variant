@@ -168,6 +168,7 @@ std::string enum_to_string<m_flag>( m_flag data )
         case MF_LOUDMOVES: return "LOUDMOVES";
         case MF_DROPS_AMMO: return "DROPS_AMMO";
         case MF_LITTLE_MAID: return "LITTLE_MAID";
+        case MF_SHOGGOTH_MAID: return "SHOGGOTH_MAID";
         // *INDENT-ON*
         case m_flag::MF_MAX:
             break;
@@ -567,6 +568,7 @@ void MonsterGenerator::init_attack()
     add_hardcoded_attack( "PARROT", mattack::parrot );
     add_hardcoded_attack( "PARROT_AT_DANGER", mattack::parrot_at_danger );
     add_hardcoded_attack( "LITTLEMAID_ACTION", mattack::littlemaid_action );
+    add_hardcoded_attack( "SHOGGOTHMAID_ACTION", mattack::shoggothmaid_action );
     add_hardcoded_attack( "MELEE_BOT", mattack::melee_bot );
     add_hardcoded_attack( "DARKMAN", mattack::darkman );
     add_hardcoded_attack( "SLIMESPRING", mattack::slimespring );

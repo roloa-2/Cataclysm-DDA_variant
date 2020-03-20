@@ -188,9 +188,20 @@ bool monexamine::pet_menu( monster &z )
         } else {
             amenu.addentry( littlemaid_stay, true, 'f', _( "Stay here" ));
         }
-        amenu.addentry( littlemaid_talk, true, 't', _( "Talk with littlemaid" ));
         amenu.addentry( littlemaid_sex, true, 'l', _( "Lovely activity" ));
     }
+    if( z.has_flag( MF_SHOGGOTH_MAID ) ) {
+        amenu.addentry( littlemaid_change_costume, true, 'C', _( "Change costume" ));
+        amenu.addentry( littlemaid_toggle_speak, false, 's', _( "Shoggoth maid do not stop speak" ));
+
+        if( z.has_effect( effect_littlemaid_stay ) ){
+            amenu.addentry( littlemaid_stay, true, 'f', _( "Follow me" ));
+        } else {
+            amenu.addentry( littlemaid_stay, true, 'f', _( "Stay here" ));
+        }
+        amenu.addentry( littlemaid_sex, true, 'l', _( "Lovely activity" ));
+    }
+
     amenu.query();
     int choice = amenu.ret;
 
@@ -710,10 +721,10 @@ void monexamine::tie_or_untie( monster &z )
 void monexamine::maid_stay_or_follow( monster &z )
 {
     if( z.has_effect( effect_littlemaid_stay ) ) {
-        add_msg( _("order littlemaid to follow.") );
+        add_msg( _("order %s to follow."), z.name() );
         z.remove_effect( effect_littlemaid_stay );
     } else {
-        add_msg( _("order littlemaid to stay.") );
+        add_msg( _("order %s to stay."), z.name() );
         z.add_effect( effect_littlemaid_stay, 1_turns, num_bp, true );
     }
 }
@@ -733,10 +744,21 @@ void monexamine::maid_change_costume( monster &z )
 {
     if( query_yn( _( "Change %s's costume?" ), z.name() ) ) {
         g->u.moves -= 100;
+        // little maid
         if (z.type->id == mtype_id("mon_little_maid_R18_milk_sanpo")) {
             z.poly( mtype_id("mon_little_maid_R18_milk_sanpo_altanate"));
-        } else {
+        } else if (z.type->id == mtype_id("mon_little_maid_R18_milk_sanpo_altanate") && one_in(10) ){
+            z.poly( mtype_id("mon_little_maid_R18_milk_sanpo_classic"));
+        } else if (z.type->id == mtype_id("mon_little_maid_R18_milk_sanpo_classic")  ){
             z.poly( mtype_id("mon_little_maid_R18_milk_sanpo"));
+
+        // shoggoth maid
+        } else if (z.type->id == mtype_id("mon_shoggoth_maid")  ){
+            z.poly( mtype_id("mon_shoggoth_maid_altanate"));
+        } else if (z.type->id == mtype_id("mon_shoggoth_maid_altanate") && one_in(10) ){
+            z.poly( mtype_id("mon_shoggoth_maid_classic"));
+        } else if (z.type->id == mtype_id("mon_shoggoth_maid_classic")  ){
+            z.poly( mtype_id("mon_shoggoth_maid"));
         }
     }
 }
@@ -798,7 +820,7 @@ void monexamine::maid_sex( monster &z )
         return;
     }
     player_activity act = player_activity( act_id,
-                        to_moves<int>( 10_minutes ),-1,0,"having fun with littlemaid" );
+                        to_moves<int>( 10_minutes ),-1,0,"having fun with maid" );
     act.monsters.emplace_back( g->shared_from( z ) );
     g->u.assign_activity(act);
 }

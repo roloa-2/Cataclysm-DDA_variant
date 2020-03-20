@@ -5404,7 +5404,7 @@ void game::examine( const tripoint &examp )
     Creature *c = critter_at( examp );
     if( c != nullptr ) {
         monster *mon = dynamic_cast<monster *>( c );
-        if( mon != nullptr && ( mon->has_effect( effect_pet ) ||  mon->has_flag( MF_LITTLE_MAID ) ) && !u.is_mounted() ) {
+        if( mon != nullptr && ( mon->has_effect( effect_pet ) || mon->has_flag( MF_LITTLE_MAID ) || mon->has_flag( MF_SHOGGOTH_MAID ) ) && !u.is_mounted() ) {
             if( monexamine::pet_menu( *mon ) ) {
                 return;
             }
