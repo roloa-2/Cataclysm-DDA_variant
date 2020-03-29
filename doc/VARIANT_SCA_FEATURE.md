@@ -5,6 +5,7 @@
 
 #10328と現在のヴァリアントの差分。
 主にこれをもとに書いてます。
+
 https://github.com/roloa/Cataclysm-DDA_variant/compare/roloa:%2310328_vanilla...variant_sca
 
 
@@ -38,6 +39,7 @@ https://github.com/roloa/Cataclysm-DDA_variant/compare/roloa:%2310328_vanilla...
     - TODO 脚に何も着ていない時は逆に意欲アップするとか？ 
     - TODO 実装前にあった案の一つ「苦痛によって上限を超える前に漏らす確率が上がる」
 - 排泄物はアイテムとしてバニラに存在する犬のフンとほぼ同等
+- 車載トイレはeで調べることで水3Lを消費して流せる
 - デバッグのプレイヤーの欲求編集で、「排泄量」「排泄欲」を確認・操作できるように
 - TODO 排泄物に何かしら利用価値をつけたい
 

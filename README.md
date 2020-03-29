@@ -51,6 +51,8 @@ Cadaclysm DDAを独自改造したバージョン、いわゆるヴァリアン�
 
 新要素の詳細は以下のファイルにまとめました。
 
+[https://github.com/roloa/Cataclysm-DDA_variant/blob/variant_sca/doc/VARIANT_SCA_FEATURE.md](https://github.com/roloa/Cataclysm-DDA_variant/blob/variant_sca/doc/VARIANT_SCA_FEATURE.md)
+
 代表的な新要素の簡単な紹介です。
 
 ### うんちを出そう
