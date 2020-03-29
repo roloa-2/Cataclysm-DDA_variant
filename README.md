@@ -2,10 +2,16 @@
 
 # Cataclysm-DDA-variant-sca
 
+English version (broken english warning!!)
+
+[https://github.com/roloa/Cataclysm-DDA_variant/blob/variant_sca/README_en.md](https://github.com/roloa/Cataclysm-DDA_variant/blob/variant_sca/README_en.md)
+
+
 ## これはなに？
 
 Cadaclysm DDAを独自改造したバージョン、いわゆるヴァリアントになります。
 バージョン#10328がベースです。
+
 
 ## 注意
 
