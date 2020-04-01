@@ -191,6 +191,14 @@
     "chance": 100
   },
   {
+    "id": "emit_heater_vehicle_strong",
+    "type": "emit",
+    "field": "fd_hot_air_vehicle_heater",
+    "intensity": 3,
+    "qty": 3,
+    "chance": 100
+  },
+  {
     "id": "emit_cooler_vehicle",
     "type": "emit",
     "field": "fd_cold_air3",
@@ -311,8 +319,8 @@
   {
     "id": "emit_shower_vehicle",
     "type": "emit",
-    "field": "fd_hot_air3",
-    "intensity": 3,
+    "field": "fd_hot_air_vehicle_heater",
+    "intensity": 2,
     "qty": 3,
     "chance": 100
   },

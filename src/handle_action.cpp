@@ -1021,7 +1021,7 @@ static void excretion(){
     if( query_yn( _( "Do excrete?" ) ) ) {
 
         g->u.assign_activity(player_activity( activity_id( "ACT_EXCRETE" ),
-        to_moves<int>( 10_minutes ),
+        to_moves<int>( 3_minutes ),
         -1,
         0,
         "Excrete" ));

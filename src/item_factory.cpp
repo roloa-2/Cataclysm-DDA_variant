@@ -2122,6 +2122,8 @@ void Item_factory::load_basic_info( const JsonObject &jo, itype &def, const std:
 
     if( jo.has_member( "toiletpaper_morale" ) ) {
         jo.read( "toiletpaper_morale", def.toiletpaper_morale );
+    } else {
+        def.toiletpaper_morale = 0;
     }
 
     if( jo.has_string( "symbol" ) ) {

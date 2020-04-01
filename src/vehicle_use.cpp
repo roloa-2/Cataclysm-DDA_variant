@@ -2001,7 +2001,7 @@ void vehicle::interact_with( const tripoint &pos, int interact_part )
         EXAMINE, TRACK, CONTROL, CONTROL_ELECTRONICS, GET_ITEMS, GET_ITEMS_ON_GROUND, FOLD_VEHICLE, UNLOAD_TURRET, RELOAD_TURRET,
         USE_HOTPLATE, FILL_CONTAINER, DRINK, USE_WELDER, USE_PURIFIER, PURIFY_TANK, USE_AUTOCLAVE, USE_WASHMACHINE, USE_DISHWASHER,
         USE_MONSTER_CAPTURE, USE_BIKE_RACK, USE_HARNESS, RELOAD_PLANTER, WORKBENCH, USE_TOWEL, PEEK_CURTAIN, TOILET, SHOWER_HAND, SHOWER, SHOWER_HOT,
-        LIGHTMODE_IDLE, LIGHTMODE_CARGO, LIGHTMODE_TURRET,
+        LIGHTMODE_CARGO, LIGHTMODE_TURRET,
     };
     uilist selectmenu;
 
@@ -2010,11 +2010,9 @@ void vehicle::interact_with( const tripoint &pos, int interact_part )
         selectmenu.addentry( CONTROL, true, 'v', _( "Control vehicle" ) );
         selectmenu.addentry( TRACK, true, keybind( "TOGGLE_TRACKING" ), tracking_toggle_string() );
 
-        selectmenu.addentry( LIGHTMODE_IDLE  , true, 'L',
-                lightmode_idle   ? _("Toggle Lightmode idle  : ON") : _("Toggle Lightmode idle  : OFF"));
-        selectmenu.addentry( LIGHTMODE_CARGO  , true, 'L',
+        selectmenu.addentry( LIGHTMODE_CARGO  , true, 'C',
                 lightmode_cargo  ? _("Toggle Lightmode cargo : ON") : _("Toggle Lightmode cargo : OFF"));
-        selectmenu.addentry( LIGHTMODE_TURRET  , true, 'L',
+        selectmenu.addentry( LIGHTMODE_TURRET  , true, 'T',
                 lightmode_turret ? _("Toggle Lightmode turret: ON") : _("Toggle Lightmode turret: OFF"));
     }
     if( has_electronics ) {
@@ -2285,10 +2283,6 @@ void vehicle::interact_with( const tripoint &pos, int interact_part )
         }
         case TOILET: {
             use_toilet( toilet_part );
-            return;
-        }
-        case LIGHTMODE_IDLE: {
-            lightmode_idle = !lightmode_idle;
             return;
         }
         case LIGHTMODE_CARGO: {

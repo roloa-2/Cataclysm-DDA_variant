@@ -2101,7 +2101,7 @@ void options_manager::add_options_world_default()
 
     add( "EXCREMENT_FEATURE", "world_default", translate_marker( "Excrement feature" ),
          translate_marker( "Player need excrement after consume food." ),
-         false
+         true
        );
 
     add( "ACID_RAIN", "world_default", translate_marker( "Acid rain" ),

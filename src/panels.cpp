@@ -1404,7 +1404,9 @@ static void draw_moon_wide( const avatar &u, const catacurses::window &w )
 {
     werase( w );
     // NOLINTNEXTLINE(cata-use-named-point-constants)
-    mvwprintz( w, point( 1, 0 ), c_light_gray, _( "Moon : %s" ), get_moon() );
+    nc_color clr = c_white;
+    print_colored_text( w, point( 1, 0 ), clr, c_white, string_format( _( "Moon : %s" ), get_moon_graphic() ));
+
     mvwprintz( w, point( 23, 0 ), c_light_gray, _( "Temp : %s" ), get_temp( u ) );
     wrefresh( w );
 }
