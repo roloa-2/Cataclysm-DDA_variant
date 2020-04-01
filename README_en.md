@@ -1,13 +1,11 @@
 
 # Cataclysm-DDA-variant-sca
 
-## Disclaimer
-
 I am so bad at english, maybe reading japanese version with google translation is better than this.
 
 ## What is this?
 
-This is homebrew version of Cadaclysm:DDA with new featuer and some tweaks.
+This is homebrew version of Cataclysm:DDA with new feature and some tweaks.
 It is based build #10328.
 
 ## Downloads and how to play
@@ -20,9 +18,13 @@ Please find "cdda_variant_sca_10328_r(Number).zip" and download it.
 
 "ダウンロード" means "download" in japanese.
 
+There is not curses version currently, only tiles version.
+
 TODO: make tutorial with graphics
 
-Extract it, and bring in your own Config, Tileset, Soundpack and Mods file.
+Extract zip file, and bring in your own Config, Tileset, Soundpack and Mods file.
+
+Execute "Cataclysm-tiles.exe".
 
 ## About additional mods
 
@@ -30,13 +32,13 @@ This variant includes some additional mods.
 
 but sadly, all text in mods are japanese at now.
 
-someday some english speaker requests transration, maybe I will transrate it,
+If someday some english speaker requests transration, maybe I will transrate it,
 
 - Battle Maid
   - This is not create by me, this mod created by unknown japanese someone.
   - Add some item, mercial arts and mutation
   - But most important additional features is friendly monster; メイドさん(ショゴス).
-  - メイドさん(ショゴス) means Ms.Maid (Shoggoth) in english. interacting her is one of main feature of this variant.
+  - メイドさん(ショゴス) means Ms.Maid (Shoggoth) in english. to made interactive her is one of main feature of this variant.
 - LittleMaid
   - This mod is trigger of Ms.Maid to be interactive. Of course, this mod depends Battle Maid.
 - Vibrator_Junkyard
@@ -50,7 +52,7 @@ All of new feature explanation is there.
 
 [https://github.com/roloa/Cataclysm-DDA_variant/blob/variant_sca/doc/VARIANT_SCA_FEATURE.md](https://github.com/roloa/Cataclysm-DDA_variant/blob/variant_sca/doc/VARIANT_SCA_FEATURE.md)
 
-Some main feature here.
+Describe some main feature here.
 
 ### Excrete it
 
@@ -64,31 +66,31 @@ This feature can turn off at world option.
 
 ### Take a shower
 
-Vehicle shower booth!
+There are vehicle shower booth!
 
-TODO!
+TODO write description!
 
 ### Have fun with maid
 
-TODO!
+Play with your maid!
 
-Play with maid!
+TODO write description!
 
 ### Beware acid rain
 
 At the  default setting, sometime acid rain fall.
 
-it couse pain and pretty damage!
+it cause pain and pretty damage!
 
-TODO!!
+TODO write description!
 
 ### Wash your cloth
 
 using vehicle washer cause good fragrant!
 
-good fragrant cause good morale!!
+good fragrant cause good morale!
 
-TODO!!!
+TODO write description!
 
 ### Prepare NPCs meal
 
@@ -96,7 +98,7 @@ attach food storage tag for cargo of vehicle.
 
 NPC eats automatically there.
 
-TODO!!11!1!!
+TODO write description!!1!1
 
 ## Thanks（and apology）
 
