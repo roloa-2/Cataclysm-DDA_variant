@@ -1,4 +1,6 @@
+# このブランチは旧バージョンです。新バージョンはこちら
 
+[https://github.com/roloa/Cataclysm-DDA_variant/tree/variant_jp](https://github.com/roloa/Cataclysm-DDA_variant/tree/variant_jp)
 
 # Cataclysm-DDA-variant-sca
 
