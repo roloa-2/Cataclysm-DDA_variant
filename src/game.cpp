@@ -11181,6 +11181,9 @@ void intro()
     catacurses::window tmp = catacurses::newwin( minHeight, minWidth, point_zero );
 
     while( maxy < minHeight || maxx < minWidth ) {
+        if( true ){
+            break;
+        }
         werase( tmp );
         if( maxy < minHeight && maxx < minWidth ) {
             fold_and_print( tmp, point_zero, maxx, c_white,
