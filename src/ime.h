@@ -20,7 +20,7 @@ class ime_sentry
             keep = 2,
         };
 
-        ime_sentry( mode m = enable );
+        ime_sentry( mode m = keep );
         ~ime_sentry();
     private:
         bool previously_enabled;
