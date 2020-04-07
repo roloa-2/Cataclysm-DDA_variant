@@ -1,3 +1,6 @@
+# This branch is outdated, please see latest branch
+
+[https://github.com/roloa/Cataclysm-DDA_variant/tree/variant_jp](https://github.com/roloa/Cataclysm-DDA_variant/tree/variant_jp)
 
 # Cataclysm-DDA-variant-sca
 
