@@ -1752,3 +1752,15 @@ void Creature::load_hit_range( const JsonObject &jo )
         jo.read( "even_good", dispersion_for_even_chance_of_good_hit );
     }
 }
+
+bool Creature::has_movement_impairing() const
+{
+    for( auto &elem : *effects ) {
+        for( const std::pair<const body_part, effect> &_it : elem.second ) {
+            if( _it.second.impairs_movement() ) {
+                return true;
+            }
+        }
+    }
+    return false;
+}

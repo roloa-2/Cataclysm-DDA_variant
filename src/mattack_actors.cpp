@@ -34,6 +34,10 @@ static const efftype_id effect_poison( "poison" );
 static const efftype_id effect_targeted( "targeted" );
 static const efftype_id effect_was_laserlocked( "was_laserlocked" );
 
+// for hentai mod
+static const efftype_id effect_lust( "lust" );
+static const efftype_id effect_corrupt( "corrupt" );
+
 static const trait_id trait_TOXICFLESH( "TOXICFLESH" );
 
 // Simplified version of the function in monattack.cpp
@@ -567,4 +571,158 @@ void gun_actor::shoot( monster &z, Creature &target, const gun_mode_id &mode ) c
         // To prevent spamming laser locks when the player can tank that stuff somehow
         target.add_effect( effect_was_laserlocked, 5_turns );
     }
+}
+
+static bool can_wife( const monster &z, const player *target )
+{
+    if( target->wearing_something_on( bp_leg_l ) || target->wearing_something_on( bp_leg_r ) ) {
+        target->add_msg_player_or_npc( _( "<color_yellow>The %s is after your crotch!</color>" ),
+                                       _( "<color_yellow>The %s is after <npcname>'s crotch!</color>" ),
+                                       z.name() );
+        return false;
+    }
+    if( !target->has_movement_impairing() ) {
+        return false;
+    }
+    return true;
+}
+
+static bool has_cum( Creature *target )
+{
+    if( target->get_effect_int( effect_lust )  >= 100) {
+        target->add_msg_player_or_npc( _( "<color_green>You reach an orgasm!</color>" ),
+                                       _( "<color_green><npcname> reachs an orgasm!</color>" ) );
+        target->remove_effect( effect_lust );
+        target->mod_moves( -50 );
+        return true;
+    }
+    return false;
+}
+
+static Creature *get_dominating( const monster &z )
+{
+    Creature *wife = nullptr;
+    std::string str_dominating = z.get_value( "dominating" );
+    if( !str_dominating.empty() ) {
+        int dominating =  std::stoi( str_dominating );
+        wife = g->critter_by_id( character_id( dominating ) );
+    }
+
+    return wife;
+}
+
+void wife_u_actor::load_internal( const JsonObject &obj, const std::string & )
+{
+    move_cost = obj.get_int( "move_cost", 100 );
+    corrupt_dice = obj.get_int( "corrupt_dice", 1 );
+    corrupt_dice_sides = obj.get_int( "corrupt_dice_sides", 20 );
+    corrupt_turns = obj.get_int( "corrupt_turns", 200 );
+    mutate_chance = obj.get_int( "mutate_chance", 0 );
+    mutate_category = obj.get_string( "mutate_category", "ANY" );
+    corrupt_turns = obj.get_int( "corrupt_turns", 200 );
+    interval = obj.get_int( "interval", 10 );
+    obj.read( "fake_dex", fake_dex );
+}
+
+std::unique_ptr<mattack_actor> wife_u_actor::clone() const
+{
+    return std::make_unique<wife_u_actor>( *this );
+}
+
+player *wife_u_actor::find_target( monster &z ) const
+{
+    if( !z.can_act() ) {
+        return nullptr;
+    }
+
+    player *target = dynamic_cast<player *>( z.attack_target() );
+    if( target == nullptr || !is_adjacent( z, *target ) ) {
+        return nullptr;
+    }
+
+    return target;
+}
+
+void wife_u_actor::gain_corrupt( Creature *target, const time_duration &dur ) const
+{
+    player *foe = dynamic_cast<player *>( target );
+    if( foe == nullptr || ( dice( corrupt_dice, corrupt_dice_sides ) > foe->int_cur ) ) {
+        target->add_effect( effect_corrupt, dur );
+    } else {
+        target->add_msg_player_or_npc( _( "However you successfully resist the temptation!" ),
+                                       _( "However <npcname> successfully resists the temptation!" ) );
+    }
+}
+
+bool wife_u_actor::call( monster &z ) const
+{
+    player *target = find_target( z );
+    if( target == nullptr ) {
+        return false;
+    }
+
+    if( !can_wife( z, target ) ) {
+        if( get_dominating(z) == target ) {
+            z.set_value( "dominating", "" );
+        }
+        return false;
+    }
+
+    // Check interval.
+    std::string str_next_wife_u = z.get_value( "next_wife_u" );
+    if( !str_next_wife_u.empty() ) {
+        if( time_point( std::stoi( str_next_wife_u ) ) > calendar::turn ){
+            return false;
+        }        
+    }
+
+    if( get_dominating(z) == target ) {
+        target->add_msg_player_or_npc( _( "<color_pink>The %s keeps grinding your hips...</color>" ),
+                                       _( "<color_pink>The %s keeps grinding <npcname>'s hips...</color>" ),
+                                       z.name() );
+    } else {
+        int count = 0;
+        for( monster &critter : g->all_monsters() ) {
+            if( get_dominating( critter ) == target ) {
+                count++;
+            }
+        }
+        if( count < 3 ) {
+            target->add_msg_player_or_npc( _( "<color_pink>The %s pins you down and slowly eases into you before joining your bodies together..." ),
+                                           _( "<color_pink>The %s pins <npcname> down and slowly eases into <npcname> before joining <npcname>'s bodies together..." ),
+                                           z.name() );
+        } else {
+            target->add_msg_player_or_npc( _( "<color_pink>The %s enjoys the show while staring at you as he plays with himself...</color>" ),
+                                           _( "<color_pink>The %s enjoys the show while staring at <npcname> as he plays with himself...</color>" ),
+                                           z.name() );
+        }
+        z.set_value( "dominating", std::to_string( target->getID().get_value() ) );
+    }
+
+    gain_corrupt( target, 1_turns * corrupt_turns );
+    target->add_effect( effect_lust, 8_turns + 1_turns * rng( 1, fake_dex ) );
+    z.add_effect( effect_lust, 8_turns + 1_turns * rng( 1, target->dex_cur ) );
+
+    if( has_cum( target ) ) {
+        g->m.add_item( target->pos(), item( "h_semen", calendar::turn ) );
+    }
+    if( has_cum( &z ) ) {
+        g->m.add_item( target->pos(), item( "d_cum", calendar::turn ) );
+        if( dice( 1, 100 ) <= mutate_chance ) {
+            target->add_msg_player_or_npc( _( "<color_yellow>Demonic bodily fluids cause your body to mutate...</color>" ),
+                                           _( "<color_yellow>Demonic bodily fluids cause <npcname>'s body to mutate...</color>" ) );
+            target->mutate_category( mutate_category );
+        }
+
+		z.anger -= 50;
+		z.friendly += 50;
+		z.morale -= 30;
+        z.set_value( "dominating", "" );
+        z.set_value( "next_wife_u", std::to_string( to_turn<int>( calendar::turn + 1_turns * interval ) ) );
+    }
+
+    target->mod_moves( -move_cost );
+    z.mod_moves( -move_cost );
+
+    return true;
 }

@@ -5902,6 +5902,18 @@ static Creature *get_dominating( const monster *z )
     return wife;
 }
 
+static int get_random_wear( const player *target )
+{
+    std::list<int> list;
+    for( int i = -2; target->is_worn( target->i_at( i ) ); i--) {
+        list.push_back( i );
+    }
+    if( list.empty() ) {
+        return INT_MIN;
+    }
+    return random_entry( list );
+}
+
 bool mattack::stripu( monster *z )
 {
     if( get_dominating( z ) != nullptr ) {
@@ -5917,9 +5929,11 @@ bool mattack::stripu( monster *z )
     if( rl_dist( z->pos(), target->pos() ) > 2 || foe == nullptr || !z->sees( *target ) ) {
         return false;
     }
-    if( foe->worn.empty() ) {
+    int i_pos = get_random_wear( foe );
+    if( i_pos == INT_MIN ) {
         return false;
     }
+    item &it = foe->i_at( i_pos );
 
     z->mod_moves( 100 );
 
@@ -5936,7 +5950,6 @@ bool mattack::stripu( monster *z )
         return true;
     }
 
-    item it = random_entry( foe->worn );
     if( it.volume() > 250_ml ) {
         target->add_msg_player_or_npc( _( "<color_pink>The %1$s  quickly takes off your</color> %2$s <color_pink>and drops it on the ground!</color>" ),
                                         _( "<color_pink>The %1$s  quickly takes off <npcname>'s</color> %2$s <color_pink>and drops it on the ground!</color>" ),

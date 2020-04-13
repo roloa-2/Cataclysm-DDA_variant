@@ -832,6 +832,10 @@ class Creature
 
     private:
         int pain;
+
+    public:
+        // for hentai mod
+        bool has_movement_impairing() const;
 };
 
 #endif

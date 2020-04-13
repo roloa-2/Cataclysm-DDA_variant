@@ -191,4 +191,27 @@ class gun_actor : public mattack_actor
         std::unique_ptr<mattack_actor> clone() const override;
 };
 
+class wife_u_actor : public mattack_actor
+{
+    public:
+        int move_cost;
+        int corrupt_dice;
+        int corrupt_dice_sides;
+        int corrupt_turns;
+        int mutate_chance;
+        std::string mutate_category;
+        int interval;
+        int fake_dex = 8;
+
+        wife_u_actor() = default;
+        ~wife_u_actor() override = default;
+
+        virtual player *find_target( monster &z ) const;
+        virtual void gain_corrupt( Creature *target, const time_duration &dur ) const;
+
+        void load_internal( const JsonObject &obj, const std::string &src ) override;
+        bool call( monster & ) const override;
+        std::unique_ptr<mattack_actor> clone() const override;
+};
+
 #endif
