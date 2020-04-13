@@ -5938,6 +5938,10 @@ bool mattack::stripu( monster *z )
 
     item it = random_entry( foe->worn );
     if( it.volume() > 250_ml ) {
+        target->add_msg_player_or_npc( _( "<color_pink>The %1$s  quickly takes off your</color> %2$s <color_pink>and drops it on the ground!</color>" ),
+                                        _( "<color_pink>The %1$s  quickly takes off <npcname>'s</color> %2$s <color_pink>and drops it on the ground!</color>" ),
+                                        z->name(),
+                                        it.display_name() );
         g->m.add_item( z->pos(), it );
     } else {
         z->add_item( it );
