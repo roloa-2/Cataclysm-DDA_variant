@@ -5890,4 +5890,63 @@ bool mattack::melee_bot( monster *bot )
     return true;
 }
 
+static Creature *get_dominating( const monster *z )
+{
+    Creature *wife = nullptr;
+    std::string str_dominating = z->get_value( "dominating" );
+    if( !str_dominating.empty() ) {
+        int dominating =  std::stoi( str_dominating );
+        wife = g->critter_by_id( character_id( dominating ) );
+    }
+
+    return wife;
+}
+
+bool mattack::stripu( monster *z )
+{
+    if( get_dominating( z ) != nullptr ) {
+        return false;
+    }
+
+    Creature *target = z->attack_target();
+    if( target == nullptr ) {
+        return false;
+    }
+
+    player *foe = dynamic_cast<player *>( target );
+    if( rl_dist( z->pos(), target->pos() ) > 2 || foe == nullptr || !z->sees( *target ) ) {
+        return false;
+    }
+    if( foe->worn.empty() ) {
+        return false;
+    }
+
+    z->mod_moves( 100 );
+
+    if( target->uncanny_dodge() ) {
+        target->add_msg_player_or_npc( _( "The %s tries to undress you, but you dodge it with a tremendous momentum!" ),
+                                        _( "The %s tries to undress <npcname>, but <npcname> dodges it with a tremendous momentum!" ),
+                                        z->name() );
+        return true;
+    }
+    if( z->hit_roll() <= target->dodge_roll() ) {
+        target->add_msg_player_or_npc( _( "The %s tries to undress you, but you dodge it with a tremendous momentum!" ),
+                                        _( "The %s tries to undress <npcname>, but <npcname> dodges it with a tremendous momentum!" ),
+                                        z->name() );
+        return true;
+    }
+
+    item it = random_entry( foe->worn );
+    if( it.volume() > 250_ml ) {
+        g->m.add_item( z->pos(), it );
+    } else {
+        z->add_item( it );
+    }
+
+    if( foe->has_item( it ) ) {
+        foe->i_rem( &it );
+    }
+
+    return true;
+}
 
