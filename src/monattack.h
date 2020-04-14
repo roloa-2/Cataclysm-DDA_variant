@@ -116,6 +116,9 @@ bool littlemaid_action( monster *maid );
 bool shoggothmaid_action( monster *maid );
 bool melee_bot( monster *bot );
 
+// for hentai mod
+bool stripu( monster *z );
+
 } //namespace mattack
 
 #endif

@@ -593,7 +593,7 @@ void MonsterGenerator::init_attack()
     add_hardcoded_attack( "LITTLEMAID_ACTION", mattack::littlemaid_action );
     add_hardcoded_attack( "SHOGGOTHMAID_ACTION", mattack::shoggothmaid_action );
     add_hardcoded_attack( "MELEE_BOT", mattack::melee_bot );
-
+    add_hardcoded_attack( "STRIP_U", mattack::stripu );
 }
 
 void MonsterGenerator::init_defense()
@@ -1009,6 +1009,8 @@ mtype_special_attack MonsterGenerator::create_actor( const JsonObject &obj,
         new_attack = std::make_unique<gun_actor>();
     } else if( attack_type == "spell" ) {
         new_attack = std::make_unique<mon_spellcasting_actor>();
+    } else if( attack_type == "wife_u" ) {
+        new_attack = std::make_unique<wife_u_actor>();
     } else {
         obj.throw_error( "unknown monster attack", "attack_type" );
     }

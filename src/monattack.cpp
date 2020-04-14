@@ -5890,4 +5890,80 @@ bool mattack::melee_bot( monster *bot )
     return true;
 }
 
+static Creature *get_dominating( const monster *z )
+{
+    Creature *wife = nullptr;
+    std::string str_dominating = z->get_value( "dominating" );
+    if( !str_dominating.empty() ) {
+        int dominating =  std::stoi( str_dominating );
+        wife = g->critter_by_id( character_id( dominating ) );
+    }
+
+    return wife;
+}
+
+static int get_random_wear( const player *target )
+{
+    std::list<int> list;
+    for( int i = -2; target->is_worn( target->i_at( i ) ); i--) {
+        list.push_back( i );
+    }
+    if( list.empty() ) {
+        return INT_MIN;
+    }
+    return random_entry( list );
+}
+
+bool mattack::stripu( monster *z )
+{
+    if( get_dominating( z ) != nullptr ) {
+        return false;
+    }
+
+    Creature *target = z->attack_target();
+    if( target == nullptr ) {
+        return false;
+    }
+
+    player *foe = dynamic_cast<player *>( target );
+    if( rl_dist( z->pos(), target->pos() ) > 2 || foe == nullptr || !z->sees( *target ) ) {
+        return false;
+    }
+    int i_pos = get_random_wear( foe );
+    if( i_pos == INT_MIN ) {
+        return false;
+    }
+    item &it = foe->i_at( i_pos );
+
+    z->mod_moves( 100 );
+
+    if( target->uncanny_dodge() ) {
+        target->add_msg_player_or_npc( _( "The %s tries to undress you, but you dodge it with a tremendous momentum!" ),
+                                        _( "The %s tries to undress <npcname>, but <npcname> dodges it with a tremendous momentum!" ),
+                                        z->name() );
+        return true;
+    }
+    if( z->hit_roll() <= target->dodge_roll() ) {
+        target->add_msg_player_or_npc( _( "The %s tries to undress you, but you dodge it with a tremendous momentum!" ),
+                                        _( "The %s tries to undress <npcname>, but <npcname> dodges it with a tremendous momentum!" ),
+                                        z->name() );
+        return true;
+    }
+
+    if( it.volume() > 250_ml ) {
+        target->add_msg_player_or_npc( _( "<color_pink>The %1$s  quickly takes off your</color> %2$s <color_pink>and drops it on the ground!</color>" ),
+                                        _( "<color_pink>The %1$s  quickly takes off <npcname>'s</color> %2$s <color_pink>and drops it on the ground!</color>" ),
+                                        z->name(),
+                                        it.display_name() );
+        g->m.add_item( z->pos(), it );
+    } else {
+        z->add_item( it );
+    }
+
+    if( foe->has_item( it ) ) {
+        foe->i_rem( &it );
+    }
+
+    return true;
+}
 
