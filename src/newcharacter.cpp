@@ -896,25 +896,25 @@ tab_direction set_stats( const catacurses::window &w, avatar &u, points_left &po
                 sel = 4;
             }
         } else if( action == "LEFT" ) {
-            if( sel == 1 && u.str_max > 4 ) {
+            if( sel == 1 && u.str_max > 2 ) {
                 if( u.str_max > HIGH_STAT ) {
                     points.stat_points++;
                 }
                 u.str_max--;
                 points.stat_points++;
-            } else if( sel == 2 && u.dex_max > 4 ) {
+            } else if( sel == 2 && u.dex_max > 2 ) {
                 if( u.dex_max > HIGH_STAT ) {
                     points.stat_points++;
                 }
                 u.dex_max--;
                 points.stat_points++;
-            } else if( sel == 3 && u.int_max > 4 ) {
+            } else if( sel == 3 && u.int_max > 1 ) {
                 if( u.int_max > HIGH_STAT ) {
                     points.stat_points++;
                 }
                 u.int_max--;
                 points.stat_points++;
-            } else if( sel == 4 && u.per_max > 4 ) {
+            } else if( sel == 4 && u.per_max > 1 ) {
                 if( u.per_max > HIGH_STAT ) {
                     points.stat_points++;
                 }
